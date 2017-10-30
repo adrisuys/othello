@@ -5,6 +5,8 @@
  */
 package esi.atlg3.g43320.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -19,22 +21,6 @@ import static org.junit.Assert.*;
 public class GameTest {
     
     public GameTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    @Before
-    public void setUp() throws Exception {
-    }
-
-    @After
-    public void tearDown() throws Exception {
     }
 
     /**
@@ -95,74 +81,6 @@ public class GameTest {
         boolean expResult = false;
         boolean result = instance.isMoveValidEast(aCoordinate);
         assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of changeColorPawn method, of class Game.
-     */
-    /*@Test
-    public void testChangeColorPawn() {
-        System.out.println("changeColorPawn");
-        Board board = null;
-        Color color = null;
-        Game instance = new Game();
-        instance.changeColorPawn(board, color);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of changePlayer method, of class Game.
-     */
-    /*@Test
-    public void testChangePlayer() {
-        System.out.println("changePlayer");
-        Game instance = new Game();
-        instance.changePlayer();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getBoard method, of class Game.
-     */
-    /*@Test
-    public void testGetBoard() {
-        System.out.println("getBoard");
-        Game instance = new Game();
-        Board expResult = null;
-        Board result = instance.getBoard();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getCurrentColor method, of class Game.
-     */
-    /*@Test
-    public void testGetCurrentColor() {
-        System.out.println("getCurrentColor");
-        Game instance = new Game();
-        Color expResult = null;
-        Color result = instance.getCurrentColor();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getCurrentPlayer method, of class Game.
-     */
-   /* @Test
-    public void testGetCurrentPlayer() {
-        System.out.println("getCurrentPlayer");
-        Game instance = new Game();
-        Player expResult = null;
-        Player result = instance.getCurrentPlayer();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -228,74 +146,193 @@ public class GameTest {
     /**
      * Test of isTurnPassed method, of class Game.
      */
-    /*@Test
+    @Test
     public void testIsTurnPassed() {
-        System.out.println("isTurnPassed");
-        Player player = null;
+        System.out.println("isTurnPassed1");
         Game instance = new Game();
+        Player player = instance.getCurrentPlayer();
+        instance.getBoard().putPawn(new Coordinates(3,3), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(3,4), Color.BLACK);
+        instance.getBoard().putPawn(new Coordinates(4,3), Color.BLACK);
+        instance.getBoard().putPawn(new Coordinates(4,4), Color.WHITE);
         boolean expResult = false;
         boolean result = instance.isTurnPassed(player);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    }
+    
+    /**
+     * Test of isTurnPassed method, of class Game.
+     */
+    @Test
+    public void testIsTurnPassed2() {
+        System.out.println("isTurnPassed2");
+        Game instance = new Game();
+        Player player = instance.getCurrentPlayer();
+        instance.getBoard().putPawn(new Coordinates(0,1), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(1,1), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(2,1), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(3,1), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(3,2), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(2,2), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(2,3), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(1,4), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(0,5), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(4,1), Color.BLACK);
+        boolean expResult = true;
+        boolean result = instance.isTurnPassed(player);
+        assertEquals(expResult, result);
     }
 
     /**
      * Test of isOver method, of class Game.
      */
-    /*@Test
+    @Test
     public void testIsOver() {
         System.out.println("isOver");
         Game instance = new Game();
+        instance.getBoard().putPawn(new Coordinates(0,1), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(1,1), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(2,1), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(3,1), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(3,2), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(2,2), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(2,3), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(1,4), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(0,5), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(4,1), Color.BLACK);
         boolean expResult = false;
         boolean result = instance.isOver();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    }
+    
+    /**
+     * Test of isOver method, of class Game.
+     */
+    @Test
+    public void testIsOver2() {
+        System.out.println("isOver2");
+        Game instance = new Game();
+        instance.getBoard().putPawn(new Coordinates(0,1), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(1,1), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(2,1), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(3,1), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(3,2), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(2,2), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(2,3), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(1,4), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(0,5), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(4,1), Color.WHITE);
+        boolean expResult = true;
+        boolean result = instance.isOver();
+        assertEquals(expResult, result);
     }
 
     /**
      * Test of putPawn method, of class Game.
      */
-    /*@Test
+    @Test
     public void testPutPawn() {
-        System.out.println("putPawn");
-        Coordinates aCoordinate = null;
+        System.out.println("putPawn1");
+        Coordinates aCoordinate = new Coordinates(3,2);
         Game instance = new Game();
+        instance.getBoard().putPawn(new Coordinates(3,3), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(3,4), Color.BLACK);
+        instance.getBoard().putPawn(new Coordinates(4,3), Color.BLACK);
+        instance.getBoard().putPawn(new Coordinates(4,4), Color.WHITE);
+        boolean expResult = true;
+        boolean result = instance.putPawn(aCoordinate);
+        System.out.println(instance.getBoard().getCheckerboard()[3][2]);
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of putPawn method, of class Game.
+     */
+    @Test
+    public void testPutPawn2() {
+        System.out.println("putPawn2");
+        Coordinates aCoordinate = new Coordinates(2,4);
+        Game instance = new Game();
+        instance.getBoard().putPawn(new Coordinates(3,3), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(3,4), Color.BLACK);
+        instance.getBoard().putPawn(new Coordinates(4,3), Color.BLACK);
+        instance.getBoard().putPawn(new Coordinates(4,4), Color.WHITE);
         boolean expResult = false;
         boolean result = instance.putPawn(aCoordinate);
+        System.out.println(instance.getBoard().getCheckerboard()[2][4]);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
      * Test of nbPossibleMove method, of class Game.
      */
-    /*@Test
+    @Test
     public void testNbPossibleMove() {
-        System.out.println("nbPossibleMove");
+        System.out.println("nbPossibleMove1");
         Game instance = new Game();
+        instance.getBoard().putPawn(new Coordinates(3,3), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(3,4), Color.BLACK);
+        instance.getBoard().putPawn(new Coordinates(4,3), Color.BLACK);
+        instance.getBoard().putPawn(new Coordinates(4,4), Color.WHITE);
+        int expResult = 4;
+        int result = instance.nbPossibleMove();
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of nbPossibleMove method, of class Game.
+     */
+    @Test
+    public void testNbPossibleMove2() {
+        System.out.println("nbPossibleMove2");
+        Game instance = new Game();
+        instance.getBoard().putPawn(new Coordinates(0,1), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(1,1), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(2,1), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(3,1), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(3,2), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(2,2), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(2,3), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(1,4), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(0,5), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(4,1), Color.BLACK);
         int expResult = 0;
         int result = instance.nbPossibleMove();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
      * Test of isMoveValid method, of class Game.
      */
-    /*@Test
+    @Test
     public void testIsMoveValid() {
-        System.out.println("isMoveValid");
-        Coordinates aCoordinate = null;
+        System.out.println("isMoveValid1");
+        Coordinates aCoordinate = new Coordinates(3,2);
         Game instance = new Game();
+        instance.getBoard().putPawn(new Coordinates(3,3), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(3,4), Color.BLACK);
+        instance.getBoard().putPawn(new Coordinates(4,3), Color.BLACK);
+        instance.getBoard().putPawn(new Coordinates(4,4), Color.WHITE);
+        boolean expResult = true;
+        boolean result = instance.isMoveValid(aCoordinate);
+        assertEquals(expResult, result);
+    }
+    
+    /**
+     * Test of isMoveValid method, of class Game.
+     */
+    @Test
+    public void testIsMoveValid2() {
+        System.out.println("isMoveValid2");
+        Coordinates aCoordinate = new Coordinates(3,5);
+        Game instance = new Game();
+        instance.getBoard().putPawn(new Coordinates(3,3), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(3,4), Color.BLACK);
+        instance.getBoard().putPawn(new Coordinates(4,3), Color.BLACK);
+        instance.getBoard().putPawn(new Coordinates(4,4), Color.WHITE);
         boolean expResult = false;
         boolean result = instance.isMoveValid(aCoordinate);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
