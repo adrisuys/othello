@@ -50,7 +50,7 @@ public class Board {
         if (aCoordinate == null) {
             throw new IllegalArgumentException("The coordinate is not valid!");
         }
-        return checkerboard[aCoordinate.getY()][aCoordinate.getX()] == 0;
+        return checkerboard[aCoordinate.getX()][aCoordinate.getY()] == 0;
     }
     
     public int getPawn(Coordinates aCoordinate) {
