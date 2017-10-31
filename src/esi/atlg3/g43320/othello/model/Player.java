@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package esi.atlg3.g43320.model;
+package esi.atlg3.g43320.othello.model;
 
 import java.util.Objects;
 

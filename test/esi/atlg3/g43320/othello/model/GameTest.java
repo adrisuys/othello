@@ -3,8 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package esi.atlg3.g43320.model;
+package esi.atlg3.g43320.othello.model;
 
+import esi.atlg3.g43320.othello.model.Player;
+import esi.atlg3.g43320.othello.model.Color;
+import esi.atlg3.g43320.othello.model.Coordinates;
+import esi.atlg3.g43320.othello.model.Game;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;

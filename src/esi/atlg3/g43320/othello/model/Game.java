@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package esi.atlg3.g43320.model;
+package esi.atlg3.g43320.othello.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -47,6 +48,24 @@ public class Game {
         pawnsAtSE = new ArrayList<>();
         possibleMove = new ArrayList<>();
     }
+    
+    public Game(Game game){
+        this.players = game.players;
+        this.board = game.board;
+        this.currentPlayer = game.currentPlayer;
+        this.pawnsToBeTurned = game.pawnsToBeTurned;
+        this.pawnsAtE = game.pawnsAtE;
+        this.pawnsAtN = game.pawnsAtN;
+        this.pawnsAtW = game.pawnsAtW;
+        this.pawnsAtS = game.pawnsAtS;
+        this.pawnsAtSE = game.pawnsAtSE;
+        this.pawnsAtSW = game.pawnsAtSW;
+        this.pawnsAtNE = game.pawnsAtNE;
+        this.pawnsAtNW = game.pawnsAtNW;
+        this.possibleMove = game.possibleMove;
+    }
+    
+    
 
     public void changePlayer() {
         if (currentPlayer.equals(players.get(0))) {
@@ -57,7 +76,7 @@ public class Game {
     }
 
     public Board getBoard() {
-        return board;
+        return new Board(board);
     }
 
     public Color getCurrentColor() {
@@ -65,7 +84,7 @@ public class Game {
     }
 
     public Player getCurrentPlayer() {
-        return currentPlayer;
+        return new Player(getCurrentColor());
     }
 
     public boolean isTurnPassed(Player player) {
@@ -352,11 +371,13 @@ public class Game {
     }
 
     public List<List<Coordinates>> getPawnsToBeTurned() {
-        return pawnsToBeTurned;
+        return Collections.unmodifiableList(pawnsToBeTurned);
+        //return pawnsToBeTurned;
     }
 
     public List<Player> getPlayers() {
-        return players;
+        return Collections.unmodifiableList(players);
+        //return players;
     }
     
     
