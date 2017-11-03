@@ -88,73 +88,66 @@ public class Game {
     }
 
     public boolean isTurnPassed(Player player) {
-        return (nbPossibleMove() == 0);
+        return (nbPossibleMove(player.getColor()) == 0);
     }
 
-    public boolean isOver() {
-        boolean isOver;
-        if (isTurnPassed(currentPlayer)){
-            changePlayer();
-            isOver = isTurnPassed(currentPlayer);
-        } else {
-            isOver = false;
-        }
-        changePlayer();
-        return isOver;
-    }
-
-    public boolean putPawn(Coordinates aCoordinate) {
+    public boolean putPawn(Coordinates aCoordinate, Color color) {
+        boolean ok;
         try {
-            if (isMoveValid(aCoordinate)) {
-                board.putPawn(aCoordinate, getCurrentColor());
-                return true;
+            if (isMoveValid(aCoordinate, color)) {
+                board.putPawn(aCoordinate, color);
+                ok = true;
             } else {
-                return false;
+                ok = false;
             }
         } catch (IllegalArgumentException e) {
-            return false;
+            ok = false;
         }
+        return ok;
 
     }
-
-    public int nbPossibleMove() {
-        int cpt = 0;
+    
+    public void updatePossibleMove(Color color){
+        possibleMove.clear();
         for (int i = 0; i < board.getROW(); i++) {
             for (int j = 0; j < board.getCOL(); j++) {
-                if (isMoveValid(new Coordinates(i, j))) {
-                    cpt++;
+                if (isMoveValid(new Coordinates(i, j), color)) {
                     possibleMove.add(new Coordinates(i, j));
                 }
             }
         }
-        return cpt;
     }
 
-    public boolean isMoveValid(Coordinates aCoordinate) {
+    public int nbPossibleMove(Color color) {
+        updatePossibleMove(color);
+        return possibleMove.size();
+    }
+
+    public boolean isMoveValid(Coordinates aCoordinate, Color color) {
         boolean valid = false;
         try {
-            if (isMoveValidEast(aCoordinate)) {
+            if (isMoveValidEast(aCoordinate, color)) {
                 valid = true;
             }
-            if (isMoveValidWest(aCoordinate)) {
+            if (isMoveValidWest(aCoordinate, color)) {
                 valid = true;
             }
-            if (isMoveValidNorth(aCoordinate)) {
+            if (isMoveValidNorth(aCoordinate, color)) {
                 valid = true;
             }
-            if (isMoveValidSouth(aCoordinate)) {
+            if (isMoveValidSouth(aCoordinate, color)) {
                 valid = true;
             }
-            if (isMoveValidSE(aCoordinate)) {
+            if (isMoveValidSE(aCoordinate, color)) {
                 valid = true;
             }
-            if (isMoveValidSW(aCoordinate)) {
+            if (isMoveValidSW(aCoordinate, color)) {
                 valid = true;
             }
-            if (isMoveValidNE(aCoordinate)) {
+            if (isMoveValidNE(aCoordinate, color)) {
                 valid = true;
             }
-            if (isMoveValidNW(aCoordinate)) {
+            if (isMoveValidNW(aCoordinate, color)) {
                 valid = true;
             }
         } catch (IllegalArgumentException e) {
@@ -163,7 +156,7 @@ public class Game {
         return valid;
     }
 
-    public boolean isMoveValidEast(Coordinates aCoordinate) {
+    public boolean isMoveValidEast(Coordinates aCoordinate, Color color) {
         boolean valid = false;
         if (aCoordinate == null) {
             throw new IllegalArgumentException("The coordinate is not valid!");
@@ -173,11 +166,11 @@ public class Game {
         }
         int y = aCoordinate.getY() + 1;
         int x = aCoordinate.getX();
-        while (y < board.getCOL() && board.getCheckerboard()[x][y] != 0 && board.getCheckerboard()[x][y] != getCurrentColor().getValue()) {
+        while (y < board.getCOL() && board.getCheckerboard()[x][y] != 0 && board.getCheckerboard()[x][y] != color.getValue()) {
             pawnsAtE.add(new Coordinates(x, y));
             y++;
         }
-        if (y < board.getCOL() && y > aCoordinate.getY() + 1 && board.getCheckerboard()[x][y] == getCurrentColor().getValue()) {
+        if (y < board.getCOL() && y > aCoordinate.getY() + 1 && board.getCheckerboard()[x][y] == color.getValue()) {
             valid = true;
         } else {
             pawnsAtE.clear();
@@ -186,7 +179,7 @@ public class Game {
         return valid;
     }
 
-    public boolean isMoveValidWest(Coordinates aCoordinate) {
+    public boolean isMoveValidWest(Coordinates aCoordinate, Color color) {
         boolean valid = false;
         if (aCoordinate == null) {
             throw new IllegalArgumentException("The coordinate is not valid!");
@@ -196,11 +189,11 @@ public class Game {
         }
         int y = aCoordinate.getY() - 1;
         int x = aCoordinate.getX();
-        while (y >= 0 && board.getCheckerboard()[x][y] != 0 && board.getCheckerboard()[x][y] != getCurrentColor().getValue()) {
+        while (y >= 0 && board.getCheckerboard()[x][y] != 0 && board.getCheckerboard()[x][y] != color.getValue()) {
             pawnsAtW.add(new Coordinates(x, y));
             y--;
         }
-        if (y >= 0 && y < aCoordinate.getY() - 1 && board.getCheckerboard()[x][y] == getCurrentColor().getValue()) {
+        if (y >= 0 && y < aCoordinate.getY() - 1 && board.getCheckerboard()[x][y] == color.getValue()) {
             valid = true;
         } else {
             pawnsAtW.clear();
@@ -209,7 +202,7 @@ public class Game {
         return valid;
     }
 
-    public boolean isMoveValidNorth(Coordinates aCoordinate) {
+    public boolean isMoveValidNorth(Coordinates aCoordinate, Color color) {
         boolean valid = false;
         if (aCoordinate == null) {
             throw new IllegalArgumentException("The coordinate is not valid!");
@@ -219,11 +212,11 @@ public class Game {
         }
         int x = aCoordinate.getX() - 1;
         int y = aCoordinate.getY();
-        while (x >= 0 && board.getCheckerboard()[x][y] != 0 && board.getCheckerboard()[x][y] != getCurrentColor().getValue()) {
+        while (x >= 0 && board.getCheckerboard()[x][y] != 0 && board.getCheckerboard()[x][y] != color.getValue()) {
             pawnsAtN.add(new Coordinates(x, y));
             x--;
         }
-        if (x >= 0 && x < aCoordinate.getX() - 1 && board.getCheckerboard()[x][y] == getCurrentColor().getValue()) {
+        if (x >= 0 && x < aCoordinate.getX() - 1 && board.getCheckerboard()[x][y] == color.getValue()) {
             valid = true;
         } else {
             pawnsAtN.clear();
@@ -232,7 +225,7 @@ public class Game {
         return valid;
     }
 
-    public boolean isMoveValidSouth(Coordinates aCoordinate) {
+    public boolean isMoveValidSouth(Coordinates aCoordinate, Color color) {
         boolean valid = false;
         if (aCoordinate == null) {
             throw new IllegalArgumentException("The coordinate is not valid!");
@@ -242,11 +235,11 @@ public class Game {
         }
         int x = aCoordinate.getX() + 1;
         int y = aCoordinate.getY();
-        while (x < board.getROW() && board.getCheckerboard()[x][y] != 0 && board.getCheckerboard()[x][y] != getCurrentColor().getValue()) {
+        while (x < board.getROW() && board.getCheckerboard()[x][y] != 0 && board.getCheckerboard()[x][y] != color.getValue()) {
             pawnsAtS.add(new Coordinates(x, y));
             x++;
         }
-        if (x < board.getROW() && x > aCoordinate.getX() + 1 && board.getCheckerboard()[x][y] == getCurrentColor().getValue()) {
+        if (x < board.getROW() && x > aCoordinate.getX() + 1 && board.getCheckerboard()[x][y] == color.getValue()) {
             valid = true;
         } else {
             pawnsAtS.clear();
@@ -255,7 +248,7 @@ public class Game {
         return valid;
     }
 
-    public boolean isMoveValidSE(Coordinates aCoordinate) {
+    public boolean isMoveValidSE(Coordinates aCoordinate, Color color) {
         boolean valid = false;
         if (aCoordinate == null) {
             throw new IllegalArgumentException("The coordinate is not valid!");
@@ -267,14 +260,14 @@ public class Game {
         int y = aCoordinate.getY() + 1;
         while ((x < board.getROW() && y < board.getCOL())
                 && (board.getCheckerboard()[x][y] != 0)
-                && (board.getCheckerboard()[x][y] != getCurrentColor().getValue())) {
+                && (board.getCheckerboard()[x][y] != color.getValue())) {
             pawnsAtSE.add(new Coordinates(x, y));
             x++;
             y++;
         }
         if ((x < board.getROW() && y < board.getCOL())
                 && (x > aCoordinate.getX() + 1)
-                && board.getCheckerboard()[x][y] == getCurrentColor().getValue()) {
+                && board.getCheckerboard()[x][y] == color.getValue()) {
             valid = true;
         } else {
             pawnsAtSE.clear();
@@ -283,7 +276,7 @@ public class Game {
         return valid;
     }
 
-    public boolean isMoveValidSW(Coordinates aCoordinate) {
+    public boolean isMoveValidSW(Coordinates aCoordinate, Color color) {
         boolean valid = false;
         if (aCoordinate == null) {
             throw new IllegalArgumentException("The coordinate is not valid!");
@@ -295,13 +288,13 @@ public class Game {
         int y = aCoordinate.getY() - 1;
         while ((x < board.getROW() && y >= 0)
                 && (board.getCheckerboard()[x][y] != 0)
-                && (board.getCheckerboard()[x][y] != getCurrentColor().getValue())) {
+                && (board.getCheckerboard()[x][y] != color.getValue())) {
             x++;
             y--;
             pawnsAtSW.add(new Coordinates(x, y));
         }
         if (x < board.getROW() && y >= 0 && (x > aCoordinate.getX() + 1)
-                && board.getCheckerboard()[x][y] == getCurrentColor().getValue()) {
+                && board.getCheckerboard()[x][y] == color.getValue()) {
             valid = true;
         } else {
             pawnsAtSW.clear();
@@ -310,7 +303,7 @@ public class Game {
         return valid;
     }
 
-    public boolean isMoveValidNE(Coordinates aCoordinate) {
+    public boolean isMoveValidNE(Coordinates aCoordinate, Color color) {
         boolean valid = false;
         if (aCoordinate == null) {
             throw new IllegalArgumentException("The coordinate is not valid!");
@@ -322,13 +315,13 @@ public class Game {
         int y = aCoordinate.getY() + 1;
         while ((x >= 0 && y < board.getCOL()
                 && board.getCheckerboard()[x][y] != 0
-                && (board.getCheckerboard()[x][y] != getCurrentColor().getValue()))) {
+                && (board.getCheckerboard()[x][y] != color.getValue()))) {
             x--;
             y++;
             pawnsAtNE.add(new Coordinates(x, y));
         }
         if (x >= 0 && y < board.getCOL() && (x < aCoordinate.getX() - 1)
-                && board.getCheckerboard()[x][y] == getCurrentColor().getValue()) {
+                && board.getCheckerboard()[x][y] == color.getValue()) {
             valid = true;
         } else {
             pawnsAtNE.clear();
@@ -337,7 +330,7 @@ public class Game {
         return valid;
     }
 
-    public boolean isMoveValidNW(Coordinates aCoordinate) {
+    public boolean isMoveValidNW(Coordinates aCoordinate, Color color) {
         boolean valid = false;
         if (aCoordinate == null) {
             throw new IllegalArgumentException("The coordinate is not valid!");
@@ -348,12 +341,12 @@ public class Game {
         int x = aCoordinate.getX() - 1;
         int y = aCoordinate.getY() - 1;
         while ((x >= 0 && y >= 0) && (board.getCheckerboard()[x][y] != 0)
-                && (board.getCheckerboard()[x][y] != getCurrentColor().getValue())) {
+                && (board.getCheckerboard()[x][y] != color.getValue())) {
             x--;
             y--;
             pawnsAtNW.add(new Coordinates(x, y));
         }
-        if (x >= 0 && y >= 0 && x < aCoordinate.getX() - 1 && board.getCheckerboard()[x][y] == getCurrentColor().getValue()) {
+        if (x >= 0 && y >= 0 && x < aCoordinate.getX() - 1 && board.getCheckerboard()[x][y] == color.getValue()) {
             valid = true;
         } else {
             pawnsAtNW.clear();
@@ -378,6 +371,24 @@ public class Game {
     public List<Player> getPlayers() {
         return Collections.unmodifiableList(players);
         //return players;
+    }
+
+    public List<Coordinates> getPossibleMove() {
+        return Collections.unmodifiableList(possibleMove);
+        //return possibleMove;
+    }
+    
+    public boolean isOver() {
+//        boolean isOver;
+//        if (isTurnPassed(currentPlayer)){
+//            changePlayer();
+//            isOver = isTurnPassed(currentPlayer);
+//        } else {
+//            isOver = false;
+//        }
+//        changePlayer();
+//        return isOver;
+        return isTurnPassed(players.get(0)) && isTurnPassed(players.get(1));
     }
     
     

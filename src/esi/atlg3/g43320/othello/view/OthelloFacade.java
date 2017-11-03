@@ -5,12 +5,9 @@
  */
 package esi.atlg3.g43320.othello.view;
 
-import esi.atlg3.g43320.othello.model.Board;
-import esi.atlg3.g43320.othello.model.Color;
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.Game;
 import esi.atlg3.g43320.othello.model.OthelloModel;
-import esi.atlg3.g43320.othello.view.BoardgameTerminal;
 import java.util.Scanner;
 
 /**
@@ -25,37 +22,12 @@ public class OthelloFacade {
     public static void main(String[] args) {
         Game game = new Game();
         OthelloModel othello = new OthelloModel();
+        BoardgameTerminal view = new BoardgameTerminal(othello);
 
         othello.init(game);
-        boolean unvalid = true;
-        boolean validPlay = true;
-        boolean turnPassed = true;
 
         while (!game.isOver()) {
-            while (unvalid) {
-                unvalid = false;
-                Scanner keyboard = new Scanner(System.in);
-                String input = keyboard.nextLine();
-                String[] inputArray = input.split("\\s+");
-                if ("SHOW".equals(inputArray[0].toUpperCase())) {
-                    othello.show(game);
-                } else if ("SCORE".equals(inputArray[0].toUpperCase())) {
-                    othello.score(game);
-                } else if ("PLAY".equals(inputArray[0].toUpperCase())) {
-                    if (verifyArgsCoordinates(inputArray, game)) {
-                        int x = Integer.parseInt(inputArray[1]);
-                        int y = Integer.parseInt(inputArray[2]);
-                        othello.play(game, new Coordinates(x, y), validPlay, turnPassed);
-                        unvalid = !validPlay;
-                    } else {
-                        othello.notifyObserversErrorInputCoordinates();
-                        unvalid = true;
-                    }
-                } else {
-                    othello.notifyObserversErrorInputCommand();
-                    unvalid = true;
-                }
-            }
+            playATurn(othello, game);
         }
     }
 
@@ -75,6 +47,46 @@ public class OthelloFacade {
             ok = false;
         }
         return ok;
+    }
+
+    public static void playATurn(OthelloModel othello, Game game) {
+        boolean unvalid = true;
+        boolean validPlay = false;
+        boolean turnPassed = false;
+        Scanner keyboard = new Scanner(System.in);
+        String input = keyboard.nextLine();
+        while (unvalid) {
+            unvalid = false;
+            String[] inputArray = input.split("\\s+");
+            if (null == inputArray[0].toUpperCase()) {
+                othello.notifyObserversErrorInputCommand();
+                unvalid = true;
+            } else switch (inputArray[0].toUpperCase()) {
+                case "SHOW":
+                    othello.show(game);
+                    break;
+                case "SCORE":
+                    othello.score(game);
+                    break;
+                case "PLAY":
+                    if (verifyArgsCoordinates(inputArray, game)) {
+                        int x = Integer.parseInt(inputArray[1]);
+                        int y = Integer.parseInt(inputArray[2]);
+                        othello.play(game, new Coordinates(x, y), validPlay, turnPassed);
+                        unvalid = !validPlay;
+                    } else {
+                        othello.notifyObserversErrorInputCoordinates();
+                        unvalid = true;
+                    }   break;
+                default:
+                    othello.notifyObserversErrorInputCommand();
+                    unvalid = true;
+                    break;
+            }
+            if (unvalid){
+                input = keyboard.nextLine();
+            }
+        }
     }
 
 }

@@ -57,16 +57,31 @@ public class OthelloModel implements Observable {
         game = aGame;
         coord = aCoordinate;
         turnPassed = passed;
-        errorMessage = "";
-        if (!game.isTurnPassed(game.getCurrentPlayer())){
-            validPlay = game.putPawn(coord);
-            turnPassed = false;
-        } else {
+        if (game.isTurnPassed(game.getCurrentPlayer())){
             turnPassed = true;
-        }
-        if (validPlay){
             game.changePlayer();
+        } else {
+            game.updatePossibleMove(game.getCurrentColor());
+            if (!game.getPossibleMove().contains(aCoordinate)){
+                validPlay = false;
+            } else {
+                validPlay = true;
+                game.putPawn(aCoordinate, game.getCurrentColor());
+                game.changeColorPawn(game.getBoard());
+                game.changePlayer();
+            }
         }
+//        if (!game.isTurnPassed(game.getCurrentPlayer())){
+//            validPlay = game.putPawn(coord);
+//            turnPassed = false;
+//        } else {
+//            turnPassed = true;
+//            game.changePlayer();
+//        }
+//        if (validPlay){
+//            game.changeColorPawn(game.getBoard());
+//            game.changePlayer();
+//        }
         notifyObserversPlay();
     }
 
@@ -92,7 +107,7 @@ public class OthelloModel implements Observable {
     }
     
     public void show (Game aGame){
-        board = aGame.getBoard();
+        game = aGame;
         notifyObserversShow();
     }
     
@@ -116,11 +131,7 @@ public class OthelloModel implements Observable {
     public Coordinates getCoord() {
         return new Coordinates(coord.getX(), coord.getY());
     }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
+    
     public int getScorePlayer1() {
         return scorePlayer1;
     }
@@ -156,6 +167,10 @@ public class OthelloModel implements Observable {
 
     public boolean isValidPlay() {
         return validPlay;
+    }
+
+    public boolean isTurnPassed() {
+        return turnPassed;
     }
    
     

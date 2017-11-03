@@ -39,7 +39,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(1,4), Color.WHITE);
         instance.getBoard().putPawn(new Coordinates(1,5), Color.BLACK);
         boolean expResult = true;
-        boolean result = instance.isMoveValidEast(aCoordinate);
+        boolean result = instance.isMoveValidEast(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -54,7 +54,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(3,6), Color.WHITE);
         instance.getBoard().putPawn(new Coordinates(3,7), Color.WHITE);
         boolean expResult = false;
-        boolean result = instance.isMoveValidEast(aCoordinate);
+        boolean result = instance.isMoveValidEast(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -68,7 +68,7 @@ public class GameTest {
         Game instance = new Game();
         instance.getBoard().putPawn(new Coordinates(7,5), Color.BLACK);
         boolean expResult = false;
-        boolean result = instance.isMoveValidEast(aCoordinate);
+        boolean result = instance.isMoveValidEast(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -83,7 +83,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(5,2), Color.WHITE);
         instance.getBoard().putPawn(new Coordinates(5,3), Color.WHITE);
         boolean expResult = false;
-        boolean result = instance.isMoveValidEast(aCoordinate);
+        boolean result = instance.isMoveValidEast(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
 
@@ -97,7 +97,7 @@ public class GameTest {
         Game instance = new Game();
         instance.getBoard().putPawn(new Coordinates(0,0), Color.BLACK);
         boolean expResult = false;
-        boolean result = instance.isMoveValidWest(aCoordinate);
+        boolean result = instance.isMoveValidWest(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -113,7 +113,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(2,2), Color.WHITE);
         instance.getBoard().putPawn(new Coordinates(2,1), Color.BLACK);
         boolean expResult = true;
-        boolean result = instance.isMoveValidWest(aCoordinate);
+        boolean result = instance.isMoveValidWest(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -128,7 +128,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(4,1), Color.WHITE);
         instance.getBoard().putPawn(new Coordinates(4,0), Color.BLACK);
         boolean expResult = true;
-        boolean result = instance.isMoveValidWest(aCoordinate);
+        boolean result = instance.isMoveValidWest(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -143,7 +143,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(6,1), Color.WHITE);
         instance.getBoard().putPawn(new Coordinates(6,0), Color.WHITE);
         boolean expResult = false;
-        boolean result = instance.isMoveValidWest(aCoordinate);
+        boolean result = instance.isMoveValidWest(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
 
@@ -244,7 +244,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(4,3), Color.BLACK);
         instance.getBoard().putPawn(new Coordinates(4,4), Color.WHITE);
         boolean expResult = true;
-        boolean result = instance.putPawn(aCoordinate);
+        boolean result = instance.putPawn(aCoordinate, Color.BLACK);
         System.out.println(instance.getBoard().getCheckerboard()[3][2]);
         assertEquals(expResult, result);
     }
@@ -262,7 +262,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(4,3), Color.BLACK);
         instance.getBoard().putPawn(new Coordinates(4,4), Color.WHITE);
         boolean expResult = false;
-        boolean result = instance.putPawn(aCoordinate);
+        boolean result = instance.putPawn(aCoordinate, Color.BLACK);
         System.out.println(instance.getBoard().getCheckerboard()[2][4]);
         assertEquals(expResult, result);
     }
@@ -279,7 +279,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(4,3), Color.BLACK);
         instance.getBoard().putPawn(new Coordinates(4,4), Color.WHITE);
         int expResult = 4;
-        int result = instance.nbPossibleMove();
+        int result = instance.nbPossibleMove(Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -301,7 +301,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(0,5), Color.WHITE);
         instance.getBoard().putPawn(new Coordinates(4,1), Color.BLACK);
         int expResult = 0;
-        int result = instance.nbPossibleMove();
+        int result = instance.nbPossibleMove(Color.BLACK);
         assertEquals(expResult, result);
     }
 
@@ -318,7 +318,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(4,3), Color.BLACK);
         instance.getBoard().putPawn(new Coordinates(4,4), Color.WHITE);
         boolean expResult = true;
-        boolean result = instance.isMoveValid(aCoordinate);
+        boolean result = instance.isMoveValid(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -335,7 +335,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(4,3), Color.BLACK);
         instance.getBoard().putPawn(new Coordinates(4,4), Color.WHITE);
         boolean expResult = false;
-        boolean result = instance.isMoveValid(aCoordinate);
+        boolean result = instance.isMoveValid(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
 
@@ -350,7 +350,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(3,1), Color.WHITE);
         instance.getBoard().putPawn(new Coordinates(2,1), Color.BLACK);
         boolean expResult = true;
-        boolean result = instance.isMoveValidNorth(aCoordinate);
+        boolean result = instance.isMoveValidNorth(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -364,7 +364,7 @@ public class GameTest {
         Game instance = new Game();
         instance.getBoard().putPawn(new Coordinates(0,3), Color.WHITE);
         boolean expResult = false;
-        boolean result = instance.isMoveValidNorth(aCoordinate);
+        boolean result = instance.isMoveValidNorth(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -378,7 +378,7 @@ public class GameTest {
         Game instance = new Game();
         instance.getBoard().putPawn(new Coordinates(0,5), Color.BLACK);
         boolean expResult = false;
-        boolean result = instance.isMoveValidNorth(aCoordinate);
+        boolean result = instance.isMoveValidNorth(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -391,7 +391,7 @@ public class GameTest {
         Coordinates aCoordinate = new Coordinates(4,4);
         Game instance = new Game();
         boolean expResult = false;
-        boolean result = instance.isMoveValidNorth(aCoordinate);
+        boolean result = instance.isMoveValidNorth(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
 
@@ -406,7 +406,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(2,1), Color.WHITE);
         instance.getBoard().putPawn(new Coordinates(3,1), Color.BLACK);
         boolean expResult = true;
-        boolean result = instance.isMoveValidSouth(aCoordinate);
+        boolean result = instance.isMoveValidSouth(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -420,7 +420,7 @@ public class GameTest {
         Game instance = new Game();
         instance.getBoard().putPawn(new Coordinates(6,1), Color.WHITE);
         boolean expResult = false;
-        boolean result = instance.isMoveValidSouth(aCoordinate);
+        boolean result = instance.isMoveValidSouth(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -440,7 +440,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(6,3), Color.WHITE);
         instance.getBoard().putPawn(new Coordinates(7,3), Color.BLACK);
         boolean expResult = true;
-        boolean result = instance.isMoveValidSouth(aCoordinate);
+        boolean result = instance.isMoveValidSouth(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -456,7 +456,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(6,5), Color.WHITE);
         instance.getBoard().putPawn(new Coordinates(7,5), Color.WHITE);
         boolean expResult = false;
-        boolean result = instance.isMoveValidSouth(aCoordinate);
+        boolean result = instance.isMoveValidSouth(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
 
@@ -471,7 +471,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(2,2), Color.WHITE);
         instance.getBoard().putPawn(new Coordinates(3,3), Color.BLACK);
         boolean expResult = true;
-        boolean result = instance.isMoveValidSE(aCoordinate);
+        boolean result = instance.isMoveValidSE(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -486,7 +486,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(5,2), Color.WHITE);
         instance.getBoard().putPawn(new Coordinates(6,3), Color.WHITE);
         boolean expResult = false;
-        boolean result = instance.isMoveValidSE(aCoordinate);
+        boolean result = instance.isMoveValidSE(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -499,7 +499,7 @@ public class GameTest {
         Coordinates aCoordinate = new Coordinates(2,7);
         Game instance = new Game();
         boolean expResult = false;
-        boolean result = instance.isMoveValidSE(aCoordinate);
+        boolean result = instance.isMoveValidSE(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -512,7 +512,7 @@ public class GameTest {
         Coordinates aCoordinate = new Coordinates(7,7);
         Game instance = new Game();
         boolean expResult = false;
-        boolean result = instance.isMoveValidSE(aCoordinate);
+        boolean result = instance.isMoveValidSE(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
 
@@ -525,7 +525,7 @@ public class GameTest {
         Coordinates aCoordinate = new Coordinates (0,0);
         Game instance = new Game();
         boolean expResult = false;
-        boolean result = instance.isMoveValidSW(aCoordinate);
+        boolean result = instance.isMoveValidSW(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -539,7 +539,7 @@ public class GameTest {
         Game instance = new Game();
         instance.getBoard().putPawn(new Coordinates(2,0), Color.BLACK);
         boolean expResult = false;
-        boolean result = instance.isMoveValidSW(aCoordinate);
+        boolean result = instance.isMoveValidSW(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -559,7 +559,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(6,1), Color.WHITE);
         instance.getBoard().putPawn(new Coordinates(7,0), Color.BLACK);
         boolean expResult = true;
-        boolean result = instance.isMoveValidSW(aCoordinate);
+        boolean result = instance.isMoveValidSW(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -573,7 +573,7 @@ public class GameTest {
         Game instance = new Game();
         instance.getBoard().putPawn(new Coordinates(6,6), Color.WHITE);
         boolean expResult = false;
-        boolean result = instance.isMoveValidSW(aCoordinate);
+        boolean result = instance.isMoveValidSW(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
 
@@ -586,7 +586,7 @@ public class GameTest {
         Coordinates aCoordinate = new Coordinates(0,7);
         Game instance = new Game();
         boolean expResult = false;
-        boolean result = instance.isMoveValidNE(aCoordinate);
+        boolean result = instance.isMoveValidNE(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -600,7 +600,7 @@ public class GameTest {
         Game instance = new Game();
         instance.getBoard().putPawn(new Coordinates(0,1), Color.WHITE);
         boolean expResult = false;
-        boolean result = instance.isMoveValidNE(aCoordinate);
+        boolean result = instance.isMoveValidNE(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -615,7 +615,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(4,1), Color.WHITE);
         instance.getBoard().putPawn(new Coordinates(3,2), Color.BLACK);
         boolean expResult = true;
-        boolean result = instance.isMoveValidNE(aCoordinate);
+        boolean result = instance.isMoveValidNE(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -630,7 +630,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(6,5), Color.WHITE);
         instance.getBoard().putPawn(new Coordinates(5,6), Color.WHITE);
         boolean expResult = false;
-        boolean result = instance.isMoveValidNE(aCoordinate);
+        boolean result = instance.isMoveValidNE(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
 
@@ -644,7 +644,7 @@ public class GameTest {
         Game instance = new Game();
         instance.getBoard().putPawn(new Coordinates(0,0), Color.BLACK);
         boolean expResult = false;
-        boolean result = instance.isMoveValidNW(aCoordinate);
+        boolean result = instance.isMoveValidNW(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -660,7 +660,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(3,2), Color.WHITE);
         instance.getBoard().putPawn(new Coordinates(2,1), Color.BLACK);
         boolean expResult = true;
-        boolean result = instance.isMoveValidNW(aCoordinate);
+        boolean result = instance.isMoveValidNW(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -673,7 +673,7 @@ public class GameTest {
         Coordinates aCoordinate = new Coordinates(0,7);
         Game instance = new Game();
         boolean expResult = false;
-        boolean result = instance.isMoveValidNW(aCoordinate);
+        boolean result = instance.isMoveValidNW(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
@@ -687,7 +687,7 @@ public class GameTest {
         Game instance = new Game();
         instance.getBoard().putPawn(new Coordinates(5,1), Color.WHITE);
         boolean expResult = false;
-        boolean result = instance.isMoveValidNW(aCoordinate);
+        boolean result = instance.isMoveValidNW(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
     }
     
