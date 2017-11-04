@@ -6,30 +6,59 @@
 package esi.atlg3.g43320.othello.model;
 
 /**
+ * This class represents the coordinates of the different cases of the
+ * checkerboard.
  *
  * @author s_u_y_s_a
  */
 public class Coordinates {
+
     private int x;
     private int y;
 
+    /**
+     * Creates an instance of a Coordinates.
+     *
+     * @param x the row of the case.
+     * @param y the column of the case.
+     */
     public Coordinates(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
+    /**
+     * Returns the row the case is at.
+     *
+     * @return the row the case is at.
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * Returns the column the case is at.
+     *
+     * @return the column the case is at.
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     * Change the row value of the coordinate.
+     *
+     * @param x the new row value.
+     */
     public void setX(int x) {
         this.x = x;
     }
 
+    /**
+     * Change the column value of the coordinate.
+     *
+     * @param y the new column value.
+     */
     public void setY(int y) {
         this.y = y;
     }
@@ -67,7 +96,5 @@ public class Coordinates {
     public String toString() {
         return "Coordinates{" + "x=" + x + ", y=" + y + '}';
     }
-    
-    
-    
+
 }

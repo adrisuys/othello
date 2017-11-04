@@ -8,20 +8,38 @@ package esi.atlg3.g43320.othello.model;
 import java.util.Objects;
 
 /**
+ * The class represents a player and a player is defined by the color of its
+ * pawns.
  *
  * @author s_u_y_s_a
  */
 public class Player {
+
     private Color color;
 
+    /**
+     * Creates an instance of a player by giving it a specified color.
+     *
+     * @param color
+     */
     public Player(Color color) {
         this.color = color;
     }
 
+    /**
+     * Returns the color of the player.
+     *
+     * @return the color of the player.
+     */
     public Color getColor() {
         return color;
     }
 
+    /**
+     * Change the color of the player.
+     *
+     * @param color the new color.
+     */
     public void setColor(Color color) {
         this.color = color;
     }
@@ -53,12 +71,11 @@ public class Player {
 
     @Override
     public String toString() {
-        if (getColor()==Color.BLACK) {
+        if (getColor() == Color.BLACK) {
             return "Player Black";
         } else {
             return "Player White";
         }
     }
-    
-    
+
 }
