@@ -37,7 +37,7 @@ public class Board {
      * one.
      */
     public Board(Board board) {
-        if (board == null){
+        if (board == null) {
             throw new IllegalArgumentException("the board can't be null");
         }
         this.checkerboard = board.checkerboard;
@@ -50,7 +50,6 @@ public class Board {
      */
     public int[][] getCheckerboard() {
         return Arrays.copyOf(checkerboard, checkerboard.length);
-        //return checkerboard;
     }
 
     /**
@@ -155,6 +154,5 @@ public class Board {
         final Board other = (Board) obj;
         return Arrays.deepEquals(this.checkerboard, other.checkerboard);
     }
-    
-    
+
 }

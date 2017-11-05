@@ -23,8 +23,8 @@ public class Player {
      * @param color
      */
     public Player(Color color) {
-        if (color == null){
-            throw new IllegalArgumentException ("the color can't be null");
+        if (color == null) {
+            throw new IllegalArgumentException("the color can't be null");
         }
         this.color = color;
     }

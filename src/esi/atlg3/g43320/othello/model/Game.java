@@ -60,7 +60,7 @@ public class Game {
      * @param game another game that gives its attributes to the new one.
      */
     public Game(Game game) {
-        if (game == null){
+        if (game == null) {
             throw new IllegalArgumentException("Game can't be null");
         }
         this.players = game.players;
@@ -516,7 +516,6 @@ public class Game {
      */
     public List<List<Coordinates>> getPawnsToBeTurned() {
         return Collections.unmodifiableList(pawnsToBeTurned);
-        //return pawnsToBeTurned;
     }
 
     /**
@@ -526,7 +525,6 @@ public class Game {
      */
     public List<Player> getPlayers() {
         return Collections.unmodifiableList(players);
-        //return players;
     }
 
     /**
@@ -536,7 +534,6 @@ public class Game {
      */
     public List<Coordinates> getPossibleMove() {
         return Collections.unmodifiableList(possibleMove);
-        //return possibleMove;
     }
 
     /**
@@ -545,15 +542,6 @@ public class Game {
      * @return true if none of the players can't play anymore, false otherwise.
      */
     public boolean isOver() {
-//        boolean isOver;
-//        if (isTurnPassed(currentPlayer)){
-//            changePlayer();
-//            isOver = isTurnPassed(currentPlayer);
-//        } else {
-//            isOver = false;
-//        }
-//        changePlayer();
-//        return isOver;
         return isTurnPassed(players.get(0)) && isTurnPassed(players.get(1));
     }
 
@@ -626,7 +614,5 @@ public class Game {
         }
         return Objects.equals(this.possibleMove, other.possibleMove);
     }
-    
-    
 
 }

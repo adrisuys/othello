@@ -40,6 +40,9 @@ public class OthelloModel implements Observable {
      */
     @Override
     public void registerObserver(Observer obs) {
+        if (obs == null) {
+            throw new IllegalArgumentException("obs can't be null");
+        }
         if (!observers.contains(obs)) {
             observers.add(obs);
         }
@@ -52,6 +55,9 @@ public class OthelloModel implements Observable {
      */
     @Override
     public void removeObserver(Observer obs) {
+        if (obs == null) {
+            throw new IllegalArgumentException("obs can't be null");
+        }
         if (observers.contains(obs)) {
             observers.remove(obs);
         }
@@ -82,32 +88,15 @@ public class OthelloModel implements Observable {
         validPlay = valid;
         game = aGame;
         coord = aCoordinate;
-        //turnPassed = passed;
-//        if (game.isTurnPassed(game.getCurrentPlayer())) {
-//            turnPassed = true;
-//            game.changePlayer();
-//        } else {
-            game.updatePossibleMove(game.getCurrentColor());
-            if (!game.getPossibleMove().contains(coord)) {
-                validPlay = false;
-            } else {
-                validPlay = true;
-                game.putPawn(coord, game.getCurrentColor());
-                game.changeColorPawn(game.getBoard());
-                game.changePlayer();
-            }
-        //}
-//        if (!game.isTurnPassed(game.getCurrentPlayer())){
-//            validPlay = game.putPawn(coord);
-//            turnPassed = false;
-//        } else {
-//            turnPassed = true;
-//            game.changePlayer();
-//        }
-//        if (validPlay){
-//            game.changeColorPawn(game.getBoard());
-//            game.changePlayer();
-//        }
+        game.updatePossibleMove(game.getCurrentColor());
+        if (!game.getPossibleMove().contains(coord)) {
+            validPlay = false;
+        } else {
+            validPlay = true;
+            game.putPawn(coord, game.getCurrentColor());
+            game.changeColorPawn(game.getBoard());
+            game.changePlayer();
+        }
         notifyObserversPlay();
     }
 
@@ -197,7 +186,7 @@ public class OthelloModel implements Observable {
     public int getScorePlayer2() {
         return scorePlayer2;
     }
-    
+
     /**
      * Notifies the observers when the game is being initialized.
      */
@@ -249,44 +238,45 @@ public class OthelloModel implements Observable {
     public boolean isTurnPassed() {
         return turnPassed;
     }
-    
+
     /**
      * Notifies the observers when the game is over.
      */
     @Override
-    public void notifyEndOfGame(){
+    public void notifyEndOfGame() {
         observers.forEach((obs) -> {
             obs.updateEndOfGame();
         });
     }
-    
+
     /**
      * End the game by telling who the winner is.
-     * 
+     *
      * @param aGame the game currently being played.
      */
-    public void endOfGame (Game aGame){
-        game =  aGame;
+    public void endOfGame(Game aGame) {
+        game = aGame;
         score(game);
         notifyEndOfGame();
     }
-    
+
     /**
      * If a player's turn is passed, it changes the current player.
+     *
      * @param aGame the game the players are currently playing.
      * @param passed a boolean indicating if a player's turn is passed.
      */
-    public void turnPassed (Game aGame, boolean passed){
+    public void turnPassed(Game aGame, boolean passed) {
         game = aGame;
         turnPassed = passed;
-        if (turnPassed){
+        if (turnPassed) {
             game.changePlayer();
         }
         notifyTurnPassed();
     }
-    
+
     @Override
-    public void notifyTurnPassed(){
+    public void notifyTurnPassed() {
         observers.forEach((obs) -> {
             obs.updateTurnPassed();
         });
@@ -337,7 +327,5 @@ public class OthelloModel implements Observable {
         }
         return Objects.equals(this.coord, other.coord);
     }
-    
-    
 
 }

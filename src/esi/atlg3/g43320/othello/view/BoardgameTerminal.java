@@ -35,7 +35,7 @@ public class BoardgameTerminal implements Observer {
         }
         this.observable = (OthelloModel) observable;
         this.observable.registerObserver(this);
-        
+
     }
 
     /**
@@ -55,25 +55,26 @@ public class BoardgameTerminal implements Observer {
         buf.append("\n");
         buf.append("-------------------------------------");
         buf.append("\n");
-        for (int i = 0; i<game.getBoard().getROW(); i++){
+        for (int i = 0; i < game.getBoard().getROW(); i++) {
             buf.append("| ");
             buf.append(cpt);
             buf.append(" ");
-            for (int j = 0; j <game.getBoard().getCOL(); j++){
-                switch (game.getBoard().getCheckerboard()[i][j]){
-                    case 0 : 
-                        if (game.getPossibleMove().contains(new Coordinates(i,j))){
+            for (int j = 0; j < game.getBoard().getCOL(); j++) {
+                switch (game.getBoard().getCheckerboard()[i][j]) {
+                    case 0:
+                        if (game.getPossibleMove().contains(new Coordinates(i, j))) {
                             buf.append("| ");
                             buf.append("\u001B[31m");
                             buf.append("x ");
                             buf.append("\u001B[0m");
                         } else {
                             buf.append("| . ");
-                        } break;
-                    case 1 :
+                        }
+                        break;
+                    case 1:
                         buf.append("| B ");
                         break;
-                    default :
+                    default:
                         buf.append("| W ");
                 }
             }
@@ -81,7 +82,7 @@ public class BoardgameTerminal implements Observer {
             buf.append("\n");
             buf.append("-------------------------------------");
             buf.append("\n");
-            cpt ++;
+            cpt++;
         }
         String s = buf.toString();
         System.out.println(s);
@@ -113,9 +114,6 @@ public class BoardgameTerminal implements Observer {
      */
     @Override
     public void updatePlay() {
-//        if (observable.isTurnPassed() == true) {
-//            System.out.println("Your turn has been passed, it is now the " + displayCurrentPlayer(observable.getGame()) + "'s turn!");
-//        } else 
         if (!observable.isValidPlay()) {
             System.out.println("You can't put a pawn on that coordinate! Try again!");
         } else {
@@ -200,17 +198,17 @@ public class BoardgameTerminal implements Observer {
      */
     @Override
     public void updateEndOfGame() {
-        if (observable.getScorePlayer1()>observable.getScorePlayer2()){
+        if (observable.getScorePlayer1() > observable.getScorePlayer2()) {
             System.out.println("The player BLACK is the winner!");
-        } else if (observable.getScorePlayer1()==observable.getScorePlayer2()) {
+        } else if (observable.getScorePlayer1() == observable.getScorePlayer2()) {
             System.out.println("This is a draw!");
         } else {
             System.out.println("The player WHITE is the winner!");
         }
     }
-    
+
     @Override
-    public void updateTurnPassed(){
+    public void updateTurnPassed() {
         if (observable.isTurnPassed()) {
             System.out.println("Your turn has been passed, it is now the " + displayCurrentPlayer(observable.getGame()) + "'s turn!");
             displayBoardgame(observable.getGame(), observable.getGame().getCurrentColor());
@@ -238,6 +236,5 @@ public class BoardgameTerminal implements Observer {
         final BoardgameTerminal other = (BoardgameTerminal) obj;
         return Objects.equals(this.observable, other.observable);
     }
-    
-    
+
 }
