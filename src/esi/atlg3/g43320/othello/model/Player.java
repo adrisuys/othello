@@ -63,10 +63,7 @@ public class Player {
             return false;
         }
         final Player other = (Player) obj;
-        if (this.color != other.color) {
-            return false;
-        }
-        return true;
+        return this.color == other.color;
     }
 
     @Override

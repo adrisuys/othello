@@ -50,7 +50,7 @@ public class BoardgameFX extends Application {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 Rectangle rec = new Rectangle(60 * j, 60 * i, 60, 60);
-                if ((i + j) % 2 == 1) {
+                if ((i + j) % 2 != 0) {
                     rec.setFill(Color.BROWN);
                 } else {
                     rec.setFill(Color.BURLYWOOD);
@@ -126,6 +126,9 @@ public class BoardgameFX extends Application {
         primaryStage.show();
     }
 
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
         launch(args);
     }

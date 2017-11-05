@@ -59,5 +59,14 @@ public interface Observable {
      * case of the board.
      */
     public void notifyObserversErrorInputCoordinates();
-
+    
+    /**
+     * Notifies the observers when the game is over.
+     */
+    public void notifyEndOfGame();
+    
+    /**
+     * Notifies the observers when a player's turn is passed.
+     */
+    public void notifyTurnPassed();
 }

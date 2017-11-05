@@ -8,6 +8,7 @@ package esi.atlg3.g43320.othello.view;
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.Game;
 import esi.atlg3.g43320.othello.model.OthelloModel;
+import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -27,10 +28,14 @@ public class OthelloFacade {
         BoardgameTerminal view = new BoardgameTerminal(othello);
 
         othello.init(game);
-
         while (!game.isOver()) {
-            playATurn(othello, game);
+            othello.turnPassed(game, game.isTurnPassed(game.getCurrentPlayer()));
+            if (!othello.isTurnPassed()) {
+                playATurn(othello, game);
+            }
         }
+
+        othello.endOfGame(game);
     }
 
     /**
@@ -75,16 +80,16 @@ public class OthelloFacade {
         boolean unvalid = true;
         boolean validPlay = false;
         boolean turnPassed = false;
-        Scanner keyboard = new Scanner(System.in);
+        Scanner keyboard = new Scanner(System.in, "UTF-8");
         String input = keyboard.nextLine();
         while (unvalid) {
             unvalid = false;
             String[] inputArray = input.split("\\s+");
-            if (null == inputArray[0].toUpperCase()) {
+            if (null == inputArray[0]) {
                 othello.notifyObserversErrorInputCommand();
                 unvalid = true;
             } else {
-                switch (inputArray[0].toUpperCase()) {
+                switch (inputArray[0].toUpperCase(Locale.ENGLISH)) {
                     case "SHOW":
                         othello.show(game);
                         break;
@@ -96,7 +101,7 @@ public class OthelloFacade {
                             int x = Integer.parseInt(inputArray[1]);
                             int y = Integer.parseInt(inputArray[2]);
                             othello.play(game, new Coordinates(x, y), validPlay, turnPassed);
-                            unvalid = !validPlay;
+                            unvalid = !othello.isValidPlay();
                         } else {
                             othello.notifyObserversErrorInputCoordinates();
                             unvalid = true;
@@ -113,5 +118,4 @@ public class OthelloFacade {
             }
         }
     }
-
 }

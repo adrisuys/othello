@@ -47,5 +47,15 @@ public interface Observer {
      * updates itself.
      */
     public void updateErrorInputCommand();
+    
+    /**
+     * When notified that the game is over, this object updates itself.
+     */
+    public void updateEndOfGame();
+    
+    /**
+     * When notified that a player's turn is passed, this object updates itself.
+     */
+    public void updateTurnPassed();
 
 }

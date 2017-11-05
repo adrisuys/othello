@@ -407,9 +407,9 @@ public class Game {
         while ((x < board.getROW() && y >= 0)
                 && (board.getCheckerboard()[x][y] != 0)
                 && (board.getCheckerboard()[x][y] != color.getValue())) {
+            pawnsAtSW.add(new Coordinates(x, y));
             x++;
             y--;
-            pawnsAtSW.add(new Coordinates(x, y));
         }
         if (x < board.getROW() && y >= 0 && (x > aCoordinate.getX() + 1)
                 && board.getCheckerboard()[x][y] == color.getValue()) {
@@ -443,9 +443,9 @@ public class Game {
         while ((x >= 0 && y < board.getCOL()
                 && board.getCheckerboard()[x][y] != 0
                 && (board.getCheckerboard()[x][y] != color.getValue()))) {
+            pawnsAtNE.add(new Coordinates(x, y));
             x--;
             y++;
-            pawnsAtNE.add(new Coordinates(x, y));
         }
         if (x >= 0 && y < board.getCOL() && (x < aCoordinate.getX() - 1)
                 && board.getCheckerboard()[x][y] == color.getValue()) {
@@ -478,9 +478,9 @@ public class Game {
         int y = aCoordinate.getY() - 1;
         while ((x >= 0 && y >= 0) && (board.getCheckerboard()[x][y] != 0)
                 && (board.getCheckerboard()[x][y] != color.getValue())) {
+            pawnsAtNW.add(new Coordinates(x, y));
             x--;
             y--;
-            pawnsAtNW.add(new Coordinates(x, y));
         }
         if (x >= 0 && y >= 0 && x < aCoordinate.getX() - 1 && board.getCheckerboard()[x][y] == color.getValue()) {
             valid = true;

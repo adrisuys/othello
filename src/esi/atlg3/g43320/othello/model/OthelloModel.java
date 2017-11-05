@@ -8,7 +8,6 @@ package esi.atlg3.g43320.othello.model;
 import esi.atlg3.g43320.othello.dp.Observable;
 import esi.atlg3.g43320.othello.dp.Observer;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,10 +20,8 @@ public class OthelloModel implements Observable {
     private final List<Observer> observers;
     private Game game;
     private Coordinates coord;
-    private String errorMessage;
     private int scorePlayer1;
     private int scorePlayer2;
-    private Board board;
     private boolean validPlay;
     private boolean turnPassed;
 
@@ -64,9 +61,9 @@ public class OthelloModel implements Observable {
      */
     @Override
     public void notifyObserversPlay() {
-        for (Observer obs : observers) {
+        observers.forEach((obs) -> {
             obs.updatePlay();
-        }
+        });
     }
 
     /**
@@ -84,21 +81,21 @@ public class OthelloModel implements Observable {
         validPlay = valid;
         game = aGame;
         coord = aCoordinate;
-        turnPassed = passed;
-        if (game.isTurnPassed(game.getCurrentPlayer())) {
-            turnPassed = true;
-            game.changePlayer();
-        } else {
+        //turnPassed = passed;
+//        if (game.isTurnPassed(game.getCurrentPlayer())) {
+//            turnPassed = true;
+//            game.changePlayer();
+//        } else {
             game.updatePossibleMove(game.getCurrentColor());
-            if (!game.getPossibleMove().contains(aCoordinate)) {
+            if (!game.getPossibleMove().contains(coord)) {
                 validPlay = false;
             } else {
                 validPlay = true;
-                game.putPawn(aCoordinate, game.getCurrentColor());
+                game.putPawn(coord, game.getCurrentColor());
                 game.changeColorPawn(game.getBoard());
                 game.changePlayer();
             }
-        }
+        //}
 //        if (!game.isTurnPassed(game.getCurrentPlayer())){
 //            validPlay = game.putPawn(coord);
 //            turnPassed = false;
@@ -118,9 +115,9 @@ public class OthelloModel implements Observable {
      */
     @Override
     public void notifyObserversScore() {
-        for (Observer obs : observers) {
+        observers.forEach((obs) -> {
             obs.updateScore();
-        }
+        });
     }
 
     /**
@@ -129,9 +126,9 @@ public class OthelloModel implements Observable {
      */
     @Override
     public void notifyObserversShow() {
-        for (Observer obs : observers) {
+        observers.forEach((obs) -> {
             obs.updateShow();
-        }
+        });
     }
 
     /**
@@ -174,32 +171,12 @@ public class OthelloModel implements Observable {
     }
 
     /**
-     * Returns the list of all the observers of this object.
-     *
-     * @return the list of all the observers of this object.
-     */
-    public List<Observer> getObservers() {
-        return Collections.unmodifiableList(observers);
-    }
-
-    /**
      * Returns the game.
      *
      * @return the game.
      */
     public Game getGame() {
         return new Game(game);
-    }
-
-    /**
-     * Returns the coordinates of the case on which the player wants to put a
-     * pawn.
-     *
-     * @return the coordinates of the case on which the player wants to put a
-     * pawn.
-     */
-    public Coordinates getCoord() {
-        return new Coordinates(coord.getX(), coord.getY());
     }
 
     /**
@@ -219,24 +196,15 @@ public class OthelloModel implements Observable {
     public int getScorePlayer2() {
         return scorePlayer2;
     }
-
-    /**
-     * Returns the board.
-     *
-     * @return the board.
-     */
-    public Board getBoard() {
-        return new Board(board);
-    }
-
+    
     /**
      * Notifies the observers when the game is being initialized.
      */
     @Override
     public void notifyObserversInit() {
-        for (Observer obs : observers) {
+        observers.forEach((obs) -> {
             obs.updateInit();
-        }
+        });
     }
 
     /**
@@ -245,9 +213,9 @@ public class OthelloModel implements Observable {
      */
     @Override
     public void notifyObserversErrorInputCommand() {
-        for (Observer obs : observers) {
+        observers.forEach((obs) -> {
             obs.updateErrorInputCommand();
-        }
+        });
     }
 
     /**
@@ -256,9 +224,9 @@ public class OthelloModel implements Observable {
      */
     @Override
     public void notifyObserversErrorInputCoordinates() {
-        for (Observer obs : observers) {
+        observers.forEach((obs) -> {
             obs.updateErrorInputCoordinates();
-        }
+        });
     }
 
     /**
@@ -279,6 +247,48 @@ public class OthelloModel implements Observable {
      */
     public boolean isTurnPassed() {
         return turnPassed;
+    }
+    
+    /**
+     * Notifies the observers when the game is over.
+     */
+    @Override
+    public void notifyEndOfGame(){
+        observers.forEach((obs) -> {
+            obs.updateEndOfGame();
+        });
+    }
+    
+    /**
+     * End the game by telling who the winner is.
+     * 
+     * @param aGame the game currently being played.
+     */
+    public void endOfGame (Game aGame){
+        game =  aGame;
+        score(game);
+        notifyEndOfGame();
+    }
+    
+    /**
+     * If a player's turn is passed, it changes the current player.
+     * @param aGame the game the players are currently playing.
+     * @param passed a boolean indicating if a player's turn is passed.
+     */
+    public void turnPassed (Game aGame, boolean passed){
+        game = aGame;
+        turnPassed = passed;
+        if (turnPassed){
+            game.changePlayer();
+        }
+        notifyTurnPassed();
+    }
+    
+    @Override
+    public void notifyTurnPassed(){
+        observers.forEach((obs) -> {
+            obs.updateTurnPassed();
+        });
     }
 
 }

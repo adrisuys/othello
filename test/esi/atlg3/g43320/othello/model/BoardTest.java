@@ -5,9 +5,6 @@
  */
 package esi.atlg3.g43320.othello.model;
 
-import esi.atlg3.g43320.othello.model.Color;
-import esi.atlg3.g43320.othello.model.Coordinates;
-import esi.atlg3.g43320.othello.model.Board;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -17,6 +14,9 @@ import static org.junit.Assert.*;
  */
 public class BoardTest {
     
+    /**
+     * Creates an instance of the class BoardTest.
+     */
     public BoardTest() {
     }
 

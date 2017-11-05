@@ -5,16 +5,6 @@
  */
 package esi.atlg3.g43320.othello.model;
 
-import esi.atlg3.g43320.othello.model.Player;
-import esi.atlg3.g43320.othello.model.Color;
-import esi.atlg3.g43320.othello.model.Coordinates;
-import esi.atlg3.g43320.othello.model.Game;
-import java.util.ArrayList;
-import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -24,6 +14,9 @@ import static org.junit.Assert.*;
  */
 public class GameTest {
     
+    /**
+     * Creates an instance of the class GameTest.
+     */
     public GameTest() {
     }
 
@@ -689,6 +682,35 @@ public class GameTest {
         boolean expResult = false;
         boolean result = instance.isMoveValidNW(aCoordinate, Color.BLACK);
         assertEquals(expResult, result);
+    }
+    
+    /**
+     * Verfies if the right coordinates are put on the list pawnsToBeTurned.
+     */
+    @Test
+    public void testListCoordChange(){
+        System.out.println("Test List de coord à changer");
+        Coordinates aCoordinate = new Coordinates (3,5);
+        Game instance = new Game();
+        instance.getBoard().putPawn(new Coordinates(0,2), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(1,3), Color.BLACK);
+        instance.getBoard().putPawn(new Coordinates(1,4), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(1,5), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(2,3), Color.BLACK);
+        instance.getBoard().putPawn(new Coordinates(2,4), Color.BLACK);
+        instance.getBoard().putPawn(new Coordinates(2,5), Color.BLACK);
+        instance.getBoard().putPawn(new Coordinates(3,3), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(3,4), Color.BLACK);
+        instance.getBoard().putPawn(new Coordinates(4,3), Color.BLACK);
+        instance.getBoard().putPawn(new Coordinates(4,4), Color.WHITE);
+        boolean expResult = true;
+        boolean result = instance.isMoveValid(aCoordinate, Color.WHITE);
+        instance.getPawnsToBeTurned().forEach((c) -> {
+            c.forEach((co) -> {
+                System.out.println(co);
+            });
+        });
+        assertEquals(expResult,result);
     }
     
 }

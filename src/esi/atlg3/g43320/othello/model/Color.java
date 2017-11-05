@@ -22,7 +22,7 @@ public enum Color {
      */
     WHITE(2);
 
-    private int value;
+    private final int value;
 
     private Color(int value) {
         this.value = value;

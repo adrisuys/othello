@@ -15,8 +15,8 @@ import java.util.Arrays;
 public class Board {
 
     private final int[][] checkerboard;
-    private final int ROW = 8;
-    private final int COL = 8;
+    private final static int ROW = 8;
+    private final static int COL = 8;
 
     /**
      * Creates an instance of a Board.
