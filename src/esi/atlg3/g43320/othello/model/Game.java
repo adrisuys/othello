@@ -8,6 +8,7 @@ package esi.atlg3.g43320.othello.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class represents the whole game of Othello.
@@ -59,6 +60,9 @@ public class Game {
      * @param game another game that gives its attributes to the new one.
      */
     public Game(Game game) {
+        if (game == null){
+            throw new IllegalArgumentException("Game can't be null");
+        }
         this.players = game.players;
         this.board = game.board;
         this.currentPlayer = game.currentPlayer;
@@ -552,5 +556,77 @@ public class Game {
 //        return isOver;
         return isTurnPassed(players.get(0)) && isTurnPassed(players.get(1));
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.players);
+        hash = 37 * hash + Objects.hashCode(this.board);
+        hash = 37 * hash + Objects.hashCode(this.currentPlayer);
+        hash = 37 * hash + Objects.hashCode(this.pawnsToBeTurned);
+        hash = 37 * hash + Objects.hashCode(this.pawnsAtE);
+        hash = 37 * hash + Objects.hashCode(this.pawnsAtS);
+        hash = 37 * hash + Objects.hashCode(this.pawnsAtW);
+        hash = 37 * hash + Objects.hashCode(this.pawnsAtN);
+        hash = 37 * hash + Objects.hashCode(this.pawnsAtNE);
+        hash = 37 * hash + Objects.hashCode(this.pawnsAtSE);
+        hash = 37 * hash + Objects.hashCode(this.pawnsAtNW);
+        hash = 37 * hash + Objects.hashCode(this.pawnsAtSW);
+        hash = 37 * hash + Objects.hashCode(this.possibleMove);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Game other = (Game) obj;
+        if (!Objects.equals(this.players, other.players)) {
+            return false;
+        }
+        if (!Objects.equals(this.board, other.board)) {
+            return false;
+        }
+        if (!Objects.equals(this.currentPlayer, other.currentPlayer)) {
+            return false;
+        }
+        if (!Objects.equals(this.pawnsToBeTurned, other.pawnsToBeTurned)) {
+            return false;
+        }
+        if (!Objects.equals(this.pawnsAtE, other.pawnsAtE)) {
+            return false;
+        }
+        if (!Objects.equals(this.pawnsAtS, other.pawnsAtS)) {
+            return false;
+        }
+        if (!Objects.equals(this.pawnsAtW, other.pawnsAtW)) {
+            return false;
+        }
+        if (!Objects.equals(this.pawnsAtN, other.pawnsAtN)) {
+            return false;
+        }
+        if (!Objects.equals(this.pawnsAtNE, other.pawnsAtNE)) {
+            return false;
+        }
+        if (!Objects.equals(this.pawnsAtSE, other.pawnsAtSE)) {
+            return false;
+        }
+        if (!Objects.equals(this.pawnsAtNW, other.pawnsAtNW)) {
+            return false;
+        }
+        if (!Objects.equals(this.pawnsAtSW, other.pawnsAtSW)) {
+            return false;
+        }
+        return Objects.equals(this.possibleMove, other.possibleMove);
+    }
+    
+    
 
 }

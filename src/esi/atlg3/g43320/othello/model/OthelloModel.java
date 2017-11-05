@@ -9,6 +9,7 @@ import esi.atlg3.g43320.othello.dp.Observable;
 import esi.atlg3.g43320.othello.dp.Observer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class is the model of the Game, it implements Observable.
@@ -290,5 +291,53 @@ public class OthelloModel implements Observable {
             obs.updateTurnPassed();
         });
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 47 * hash + Objects.hashCode(this.observers);
+        hash = 47 * hash + Objects.hashCode(this.game);
+        hash = 47 * hash + Objects.hashCode(this.coord);
+        hash = 47 * hash + this.scorePlayer1;
+        hash = 47 * hash + this.scorePlayer2;
+        hash = 47 * hash + (this.validPlay ? 1 : 0);
+        hash = 47 * hash + (this.turnPassed ? 1 : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final OthelloModel other = (OthelloModel) obj;
+        if (this.scorePlayer1 != other.scorePlayer1) {
+            return false;
+        }
+        if (this.scorePlayer2 != other.scorePlayer2) {
+            return false;
+        }
+        if (this.validPlay != other.validPlay) {
+            return false;
+        }
+        if (this.turnPassed != other.turnPassed) {
+            return false;
+        }
+        if (!Objects.equals(this.observers, other.observers)) {
+            return false;
+        }
+        if (!Objects.equals(this.game, other.game)) {
+            return false;
+        }
+        return Objects.equals(this.coord, other.coord);
+    }
+    
+    
 
 }

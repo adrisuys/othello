@@ -11,6 +11,7 @@ import esi.atlg3.g43320.othello.model.Color;
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.Game;
 import esi.atlg3.g43320.othello.model.OthelloModel;
+import java.util.Objects;
 
 /**
  * This class represents the command/terminal interface of the game Othello.
@@ -215,4 +216,28 @@ public class BoardgameTerminal implements Observer {
             displayBoardgame(observable.getGame(), observable.getGame().getCurrentColor());
         }
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 53 * hash + Objects.hashCode(this.observable);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final BoardgameTerminal other = (BoardgameTerminal) obj;
+        return Objects.equals(this.observable, other.observable);
+    }
+    
+    
 }

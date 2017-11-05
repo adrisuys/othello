@@ -37,6 +37,9 @@ public class Board {
      * one.
      */
     public Board(Board board) {
+        if (board == null){
+            throw new IllegalArgumentException("the board can't be null");
+        }
         this.checkerboard = board.checkerboard;
     }
 
@@ -130,4 +133,28 @@ public class Board {
         }
         return score;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 41 * hash + Arrays.deepHashCode(this.checkerboard);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Board other = (Board) obj;
+        return Arrays.deepEquals(this.checkerboard, other.checkerboard);
+    }
+    
+    
 }
