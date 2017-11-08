@@ -25,6 +25,14 @@ public class OthelloModel implements Observable {
     private int scorePlayer2;
     private boolean validPlay;
     private boolean turnPassed;
+    private boolean updatePlay;
+    private boolean updateScore;
+    private boolean updateShow;
+    private boolean updateInit;
+    private boolean updateTurnPassed;
+    private boolean updateEndOfGame;
+    private boolean updateCoordinatesError;
+    private boolean updateCommandsError;
 
     /**
      * Creates an instance of a model of Othello.
@@ -67,9 +75,9 @@ public class OthelloModel implements Observable {
      * Notifies the observers when a player plays.
      */
     @Override
-    public void notifyObserversPlay() {
+    public void notifyObservers() {
         observers.forEach((obs) -> {
-            obs.updatePlay();
+            obs.update();
         });
     }
 
@@ -97,28 +105,15 @@ public class OthelloModel implements Observable {
             game.changeColorPawn(game.getBoard());
             game.changePlayer();
         }
-        notifyObserversPlay();
-    }
-
-    /**
-     * Notifies the observers when a player asks to see the score.
-     */
-    @Override
-    public void notifyObserversScore() {
-        observers.forEach((obs) -> {
-            obs.updateScore();
-        });
-    }
-
-    /**
-     * Notifies the observers when a player asks to see the board at a given
-     * time.
-     */
-    @Override
-    public void notifyObserversShow() {
-        observers.forEach((obs) -> {
-            obs.updateShow();
-        });
+        updateInit = false;
+        updateScore = false;
+        updatePlay = true;
+        updateShow = false;
+        updateTurnPassed = false;
+        updateEndOfGame = false;
+        updateCommandsError = false;
+        updateCoordinatesError = false;
+        notifyObservers();
     }
 
     /**
@@ -131,7 +126,15 @@ public class OthelloModel implements Observable {
         game = aGame;
         scorePlayer1 = game.getBoard().getScore(Color.BLACK);
         scorePlayer2 = game.getBoard().getScore(Color.WHITE);
-        notifyObserversScore();
+        updateInit = false;
+        updateScore = true;
+        updatePlay = false;
+        updateShow = false;
+        updateTurnPassed = false;
+        updateEndOfGame = false;
+        updateCommandsError = false;
+        updateCoordinatesError = false;
+        notifyObservers();
     }
 
     /**
@@ -142,7 +145,15 @@ public class OthelloModel implements Observable {
      */
     public void show(Game aGame) {
         game = aGame;
-        notifyObserversShow();
+        updateInit = false;
+        updateScore = false;
+        updatePlay = false;
+        updateShow = true;
+        updateTurnPassed = false;
+        updateEndOfGame = false;
+        updateCommandsError = false;
+        updateCoordinatesError = false;
+        notifyObservers();
     }
 
     /**
@@ -157,7 +168,15 @@ public class OthelloModel implements Observable {
         game.getBoard().putPawn(new Coordinates(3, 4), Color.BLACK);
         game.getBoard().putPawn(new Coordinates(4, 3), Color.BLACK);
         game.getBoard().putPawn(new Coordinates(4, 4), Color.WHITE);
-        notifyObserversInit();
+        updateInit = true;
+        updateScore = false;
+        updatePlay = false;
+        updateShow = false;
+        updateTurnPassed = false;
+        updateEndOfGame = false;
+        updateCommandsError = false;
+        updateCoordinatesError = false;
+        notifyObservers();
     }
 
     /**
@@ -188,38 +207,6 @@ public class OthelloModel implements Observable {
     }
 
     /**
-     * Notifies the observers when the game is being initialized.
-     */
-    @Override
-    public void notifyObserversInit() {
-        observers.forEach((obs) -> {
-            obs.updateInit();
-        });
-    }
-
-    /**
-     * Notifies the observers when the player typed a wrong command (not amongs
-     * the following : "score", "show", "play x y").
-     */
-    @Override
-    public void notifyObserversErrorInputCommand() {
-        observers.forEach((obs) -> {
-            obs.updateErrorInputCommand();
-        });
-    }
-
-    /**
-     * Notifies the observers when the player wants to put a pawn on a non-valid
-     * case of the board.
-     */
-    @Override
-    public void notifyObserversErrorInputCoordinates() {
-        observers.forEach((obs) -> {
-            obs.updateErrorInputCoordinates();
-        });
-    }
-
-    /**
      * Returns a boolean indicating if the play happened correctly (if the
      * player has been able to put a pawn on the board).
      *
@@ -240,24 +227,23 @@ public class OthelloModel implements Observable {
     }
 
     /**
-     * Notifies the observers when the game is over.
-     */
-    @Override
-    public void notifyEndOfGame() {
-        observers.forEach((obs) -> {
-            obs.updateEndOfGame();
-        });
-    }
-
-    /**
      * End the game by telling who the winner is.
      *
      * @param aGame the game currently being played.
      */
     public void endOfGame(Game aGame) {
         game = aGame;
-        score(game);
-        notifyEndOfGame();
+        scorePlayer1 = game.getBoard().getScore(Color.BLACK);
+        scorePlayer2 = game.getBoard().getScore(Color.WHITE);
+        updateInit = false;
+        updateScore = true;
+        updatePlay = false;
+        updateShow = false;
+        updateTurnPassed = false;
+        updateEndOfGame = true;
+        updateCommandsError = false;
+        updateCoordinatesError = false;
+        notifyObservers();
     }
 
     /**
@@ -272,14 +258,15 @@ public class OthelloModel implements Observable {
         if (turnPassed) {
             game.changePlayer();
         }
-        notifyTurnPassed();
-    }
-
-    @Override
-    public void notifyTurnPassed() {
-        observers.forEach((obs) -> {
-            obs.updateTurnPassed();
-        });
+        updateInit = false;
+        updateScore = false;
+        updatePlay = false;
+        updateShow = false;
+        updateTurnPassed = true;
+        updateEndOfGame = false;
+        updateCommandsError = false;
+        updateCoordinatesError = false;
+        notifyObservers();
     }
 
     @Override
@@ -327,5 +314,76 @@ public class OthelloModel implements Observable {
         }
         return Objects.equals(this.coord, other.coord);
     }
+
+    public boolean isUpdatePlay() {
+        return updatePlay;
+    }
+
+    public boolean isUpdateScore() {
+        return updateScore;
+    }
+
+    public boolean isUpdateShow() {
+        return updateShow;
+    }
+
+    public boolean isUpdateInit() {
+        return updateInit;
+    }
+
+    public boolean isUpdateTurnPassed() {
+        return updateTurnPassed;
+    }
+
+    public boolean isUpdateEndOfGame() {
+        return updateEndOfGame;
+    }
+
+    public boolean isUpdateCoordinatesError() {
+        return updateCoordinatesError;
+    }
+
+    public boolean isUpdateCommandsError() {
+        return updateCommandsError;
+    }
+    
+    
+    
+    public void updateBooleans (boolean a, boolean b, boolean c, boolean d, boolean e, boolean f, boolean g, boolean h){
+        a = true;
+        b = false;
+        c = false;
+        d = false;
+        e = false;
+        f = false;
+        g = false;
+        h = false;
+    }
+    
+    public void throwCoordinatesError(){
+        updateInit = false;
+        updateScore = false;
+        updatePlay = false;
+        updateShow = false;
+        updateTurnPassed = false;
+        updateEndOfGame = false;
+        updateCommandsError = false;
+        updateCoordinatesError = true;
+        notifyObservers();
+    }
+    
+    public void throwCommandsError(){
+        updateInit = false;
+        updateScore = false;
+        updatePlay = false;
+        updateShow = false;
+        updateTurnPassed = false;
+        updateEndOfGame = false;
+        updateCommandsError = true;
+        updateCoordinatesError = false;
+        notifyObservers();
+    }
+    
+    
 
 }

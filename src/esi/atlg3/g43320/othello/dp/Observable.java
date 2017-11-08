@@ -28,45 +28,8 @@ public interface Observable {
     public void removeObserver(Observer obs);
 
     /**
-     * Notifies the observers when a player plays.
+     * Notifies the observers.
      */
-    public void notifyObserversPlay();
+    public void notifyObservers();
 
-    /**
-     * Notifies the observers when a player asks to see the score.
-     */
-    public void notifyObserversScore();
-
-    /**
-     * Notifies the observers when a player asks to see the board at a given
-     * time.
-     */
-    public void notifyObserversShow();
-
-    /**
-     * Notifies the observers when the game is being initialized.
-     */
-    public void notifyObserversInit();
-
-    /**
-     * Notifies the observers when the player typed a wrong command (not amongs
-     * the following : "score", "show", "play x y").
-     */
-    public void notifyObserversErrorInputCommand();
-
-    /**
-     * Notifies the observers when the player wants to put a pawn on a non-valid
-     * case of the board.
-     */
-    public void notifyObserversErrorInputCoordinates();
-    
-    /**
-     * Notifies the observers when the game is over.
-     */
-    public void notifyEndOfGame();
-    
-    /**
-     * Notifies the observers when a player's turn is passed.
-     */
-    public void notifyTurnPassed();
 }

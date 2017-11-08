@@ -14,48 +14,8 @@ package esi.atlg3.g43320.othello.dp;
 public interface Observer {
 
     /**
-     * When notified of a play, this object updates itself.
+     * When notified, this object updates itself.
      */
-    public void updatePlay();
-
-    /**
-     * When notified that a players wants to see the score, this object updates
-     * itself.
-     */
-    public void updateScore();
-
-    /**
-     * When notified that a players wants to see the board, this object updates
-     * iteself.
-     */
-    public void updateShow();
-
-    /**
-     * When notified that the game has been initialized, this object updates
-     * itself.
-     */
-    public void updateInit();
-
-    /**
-     * When notified that a pawn can't be put on a given coordinates, this
-     * object updates itself.
-     */
-    public void updateErrorInputCoordinates();
-
-    /**
-     * When notified that the player has entered a wrong command, this object
-     * updates itself.
-     */
-    public void updateErrorInputCommand();
-    
-    /**
-     * When notified that the game is over, this object updates itself.
-     */
-    public void updateEndOfGame();
-    
-    /**
-     * When notified that a player's turn is passed, this object updates itself.
-     */
-    public void updateTurnPassed();
+    public void update();
 
 }

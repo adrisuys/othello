@@ -61,7 +61,7 @@ public class OthelloFacade {
                 ok = false;
             }
 
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
             ok = false;
         }
         return ok;
@@ -86,7 +86,7 @@ public class OthelloFacade {
             unvalid = false;
             String[] inputArray = input.split("\\s+");
             if (null == inputArray[0]) {
-                othello.notifyObserversErrorInputCommand();
+                othello.throwCommandsError();
                 unvalid = true;
             } else {
                 switch (inputArray[0].toUpperCase(Locale.ENGLISH)) {
@@ -103,12 +103,12 @@ public class OthelloFacade {
                             othello.play(game, new Coordinates(x, y), validPlay, turnPassed);
                             unvalid = !othello.isValidPlay();
                         } else {
-                            othello.notifyObserversErrorInputCoordinates();
+                            othello.throwCoordinatesError();
                             unvalid = true;
                         }
                         break;
                     default:
-                        othello.notifyObserversErrorInputCommand();
+                        othello.throwCommandsError();
                         unvalid = true;
                         break;
                 }

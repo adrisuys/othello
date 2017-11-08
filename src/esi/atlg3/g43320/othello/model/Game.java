@@ -6,6 +6,7 @@
 package esi.atlg3.g43320.othello.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -30,6 +31,7 @@ public class Game {
     private final List<Coordinates> pawnsAtNW;
     private final List<Coordinates> pawnsAtSW;
     private final List<Coordinates> possibleMove;
+    private final List<Coordinates> pawnsToBeTurnedInterm;
 
     /**
      * Creates an instance of a game of Othello.
@@ -52,6 +54,7 @@ public class Game {
         pawnsAtNW = new ArrayList<>();
         pawnsAtSE = new ArrayList<>();
         possibleMove = new ArrayList<>();
+        pawnsToBeTurnedInterm = new ArrayList<>();
     }
 
     /**
@@ -76,6 +79,7 @@ public class Game {
         this.pawnsAtNE = game.pawnsAtNE;
         this.pawnsAtNW = game.pawnsAtNW;
         this.possibleMove = game.possibleMove;
+        this.pawnsToBeTurnedInterm = game.pawnsToBeTurnedInterm;
     }
 
     /**
@@ -192,308 +196,309 @@ public class Game {
      * @return a boolean true if the move is valid, false otherwise.
      */
     public boolean isMoveValid(Coordinates aCoordinate, Color color) {
-        boolean valid = false;
+        boolean valid ;//= false;
         try {
-            if (isMoveValidEast(aCoordinate, color)) {
-                valid = true;
-            }
-            if (isMoveValidWest(aCoordinate, color)) {
-                valid = true;
-            }
-            if (isMoveValidNorth(aCoordinate, color)) {
-                valid = true;
-            }
-            if (isMoveValidSouth(aCoordinate, color)) {
-                valid = true;
-            }
-            if (isMoveValidSE(aCoordinate, color)) {
-                valid = true;
-            }
-            if (isMoveValidSW(aCoordinate, color)) {
-                valid = true;
-            }
-            if (isMoveValidNE(aCoordinate, color)) {
-                valid = true;
-            }
-            if (isMoveValidNW(aCoordinate, color)) {
-                valid = true;
-            }
+            valid = isMoveValidTest(aCoordinate, color);
+//            if (isMoveValidEast(aCoordinate, color)) {
+//                valid = true;
+//            }
+//            if (isMoveValidWest(aCoordinate, color)) {
+//                valid = true;
+//            }
+//            if (isMoveValidNorth(aCoordinate, color)) {
+//                valid = true;
+//            }
+//            if (isMoveValidSouth(aCoordinate, color)) {
+//                valid = true;
+//            }
+//            if (isMoveValidSE(aCoordinate, color)) {
+//                valid = true;
+//            }
+//            if (isMoveValidSW(aCoordinate, color)) {
+//                valid = true;
+//            }
+//            if (isMoveValidNE(aCoordinate, color)) {
+//                valid = true;
+//            }
+//            if (isMoveValidNW(aCoordinate, color)) {
+//                valid = true;
+//            }
         } catch (IllegalArgumentException e) {
             valid = false;
         }
         return valid;
     }
 
-    /**
-     * Checks if the move is valid on a horizontal line to the right of a
-     * specified case.
-     *
-     * @param aCoordinate the coordinates of the specified case.
-     * @param color the color of the pawn that has to be put.
-     * @return a boolean true if the move is valid on the eastern direction,
-     * false otherwise.
-     */
-    public boolean isMoveValidEast(Coordinates aCoordinate, Color color) {
-        boolean valid = false;
-        if (aCoordinate == null) {
-            throw new IllegalArgumentException("The coordinate is not valid!");
-        }
-        if (!board.isFree(aCoordinate)) {
-            throw new IllegalArgumentException("The coordinate is not free");
-        }
-        int y = aCoordinate.getY() + 1;
-        int x = aCoordinate.getX();
-        while (y < board.getCOL() && board.getCheckerboard()[x][y] != 0 && board.getCheckerboard()[x][y] != color.getValue()) {
-            pawnsAtE.add(new Coordinates(x, y));
-            y++;
-        }
-        if (y < board.getCOL() && y > aCoordinate.getY() + 1 && board.getCheckerboard()[x][y] == color.getValue()) {
-            valid = true;
-        } else {
-            pawnsAtE.clear();
-        }
-        pawnsToBeTurned.add(pawnsAtE);
-        return valid;
-    }
-
-    /**
-     * Checks if the move is valid on a horizontal line to the left of a
-     * specified case.
-     *
-     * @param aCoordinate the coordinates of the specified case.
-     * @param color the color of the pawn that has to be put.
-     * @return a boolean true if the move is valid on the western direction,
-     * false otherwise.
-     */
-    public boolean isMoveValidWest(Coordinates aCoordinate, Color color) {
-        boolean valid = false;
-        if (aCoordinate == null) {
-            throw new IllegalArgumentException("The coordinate is not valid!");
-        }
-        if (!board.isFree(aCoordinate)) {
-            throw new IllegalArgumentException("The coordinate is not free");
-        }
-        int y = aCoordinate.getY() - 1;
-        int x = aCoordinate.getX();
-        while (y >= 0 && board.getCheckerboard()[x][y] != 0 && board.getCheckerboard()[x][y] != color.getValue()) {
-            pawnsAtW.add(new Coordinates(x, y));
-            y--;
-        }
-        if (y >= 0 && y < aCoordinate.getY() - 1 && board.getCheckerboard()[x][y] == color.getValue()) {
-            valid = true;
-        } else {
-            pawnsAtW.clear();
-        }
-        pawnsToBeTurned.add(pawnsAtW);
-        return valid;
-    }
-
-    /**
-     * Checks if the move is valid on a vertical line to the top of a specified
-     * case.
-     *
-     * @param aCoordinate the coordinates of the specified case.
-     * @param color the color of the pawn that has to be put.
-     * @return a boolean true if the move is valid on the northern direction,
-     * false otherwise.
-     */
-    public boolean isMoveValidNorth(Coordinates aCoordinate, Color color) {
-        boolean valid = false;
-        if (aCoordinate == null) {
-            throw new IllegalArgumentException("The coordinate is not valid!");
-        }
-        if (!board.isFree(aCoordinate)) {
-            throw new IllegalArgumentException("The coordinate is not free");
-        }
-        int x = aCoordinate.getX() - 1;
-        int y = aCoordinate.getY();
-        while (x >= 0 && board.getCheckerboard()[x][y] != 0 && board.getCheckerboard()[x][y] != color.getValue()) {
-            pawnsAtN.add(new Coordinates(x, y));
-            x--;
-        }
-        if (x >= 0 && x < aCoordinate.getX() - 1 && board.getCheckerboard()[x][y] == color.getValue()) {
-            valid = true;
-        } else {
-            pawnsAtN.clear();
-        }
-        pawnsToBeTurned.add(pawnsAtN);
-        return valid;
-    }
-
-    /**
-     * Checks if the move is valid on a vertical line to the bottom of a
-     * specified case.
-     *
-     * @param aCoordinate the coordinates of the specified case.
-     * @param color the color of the pawn that has to be put.
-     * @return a boolean true if the move is valid on the southern direction,
-     * false otherwise.
-     */
-    public boolean isMoveValidSouth(Coordinates aCoordinate, Color color) {
-        boolean valid = false;
-        if (aCoordinate == null) {
-            throw new IllegalArgumentException("The coordinate is not valid!");
-        }
-        if (!board.isFree(aCoordinate)) {
-            throw new IllegalArgumentException("The coordinate is not free");
-        }
-        int x = aCoordinate.getX() + 1;
-        int y = aCoordinate.getY();
-        while (x < board.getROW() && board.getCheckerboard()[x][y] != 0 && board.getCheckerboard()[x][y] != color.getValue()) {
-            pawnsAtS.add(new Coordinates(x, y));
-            x++;
-        }
-        if (x < board.getROW() && x > aCoordinate.getX() + 1 && board.getCheckerboard()[x][y] == color.getValue()) {
-            valid = true;
-        } else {
-            pawnsAtS.clear();
-        }
-        pawnsToBeTurned.add(pawnsAtS);
-        return valid;
-    }
-
-    /**
-     * Checks if the move is valid on a diagonal line to the bottom-right of a
-     * specified case.
-     *
-     * @param aCoordinate the coordinates of the specified case.
-     * @param color the color of the pawn that has to be put.
-     * @return a boolean true if the move is valid on the south-eastern
-     * direction, false otherwise.
-     */
-    public boolean isMoveValidSE(Coordinates aCoordinate, Color color) {
-        boolean valid = false;
-        if (aCoordinate == null) {
-            throw new IllegalArgumentException("The coordinate is not valid!");
-        }
-        if (!board.isFree(aCoordinate)) {
-            throw new IllegalArgumentException("The coordinate is not free");
-        }
-        int x = aCoordinate.getX() + 1;
-        int y = aCoordinate.getY() + 1;
-        while ((x < board.getROW() && y < board.getCOL())
-                && (board.getCheckerboard()[x][y] != 0)
-                && (board.getCheckerboard()[x][y] != color.getValue())) {
-            pawnsAtSE.add(new Coordinates(x, y));
-            x++;
-            y++;
-        }
-        if ((x < board.getROW() && y < board.getCOL())
-                && (x > aCoordinate.getX() + 1)
-                && board.getCheckerboard()[x][y] == color.getValue()) {
-            valid = true;
-        } else {
-            pawnsAtSE.clear();
-        }
-        pawnsToBeTurned.add(pawnsAtSE);
-        return valid;
-    }
-
-    /**
-     * Checks if the move is valid on a diagonal line to the bottom-left of a
-     * specified case.
-     *
-     * @param aCoordinate the coordinates of the specified case.
-     * @param color the color of the pawn that has to be put.
-     * @return a boolean true if the move is valid on the south-western
-     * direction, false otherwise.
-     */
-    public boolean isMoveValidSW(Coordinates aCoordinate, Color color) {
-        boolean valid = false;
-        if (aCoordinate == null) {
-            throw new IllegalArgumentException("The coordinate is not valid!");
-        }
-        if (!board.isFree(aCoordinate)) {
-            throw new IllegalArgumentException("The coordinate is not free");
-        }
-        int x = aCoordinate.getX() + 1;
-        int y = aCoordinate.getY() - 1;
-        while ((x < board.getROW() && y >= 0)
-                && (board.getCheckerboard()[x][y] != 0)
-                && (board.getCheckerboard()[x][y] != color.getValue())) {
-            pawnsAtSW.add(new Coordinates(x, y));
-            x++;
-            y--;
-        }
-        if (x < board.getROW() && y >= 0 && (x > aCoordinate.getX() + 1)
-                && board.getCheckerboard()[x][y] == color.getValue()) {
-            valid = true;
-        } else {
-            pawnsAtSW.clear();
-        }
-        pawnsToBeTurned.add(pawnsAtSW);
-        return valid;
-    }
-
-    /**
-     * Checks if the move is valid on a diagonal line to the top-right of a
-     * specified case.
-     *
-     * @param aCoordinate the coordinates of the specified case.
-     * @param color the color of the pawn that has to be put.
-     * @return a boolean true if the move is valid on the north-eastern
-     * direction, false otherwise.
-     */
-    public boolean isMoveValidNE(Coordinates aCoordinate, Color color) {
-        boolean valid = false;
-        if (aCoordinate == null) {
-            throw new IllegalArgumentException("The coordinate is not valid!");
-        }
-        if (!board.isFree(aCoordinate)) {
-            throw new IllegalArgumentException("The coordinate is not free");
-        }
-        int x = aCoordinate.getX() - 1;
-        int y = aCoordinate.getY() + 1;
-        while ((x >= 0 && y < board.getCOL()
-                && board.getCheckerboard()[x][y] != 0
-                && (board.getCheckerboard()[x][y] != color.getValue()))) {
-            pawnsAtNE.add(new Coordinates(x, y));
-            x--;
-            y++;
-        }
-        if (x >= 0 && y < board.getCOL() && (x < aCoordinate.getX() - 1)
-                && board.getCheckerboard()[x][y] == color.getValue()) {
-            valid = true;
-        } else {
-            pawnsAtNE.clear();
-        }
-        pawnsToBeTurned.add(pawnsAtNE);
-        return valid;
-    }
-
-    /**
-     * Checks if the move is valid on a diagonal line to the top-left of a
-     * specified case.
-     *
-     * @param aCoordinate the coordinates of the specified case.
-     * @param color the color of the pawn that has to be put.
-     * @return a boolean true if the move is valid on the north-western
-     * direction, false otherwise.
-     */
-    public boolean isMoveValidNW(Coordinates aCoordinate, Color color) {
-        boolean valid = false;
-        if (aCoordinate == null) {
-            throw new IllegalArgumentException("The coordinate is not valid!");
-        }
-        if (!board.isFree(aCoordinate)) {
-            throw new IllegalArgumentException("The coordinate is not free");
-        }
-        int x = aCoordinate.getX() - 1;
-        int y = aCoordinate.getY() - 1;
-        while ((x >= 0 && y >= 0) && (board.getCheckerboard()[x][y] != 0)
-                && (board.getCheckerboard()[x][y] != color.getValue())) {
-            pawnsAtNW.add(new Coordinates(x, y));
-            x--;
-            y--;
-        }
-        if (x >= 0 && y >= 0 && x < aCoordinate.getX() - 1 && board.getCheckerboard()[x][y] == color.getValue()) {
-            valid = true;
-        } else {
-            pawnsAtNW.clear();
-        }
-        pawnsToBeTurned.add(pawnsAtNW);
-        return valid;
-    }
+//    /**
+//     * Checks if the move is valid on a horizontal line to the right of a
+//     * specified case.
+//     *
+//     * @param aCoordinate the coordinates of the specified case.
+//     * @param color the color of the pawn that has to be put.
+//     * @return a boolean true if the move is valid on the eastern direction,
+//     * false otherwise.
+//     */
+//    public boolean isMoveValidEast(Coordinates aCoordinate, Color color) {
+//        boolean valid = false;
+//        if (aCoordinate == null) {
+//            throw new IllegalArgumentException("The coordinate is not valid!");
+//        }
+//        if (!board.isFree(aCoordinate)) {
+//            throw new IllegalArgumentException("The coordinate is not free");
+//        }
+//        int y = aCoordinate.getY() + 1;
+//        int x = aCoordinate.getX();
+//        while (y < board.getCOL() && board.getCheckerboard()[x][y] != 0 && board.getCheckerboard()[x][y] != color.getValue()) {
+//            pawnsAtE.add(new Coordinates(x, y));
+//            y++;
+//        }
+//        if (y < board.getCOL() && y > aCoordinate.getY() + 1 && board.getCheckerboard()[x][y] == color.getValue()) {
+//            valid = true;
+//        } else {
+//            pawnsAtE.clear();
+//        }
+//        pawnsToBeTurned.add(pawnsAtE);
+//        return valid;
+//    }
+//
+//    /**
+//     * Checks if the move is valid on a horizontal line to the left of a
+//     * specified case.
+//     *
+//     * @param aCoordinate the coordinates of the specified case.
+//     * @param color the color of the pawn that has to be put.
+//     * @return a boolean true if the move is valid on the western direction,
+//     * false otherwise.
+//     */
+//    public boolean isMoveValidWest(Coordinates aCoordinate, Color color) {
+//        boolean valid = false;
+//        if (aCoordinate == null) {
+//            throw new IllegalArgumentException("The coordinate is not valid!");
+//        }
+//        if (!board.isFree(aCoordinate)) {
+//            throw new IllegalArgumentException("The coordinate is not free");
+//        }
+//        int y = aCoordinate.getY() - 1;
+//        int x = aCoordinate.getX();
+//        while (y >= 0 && board.getCheckerboard()[x][y] != 0 && board.getCheckerboard()[x][y] != color.getValue()) {
+//            pawnsAtW.add(new Coordinates(x, y));
+//            y--;
+//        }
+//        if (y >= 0 && y < aCoordinate.getY() - 1 && board.getCheckerboard()[x][y] == color.getValue()) {
+//            valid = true;
+//        } else {
+//            pawnsAtW.clear();
+//        }
+//        pawnsToBeTurned.add(pawnsAtW);
+//        return valid;
+//    }
+//
+//    /**
+//     * Checks if the move is valid on a vertical line to the top of a specified
+//     * case.
+//     *
+//     * @param aCoordinate the coordinates of the specified case.
+//     * @param color the color of the pawn that has to be put.
+//     * @return a boolean true if the move is valid on the northern direction,
+//     * false otherwise.
+//     */
+//    public boolean isMoveValidNorth(Coordinates aCoordinate, Color color) {
+//        boolean valid = false;
+//        if (aCoordinate == null) {
+//            throw new IllegalArgumentException("The coordinate is not valid!");
+//        }
+//        if (!board.isFree(aCoordinate)) {
+//            throw new IllegalArgumentException("The coordinate is not free");
+//        }
+//        int x = aCoordinate.getX() - 1;
+//        int y = aCoordinate.getY();
+//        while (x >= 0 && board.getCheckerboard()[x][y] != 0 && board.getCheckerboard()[x][y] != color.getValue()) {
+//            pawnsAtN.add(new Coordinates(x, y));
+//            x--;
+//        }
+//        if (x >= 0 && x < aCoordinate.getX() - 1 && board.getCheckerboard()[x][y] == color.getValue()) {
+//            valid = true;
+//        } else {
+//            pawnsAtN.clear();
+//        }
+//        pawnsToBeTurned.add(pawnsAtN);
+//        return valid;
+//    }
+//
+//    /**
+//     * Checks if the move is valid on a vertical line to the bottom of a
+//     * specified case.
+//     *
+//     * @param aCoordinate the coordinates of the specified case.
+//     * @param color the color of the pawn that has to be put.
+//     * @return a boolean true if the move is valid on the southern direction,
+//     * false otherwise.
+//     */
+//    public boolean isMoveValidSouth(Coordinates aCoordinate, Color color) {
+//        boolean valid = false;
+//        if (aCoordinate == null) {
+//            throw new IllegalArgumentException("The coordinate is not valid!");
+//        }
+//        if (!board.isFree(aCoordinate)) {
+//            throw new IllegalArgumentException("The coordinate is not free");
+//        }
+//        int x = aCoordinate.getX() + 1;
+//        int y = aCoordinate.getY();
+//        while (x < board.getROW() && board.getCheckerboard()[x][y] != 0 && board.getCheckerboard()[x][y] != color.getValue()) {
+//            pawnsAtS.add(new Coordinates(x, y));
+//            x++;
+//        }
+//        if (x < board.getROW() && x > aCoordinate.getX() + 1 && board.getCheckerboard()[x][y] == color.getValue()) {
+//            valid = true;
+//        } else {
+//            pawnsAtS.clear();
+//        }
+//        pawnsToBeTurned.add(pawnsAtS);
+//        return valid;
+//    }
+//
+//    /**
+//     * Checks if the move is valid on a diagonal line to the bottom-right of a
+//     * specified case.
+//     *
+//     * @param aCoordinate the coordinates of the specified case.
+//     * @param color the color of the pawn that has to be put.
+//     * @return a boolean true if the move is valid on the south-eastern
+//     * direction, false otherwise.
+//     */
+//    public boolean isMoveValidSE(Coordinates aCoordinate, Color color) {
+//        boolean valid = false;
+//        if (aCoordinate == null) {
+//            throw new IllegalArgumentException("The coordinate is not valid!");
+//        }
+//        if (!board.isFree(aCoordinate)) {
+//            throw new IllegalArgumentException("The coordinate is not free");
+//        }
+//        int x = aCoordinate.getX() + 1;
+//        int y = aCoordinate.getY() + 1;
+//        while ((x < board.getROW() && y < board.getCOL())
+//                && (board.getCheckerboard()[x][y] != 0)
+//                && (board.getCheckerboard()[x][y] != color.getValue())) {
+//            pawnsAtSE.add(new Coordinates(x, y));
+//            x++;
+//            y++;
+//        }
+//        if ((x < board.getROW() && y < board.getCOL())
+//                && (x > aCoordinate.getX() + 1)
+//                && board.getCheckerboard()[x][y] == color.getValue()) {
+//            valid = true;
+//        } else {
+//            pawnsAtSE.clear();
+//        }
+//        pawnsToBeTurned.add(pawnsAtSE);
+//        return valid;
+//    }
+//
+//    /**
+//     * Checks if the move is valid on a diagonal line to the bottom-left of a
+//     * specified case.
+//     *
+//     * @param aCoordinate the coordinates of the specified case.
+//     * @param color the color of the pawn that has to be put.
+//     * @return a boolean true if the move is valid on the south-western
+//     * direction, false otherwise.
+//     */
+//    public boolean isMoveValidSW(Coordinates aCoordinate, Color color) {
+//        boolean valid = false;
+//        if (aCoordinate == null) {
+//            throw new IllegalArgumentException("The coordinate is not valid!");
+//        }
+//        if (!board.isFree(aCoordinate)) {
+//            throw new IllegalArgumentException("The coordinate is not free");
+//        }
+//        int x = aCoordinate.getX() + 1;
+//        int y = aCoordinate.getY() - 1;
+//        while ((x < board.getROW() && y >= 0)
+//                && (board.getCheckerboard()[x][y] != 0)
+//                && (board.getCheckerboard()[x][y] != color.getValue())) {
+//            pawnsAtSW.add(new Coordinates(x, y));
+//            x++;
+//            y--;
+//        }
+//        if (x < board.getROW() && y >= 0 && (x > aCoordinate.getX() + 1)
+//                && board.getCheckerboard()[x][y] == color.getValue()) {
+//            valid = true;
+//        } else {
+//            pawnsAtSW.clear();
+//        }
+//        pawnsToBeTurned.add(pawnsAtSW);
+//        return valid;
+//    }
+//
+//    /**
+//     * Checks if the move is valid on a diagonal line to the top-right of a
+//     * specified case.
+//     *
+//     * @param aCoordinate the coordinates of the specified case.
+//     * @param color the color of the pawn that has to be put.
+//     * @return a boolean true if the move is valid on the north-eastern
+//     * direction, false otherwise.
+//     */
+//    public boolean isMoveValidNE(Coordinates aCoordinate, Color color) {
+//        boolean valid = false;
+//        if (aCoordinate == null) {
+//            throw new IllegalArgumentException("The coordinate is not valid!");
+//        }
+//        if (!board.isFree(aCoordinate)) {
+//            throw new IllegalArgumentException("The coordinate is not free");
+//        }
+//        int x = aCoordinate.getX() - 1;
+//        int y = aCoordinate.getY() + 1;
+//        while ((x >= 0 && y < board.getCOL()
+//                && board.getCheckerboard()[x][y] != 0
+//                && (board.getCheckerboard()[x][y] != color.getValue()))) {
+//            pawnsAtNE.add(new Coordinates(x, y));
+//            x--;
+//            y++;
+//        }
+//        if (x >= 0 && y < board.getCOL() && (x < aCoordinate.getX() - 1)
+//                && board.getCheckerboard()[x][y] == color.getValue()) {
+//            valid = true;
+//        } else {
+//            pawnsAtNE.clear();
+//        }
+//        pawnsToBeTurned.add(pawnsAtNE);
+//        return valid;
+//    }
+//
+//    /**
+//     * Checks if the move is valid on a diagonal line to the top-left of a
+//     * specified case.
+//     *
+//     * @param aCoordinate the coordinates of the specified case.
+//     * @param color the color of the pawn that has to be put.
+//     * @return a boolean true if the move is valid on the north-western
+//     * direction, false otherwise.
+//     */
+//    public boolean isMoveValidNW(Coordinates aCoordinate, Color color) {
+//        boolean valid = false;
+//        if (aCoordinate == null) {
+//            throw new IllegalArgumentException("The coordinate is not valid!");
+//        }
+//        if (!board.isFree(aCoordinate)) {
+//            throw new IllegalArgumentException("The coordinate is not free");
+//        }
+//        int x = aCoordinate.getX() - 1;
+//        int y = aCoordinate.getY() - 1;
+//        while ((x >= 0 && y >= 0) && (board.getCheckerboard()[x][y] != 0)
+//                && (board.getCheckerboard()[x][y] != color.getValue())) {
+//            pawnsAtNW.add(new Coordinates(x, y));
+//            x--;
+//            y--;
+//        }
+//        if (x >= 0 && y >= 0 && x < aCoordinate.getX() - 1 && board.getCheckerboard()[x][y] == color.getValue()) {
+//            valid = true;
+//        } else {
+//            pawnsAtNW.clear();
+//        }
+//        pawnsToBeTurned.add(pawnsAtNW);
+//        return valid;
+//    }
 
     /**
      * Change the color of certain pawns put on the board.
@@ -615,4 +620,76 @@ public class Game {
         return Objects.equals(this.possibleMove, other.possibleMove);
     }
 
+    public boolean isMoveValidTest(Coordinates c, Color col) {
+        pawnsToBeTurned.clear();
+        boolean valid = false;
+        if (c == null) {
+            throw new IllegalArgumentException("The coordinate is not valid!");
+        }
+        if (!board.isFree(c)) {
+            throw new IllegalArgumentException("The coordinate is not free");
+        }
+        for (Directions dir : Directions.values()) {
+            pawnsToBeTurnedInterm.clear();
+            int x = c.getX() + dir.getxShift();
+            int y = c.getY() + dir.getyShift();
+            while (isInsideBoard(new Coordinates(x,y)) && board.getCheckerboard()[x][y] != 0 && (board.getCheckerboard()[x][y] != col.getValue())) {
+                pawnsToBeTurnedInterm.add(new Coordinates(x, y));
+                x = x + dir.getxShift();
+                y = y + dir.getyShift();
+            }
+            Coordinates coordLimit = new Coordinates(x, y);
+            if (isInsideBoard(coordLimit) && isGreaterThanCoordinates(coordLimit, c, dir) && board.getCheckerboard()[x][y] == col.getValue()) {
+                valid = true;
+            } else {
+                pawnsToBeTurnedInterm.clear();
+            }
+            pawnsToBeTurned.add(deepCopyList(pawnsToBeTurnedInterm));
+        }
+        return valid;
+    }
+
+    public boolean isInsideBoard(Coordinates c) {
+        return c.getX() >= 0 && c.getX() < board.getROW() && c.getY() >= 0 && c.getY() < board.getCOL();
+    }
+
+    public boolean isGreaterThanCoordinates(Coordinates c1, Coordinates c2, Directions d) {
+        boolean ok = false;
+        switch (d) {
+            case S:
+                ok = c1.getX() > c2.getX() + 1;
+                break;
+            case N:
+                ok = c1.getX() < c2.getX() - 1;
+                break;
+            case E:
+                ok = c1.getY() > c2.getY() + 1;
+                break;
+            case W:
+                ok = c1.getY() < c2.getY() - 1;
+                break;
+            case SE:
+                ok = c1.getX() > c2.getX() + 1;
+                break;
+            case SW:
+                ok = c1.getX() > c2.getX() + 1;
+                break;
+            case NE:
+                ok = c1.getX() < c2.getX() - 1;
+                break;
+            case NW:
+                ok = c1.getX() < c2.getX() - 1;
+                break;
+        }
+        return ok;
+    }
+    
+    public List<Coordinates> deepCopyList (List<Coordinates> l){
+        List <Coordinates> l2 = new ArrayList<>();
+        for (Coordinates c : l){
+            Coordinates c2 = new Coordinates(c.getX(),c.getY());
+            l2.add(c2);
+        }
+        return l2;
+    }
 }

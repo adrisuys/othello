@@ -112,13 +112,14 @@ public class BoardgameTerminal implements Observer {
      * When notified of a play, this object updates itself : if all went to
      * good, it display the updated board, else it displays a error message.
      */
-    @Override
     public void updatePlay() {
-        if (!observable.isValidPlay()) {
-            System.out.println("You can't put a pawn on that coordinate! Try again!");
-        } else {
-            displayBoardgame(observable.getGame(), observable.getGame().getCurrentColor());
-            System.out.println("It is now the turn of " + displayCurrentPlayer(observable.getGame()) + ".");
+        if (observable.isUpdatePlay()) {
+            if (!observable.isValidPlay()) {
+                System.out.println("You can't put a pawn on that coordinate! Try again!");
+            } else {
+                displayBoardgame(observable.getGame(), observable.getGame().getCurrentColor());
+                System.out.println("It is now the turn of " + displayCurrentPlayer(observable.getGame()) + ".");
+            }
         }
 
     }
@@ -127,19 +128,23 @@ public class BoardgameTerminal implements Observer {
      * When notified that a players wants to see the score, this object updates
      * itself : it displays the score of the 2 players.
      */
-    @Override
     public void updateScore() {
-        System.out.println("The score of the player BLACK is " + observable.getScorePlayer1());
-        System.out.println("The score of the player WHITE is " + observable.getScorePlayer2());
+        if (observable.isUpdateScore()) {
+            System.out.println("The score of the player BLACK is " + observable.getScorePlayer1());
+            System.out.println("The score of the player WHITE is " + observable.getScorePlayer2());
+        }
+
     }
 
     /**
      * When notified that a players wants to see the board, this object updates
      * iteself : it displays the board.
      */
-    @Override
     public void updateShow() {
-        displayBoardgame(observable.getGame(), observable.getGame().getCurrentColor());
+        if (observable.isUpdateShow()) {
+            displayBoardgame(observable.getGame(), observable.getGame().getCurrentColor());
+        }
+
     }
 
     /**
@@ -147,32 +152,38 @@ public class BoardgameTerminal implements Observer {
      * itself : it display the name, the rules, the usage and the board of the
      * game.
      */
-    @Override
     public void updateInit() {
-        System.out.println("OTHELLO");
-        System.out.println("-------");
-        displayRules();
-        displayBoardgame(observable.getGame(), observable.getGame().getCurrentColor());
-        displayUsage();
+        if (observable.isUpdateInit()) {
+            System.out.println("OTHELLO");
+            System.out.println("-------");
+            displayRules();
+            displayBoardgame(observable.getGame(), observable.getGame().getCurrentColor());
+            displayUsage();
+        }
+
     }
 
     /**
      * When notified that a pawn can't be put on a given coordinates, this
      * object updates itself : it displays an error message.
      */
-    @Override
     public void updateErrorInputCoordinates() {
-        System.out.println("You have not entered proper coordinates for the pawn to be put!");
+        if (observable.isUpdateCoordinatesError()) {
+            System.out.println("You have not entered proper coordinates for the pawn to be put!");
+        }
+
     }
 
     /**
      * When notified that the player has entered a wrong command, this object
      * updates itself : it displays an error message and reminds of the usage.
      */
-    @Override
     public void updateErrorInputCommand() {
-        System.out.println("You have not entered proper command");
-        displayUsage();
+        if (observable.isUpdateCommandsError()) {
+            System.out.println("You have not entered proper command");
+            displayUsage();
+        }
+
     }
 
     /**
@@ -196,23 +207,31 @@ public class BoardgameTerminal implements Observer {
      * When notified that the game is over, this object updates itself : it
      * displays the score of each player and declares the winner.
      */
-    @Override
     public void updateEndOfGame() {
-        if (observable.getScorePlayer1() > observable.getScorePlayer2()) {
-            System.out.println("The player BLACK is the winner!");
-        } else if (observable.getScorePlayer1() == observable.getScorePlayer2()) {
-            System.out.println("This is a draw!");
-        } else {
-            System.out.println("The player WHITE is the winner!");
+        if (observable.isUpdateScore()) {
+            System.out.println("The score of the player BLACK is " + observable.getScorePlayer1());
+            System.out.println("The score of the player WHITE is " + observable.getScorePlayer2());
         }
+        if (observable.isUpdateEndOfGame()) {
+            if (observable.getScorePlayer1() > observable.getScorePlayer2()) {
+                System.out.println("The player BLACK is the winner!");
+            } else if (observable.getScorePlayer1() == observable.getScorePlayer2()) {
+                System.out.println("This is a draw!");
+            } else {
+                System.out.println("The player WHITE is the winner!");
+            }
+        }
+
     }
 
-    @Override
     public void updateTurnPassed() {
-        if (observable.isTurnPassed()) {
-            System.out.println("Your turn has been passed, it is now the " + displayCurrentPlayer(observable.getGame()) + "'s turn!");
-            displayBoardgame(observable.getGame(), observable.getGame().getCurrentColor());
+        if (observable.isUpdateTurnPassed()) {
+            if (observable.isTurnPassed()) {
+                System.out.println("Your turn has been passed, it is now the " + displayCurrentPlayer(observable.getGame()) + "'s turn!");
+                displayBoardgame(observable.getGame(), observable.getGame().getCurrentColor());
+            }
         }
+
     }
 
     @Override
@@ -235,6 +254,18 @@ public class BoardgameTerminal implements Observer {
         }
         final BoardgameTerminal other = (BoardgameTerminal) obj;
         return Objects.equals(this.observable, other.observable);
+    }
+
+    @Override
+    public void update() {
+        updateEndOfGame();
+        updateInit();
+        updatePlay();
+        updateScore();
+        updateShow();
+        updateTurnPassed();
+        updateErrorInputCommand();
+        updateErrorInputCoordinates();
     }
 
 }
