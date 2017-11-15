@@ -49,7 +49,7 @@ public class BoardgameFX extends Application {
         Pane pane = new Pane();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                Rectangle rec = new Rectangle(60 * j, 60 * i, 60, 60);
+                Rectangle rec = new Rectangle(60 * i, 60 * j, 60, 60);
                 if ((i + j) % 2 != 0) {
                     rec.setFill(Color.BROWN);
                 } else {
