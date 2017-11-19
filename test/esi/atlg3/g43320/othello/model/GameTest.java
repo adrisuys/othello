@@ -718,10 +718,10 @@ public class GameTest {
         System.out.println("isMoveValidTest");
         Coordinates aCoordinate = new Coordinates(2,4);
         Game instance = new Game();
-        instance.getBoard().putPawn(new Coordinates(3,4), Color.BLACK);
-        instance.getBoard().putPawn(new Coordinates(4,4), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(3,4), ColorPawn.BLACK);
+        instance.getBoard().putPawn(new Coordinates(4,4), ColorPawn.WHITE);
         boolean expResult = true;
-        boolean result = instance.isMoveValidTest(aCoordinate, Color.WHITE);
+        boolean result = instance.isMoveValidTest(aCoordinate, ColorPawn.WHITE);
         assertEquals(expResult, result);
     }
     
@@ -730,10 +730,10 @@ public class GameTest {
         System.out.println("isMoveValidTest2");
         Coordinates aCoordinate = new Coordinates(1,4);
         Game instance = new Game();
-        instance.getBoard().putPawn(new Coordinates(3,4), Color.BLACK);
-        instance.getBoard().putPawn(new Coordinates(4,4), Color.WHITE);
+        instance.getBoard().putPawn(new Coordinates(3,4), ColorPawn.BLACK);
+        instance.getBoard().putPawn(new Coordinates(4,4), ColorPawn.WHITE);
         boolean expResult = false;
-        boolean result = instance.isMoveValidTest(aCoordinate, Color.WHITE);
+        boolean result = instance.isMoveValidTest(aCoordinate, ColorPawn.WHITE);
         assertEquals(expResult, result);
     }
     

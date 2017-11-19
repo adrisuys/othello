@@ -20,11 +20,21 @@ public class OthelloModel implements Observable {
 
     private final List<Observer> observers;
     private Game game;
-    private Coordinates coord;
     private int scorePlayer1;
     private int scorePlayer2;
     private boolean validPlay;
     private boolean turnPassed;
+    private boolean isPossibleCase;
+    private int coordX;
+    private int coordY;
+    private String moveName;
+    private String moveAction;
+    private String movePos;
+    private String moveTaken;
+    private boolean isWallValid;
+    private int nbPawnsOnBoard;
+    
+    //booleans to be used to check updates
     private boolean updatePlay;
     private boolean updateScore;
     private boolean updateShow;
@@ -33,12 +43,15 @@ public class OthelloModel implements Observable {
     private boolean updateEndOfGame;
     private boolean updateCoordinatesError;
     private boolean updateCommandsError;
+    private boolean updateMouseOver;
+    private boolean updateWall;
 
     /**
      * Creates an instance of a model of Othello.
      */
     public OthelloModel() {
         observers = new ArrayList<>();
+        game = new Game();
     }
 
     /**
@@ -85,26 +98,28 @@ public class OthelloModel implements Observable {
      * This represents a play for the current player. If it is its turn and he
      * can play, he puts a pawn on a case. Nnd notifies the observers.
      *
-     * @param aGame the game.
      * @param aCoordinate the coordinates of the case the player wants to put a
      * pawn on
-     * @param valid a boolean indicating if the play is valid (if he can play on
-     * that particular case)
-     * @param passed a boolean indicating if the player's turn is passed.
      */
-    public void play(Game aGame, Coordinates aCoordinate, boolean valid, boolean passed) {
-        validPlay = valid;
-        game = aGame;
-        coord = aCoordinate;
+    public void play(Coordinates aCoordinate, String namePlayer) {
+        //validPlay = valid;
+        //game = aGame;
+        //coord = aCoordinate;
         game.updatePossibleMove(game.getCurrentColor());
-        if (!game.getPossibleMove().contains(coord)) {
+        if (!game.getPossibleMove().contains(aCoordinate)) {
             validPlay = false;
         } else {
             validPlay = true;
-            game.putPawn(coord, game.getCurrentColor());
-            game.changeColorPawn(game.getBoard());
+            game.putPawn(aCoordinate, game.getCurrentColor());
+            game.changeColorPawn();
             game.changePlayer();
         }
+        scorePlayer1 = game.getBoard().getScore(ColorPawn.BLACK);
+        scorePlayer2 = game.getBoard().getScore(ColorPawn.WHITE);
+        moveName = namePlayer;
+        moveAction = "Place une pièce";
+        movePos = aCoordinate.toString();
+        moveTaken = Integer.toString(game.getNbPawnsToBeTurned());
         updateInit = false;
         updateScore = false;
         updatePlay = true;
@@ -113,6 +128,9 @@ public class OthelloModel implements Observable {
         updateEndOfGame = false;
         updateCommandsError = false;
         updateCoordinatesError = false;
+        updateMouseOver = false;
+        updateWall = false;
+        game.updatePossibleMove(game.getCurrentColor());
         notifyObservers();
     }
 
@@ -122,10 +140,10 @@ public class OthelloModel implements Observable {
      *
      * @param aGame the game they are currently playing.
      */
-    public void score(Game aGame) {
-        game = aGame;
-        scorePlayer1 = game.getBoard().getScore(Color.BLACK);
-        scorePlayer2 = game.getBoard().getScore(Color.WHITE);
+    public void score() {
+        //game = aGame;
+        scorePlayer1 = game.getBoard().getScore(ColorPawn.BLACK);
+        scorePlayer2 = game.getBoard().getScore(ColorPawn.WHITE);
         updateInit = false;
         updateScore = true;
         updatePlay = false;
@@ -134,6 +152,8 @@ public class OthelloModel implements Observable {
         updateEndOfGame = false;
         updateCommandsError = false;
         updateCoordinatesError = false;
+        updateMouseOver = false;
+        updateWall = false;
         notifyObservers();
     }
 
@@ -143,8 +163,8 @@ public class OthelloModel implements Observable {
      *
      * @param aGame
      */
-    public void show(Game aGame) {
-        game = aGame;
+    public void show() {
+        //game = aGame;
         updateInit = false;
         updateScore = false;
         updatePlay = false;
@@ -153,21 +173,24 @@ public class OthelloModel implements Observable {
         updateEndOfGame = false;
         updateCommandsError = false;
         updateCoordinatesError = false;
+        updateMouseOver = false;
+        updateWall = false;
+        game.updatePossibleMove(game.getCurrentColor());
         notifyObservers();
     }
-
-    /**
-     * Initialize the game by putting 2 white pawns and 2 black ones in the
-     * middle of the board.
-     *
-     * @param aGame the game the players are currently playing.
-     */
-    public void init(Game aGame) {
-        game = aGame;
-        game.getBoard().putPawn(new Coordinates(3, 3), Color.WHITE);
-        game.getBoard().putPawn(new Coordinates(3, 4), Color.BLACK);
-        game.getBoard().putPawn(new Coordinates(4, 3), Color.BLACK);
-        game.getBoard().putPawn(new Coordinates(4, 4), Color.WHITE);
+    
+    public void init(String name1){
+        game = new Game();
+        game.getBoard().putPawn(new Coordinates(3, 3), ColorPawn.WHITE);
+        game.getBoard().putPawn(new Coordinates(3, 4), ColorPawn.BLACK);
+        game.getBoard().putPawn(new Coordinates(4, 3), ColorPawn.BLACK);
+        game.getBoard().putPawn(new Coordinates(4, 4), ColorPawn.WHITE);
+        scorePlayer1 = game.getBoard().getScore(ColorPawn.BLACK);
+        scorePlayer2 = game.getBoard().getScore(ColorPawn.WHITE);
+        moveName = name1;
+        moveAction = "Nouvelle partie";
+        movePos = "/";
+        moveTaken = "/";
         updateInit = true;
         updateScore = false;
         updatePlay = false;
@@ -176,6 +199,9 @@ public class OthelloModel implements Observable {
         updateEndOfGame = false;
         updateCommandsError = false;
         updateCoordinatesError = false;
+        updateMouseOver = false;
+        updateWall = false;
+        game.updatePossibleMove(game.getCurrentColor());
         notifyObservers();
     }
 
@@ -231,30 +257,31 @@ public class OthelloModel implements Observable {
      *
      * @param aGame the game currently being played.
      */
-    public void endOfGame(Game aGame) {
-        game = aGame;
-        scorePlayer1 = game.getBoard().getScore(Color.BLACK);
-        scorePlayer2 = game.getBoard().getScore(Color.WHITE);
+    public void endOfGame() {
+        //game = aGame;
+        scorePlayer1 = game.getBoard().getScore(ColorPawn.BLACK);
+        scorePlayer2 = game.getBoard().getScore(ColorPawn.WHITE);
         updateInit = false;
-        updateScore = true;
+        updateScore = false;
         updatePlay = false;
         updateShow = false;
         updateTurnPassed = false;
         updateEndOfGame = true;
         updateCommandsError = false;
         updateCoordinatesError = false;
+        updateMouseOver = false;
+        updateWall = false;
         notifyObservers();
     }
 
     /**
      * If a player's turn is passed, it changes the current player.
      *
-     * @param aGame the game the players are currently playing.
-     * @param passed a boolean indicating if a player's turn is passed.
      */
-    public void turnPassed(Game aGame, boolean passed) {
-        game = aGame;
-        turnPassed = passed;
+    public void turnPassed() {
+        //game = aGame;
+        turnPassed = game.isTurnPassed(game.getCurrentPlayer());
+        //turnPassed = passed;
         if (turnPassed) {
             game.changePlayer();
         }
@@ -266,53 +293,26 @@ public class OthelloModel implements Observable {
         updateEndOfGame = false;
         updateCommandsError = false;
         updateCoordinatesError = false;
+        updateMouseOver = false;
+        updateWall = false;
         notifyObservers();
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 47 * hash + Objects.hashCode(this.observers);
-        hash = 47 * hash + Objects.hashCode(this.game);
-        hash = 47 * hash + Objects.hashCode(this.coord);
-        hash = 47 * hash + this.scorePlayer1;
-        hash = 47 * hash + this.scorePlayer2;
-        hash = 47 * hash + (this.validPlay ? 1 : 0);
-        hash = 47 * hash + (this.turnPassed ? 1 : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final OthelloModel other = (OthelloModel) obj;
-        if (this.scorePlayer1 != other.scorePlayer1) {
-            return false;
-        }
-        if (this.scorePlayer2 != other.scorePlayer2) {
-            return false;
-        }
-        if (this.validPlay != other.validPlay) {
-            return false;
-        }
-        if (this.turnPassed != other.turnPassed) {
-            return false;
-        }
-        if (!Objects.equals(this.observers, other.observers)) {
-            return false;
-        }
-        if (!Objects.equals(this.game, other.game)) {
-            return false;
-        }
-        return Objects.equals(this.coord, other.coord);
+    
+    public void turnPassedFX() {
+        //game = aGame;
+        turnPassed = game.isTurnPassed(game.getCurrentPlayer());
+        //turnPassed = passed;
+        updateInit = false;
+        updateScore = false;
+        updatePlay = false;
+        updateShow = false;
+        updateTurnPassed = true;
+        updateEndOfGame = false;
+        updateCommandsError = false;
+        updateCoordinatesError = false;
+        updateMouseOver = false;
+        updateWall = false;
+        notifyObservers();
     }
 
     public boolean isUpdatePlay() {
@@ -346,21 +346,8 @@ public class OthelloModel implements Observable {
     public boolean isUpdateCommandsError() {
         return updateCommandsError;
     }
-    
-    
-    
-    public void updateBooleans (boolean a, boolean b, boolean c, boolean d, boolean e, boolean f, boolean g, boolean h){
-        a = true;
-        b = false;
-        c = false;
-        d = false;
-        e = false;
-        f = false;
-        g = false;
-        h = false;
-    }
-    
-    public void throwCoordinatesError(){
+
+    public void throwCoordinatesError() {
         updateInit = false;
         updateScore = false;
         updatePlay = false;
@@ -369,10 +356,12 @@ public class OthelloModel implements Observable {
         updateEndOfGame = false;
         updateCommandsError = false;
         updateCoordinatesError = true;
+        updateMouseOver = false;
+        updateWall = false;
         notifyObservers();
     }
-    
-    public void throwCommandsError(){
+
+    public void throwCommandsError() {
         updateInit = false;
         updateScore = false;
         updatePlay = false;
@@ -381,8 +370,104 @@ public class OthelloModel implements Observable {
         updateEndOfGame = false;
         updateCommandsError = true;
         updateCoordinatesError = false;
+        updateMouseOver = false;
+        updateWall = false;
         notifyObservers();
     }
+
+    public boolean isOver() {
+        return game.isOver();
+    }
+
+    public String getMoveName() {
+        return moveName;
+    }
+
+    public String getMoveAction() {
+        return moveAction;
+    }
+
+    public String getMovePos() {
+        return movePos;
+    }
+
+    public String getMoveTaken() {
+        return moveTaken;
+    }
+    
+    public void mouseOverEnter(Coordinates coord){
+        game.updatePossibleMove(game.getCurrentColor());
+        isPossibleCase = game.getPossibleMove().contains(coord);
+        coordX = coord.getX();
+        coordY = coord.getY();
+        updateInit = false;
+        updateScore = false;
+        updatePlay = false;
+        updateShow = false;
+        updateTurnPassed = false;
+        updateEndOfGame = false;
+        updateCommandsError = false;
+        updateCoordinatesError = false;
+        updateMouseOver = true;
+        updateWall = false;
+        notifyObservers();
+    }
+
+    public boolean isPossibleCase() {
+        return isPossibleCase;
+    }
+    
+    public int getCoordX(){
+        return coordX;
+    }
+    
+    public int getCoordY(){
+        return coordY;
+    }
+
+    public boolean isUpdateMouseOver() {
+        return updateMouseOver;
+    }
+    
+    public void wall(Coordinates aCoordinate, String namePlayer){
+        isWallValid = game.getBoard().putWall(aCoordinate);
+        if (isWallValid) {
+            game.changePlayer();
+        }
+        moveName = namePlayer;
+        moveAction = "Place un mur";
+        movePos = aCoordinate.toString();
+        moveTaken = "/";
+        updateInit = false;
+        updateScore = false;
+        updatePlay = false;
+        updateShow = false;
+        updateTurnPassed = false;
+        updateEndOfGame = false;
+        updateCommandsError = false;
+        updateCoordinatesError = false;
+        updateMouseOver = false;
+        updateWall = true;
+        notifyObservers();
+    }
+
+    public boolean isWallValid() {
+        return isWallValid;
+    }
+
+    public boolean isUpdateWall() {
+        return updateWall;
+    }
+    
+    public void changePlayer(){
+        game.changePlayer();
+    }
+
+    public int getNbPawnsOnBoard() {
+        return game.getBoard().nbCaseOccupied();
+    }
+    
+    
     
     
 

@@ -11,21 +11,23 @@ package esi.atlg3.g43320.othello.model;
  */
 public enum Directions {
     
-    SW (1, -1),
-    SE (1, 1),
-    NE (-1, 1),
-    NW (-1, -1),
-    N (-1, 0),
-    S (1, 0),
-    E (0, 1),
-    W (0, -1);
+    SW (1, -1, "Southwest"),
+    SE (1, 1, "Southeast"),
+    NE (-1, 1, "Northeast"),
+    NW (-1, -1, "Northwest"),
+    N (-1, 0, "North"),
+    S (1, 0, "South"),
+    E (0, 1, "East"),
+    W (0, -1, "West");
     
     private final int xShift;
     private final int yShift;
+    private final String libelle;
     
-    private Directions (int xShift, int yShift) {
+    private Directions (int xShift, int yShift, String libelle) {
         this.xShift = xShift;
         this.yShift = yShift;
+        this.libelle = libelle;
     }
 
     public int getxShift() {
@@ -35,6 +37,13 @@ public enum Directions {
     public int getyShift() {
         return yShift;
     }
+
+    @Override
+    public String toString() {
+        return libelle;
+    }
+    
+    
     
     
 }

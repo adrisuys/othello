@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package esi.atlg3.g43320.othello.view;
+package esi.atlg3.g43320.othello.view.console;
 
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.Game;
@@ -17,25 +17,27 @@ import java.util.Scanner;
  *
  * @author s_u_y_s_a
  */
-public class OthelloFacade {
+public class TerminalOthelloUserInterface {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Game game = new Game();
+        //Game game = new Game();
         OthelloModel othello = new OthelloModel();
-        BoardgameTerminal view = new BoardgameTerminal(othello);
-
-        othello.init(game);
-        while (!game.isOver()) {
-            othello.turnPassed(game, game.isTurnPassed(game.getCurrentPlayer()));
+        TerminalOthelloView view = new TerminalOthelloView(othello);
+        
+        othello.init("");
+        //othello.init(othello.getGame());
+        while (!othello.isOver()) {
+            //othello.turnPassed(othello.getGame().isTurnPassed(othello.getGame().getCurrentPlayer()));
+            othello.turnPassed();
             if (!othello.isTurnPassed()) {
-                playATurn(othello, game);
+                playATurn(othello);
             }
         }
 
-        othello.endOfGame(game);
+        othello.endOfGame();
     }
 
     /**
@@ -76,7 +78,7 @@ public class OthelloFacade {
      * game.
      * @param game the game that is being implemented.
      */
-    public static void playATurn(OthelloModel othello, Game game) {
+    public static void playATurn(OthelloModel othello) {
         boolean unvalid = true;
         boolean validPlay = false;
         boolean turnPassed = false;
@@ -91,16 +93,16 @@ public class OthelloFacade {
             } else {
                 switch (inputArray[0].toUpperCase(Locale.ENGLISH)) {
                     case "SHOW":
-                        othello.show(game);
+                        othello.show();
                         break;
                     case "SCORE":
-                        othello.score(game);
+                        othello.score();
                         break;
                     case "PLAY":
-                        if (verifyArgsCoordinates(inputArray, game)) {
+                        if (verifyArgsCoordinates(inputArray, othello.getGame())) {
                             int x = Integer.parseInt(inputArray[1]);
                             int y = Integer.parseInt(inputArray[2]);
-                            othello.play(game, new Coordinates(x, y), validPlay, turnPassed);
+                            othello.play(new Coordinates(x, y), "");
                             unvalid = !othello.isValidPlay();
                         } else {
                             othello.throwCoordinatesError();

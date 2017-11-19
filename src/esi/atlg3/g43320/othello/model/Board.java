@@ -17,6 +17,7 @@ public class Board {
     private final int[][] checkerboard;
     private final static int ROW = 8;
     private final static int COL = 8;
+    private final static int WALL = 3;
 
     /**
      * Creates an instance of a Board.
@@ -76,15 +77,31 @@ public class Board {
      * @param aCoordinate the coordinates of the case the pawn has to be put on.
      * @param color the color of the pawn.
      */
-    public void putPawn(Coordinates aCoordinate, Color color) {
+    public void putPawn(Coordinates aCoordinate, ColorPawn color){
         if (aCoordinate == null) {
             throw new IllegalArgumentException("The coordinate is not valid!");
         }
         if (!isFree(aCoordinate)) {
-            throw new IllegalArgumentException("There is already a pawn on that case of the board");
+            throw new IllegalArgumentException("There is already a pawn on this case");
         }
         int aPawn = color.getValue();
         checkerboard[aCoordinate.getX()][aCoordinate.getY()] = aPawn;
+    }
+    
+    /**
+     * Puts a wall on the board on a specified case.
+     * @param aCoordinate the coordinates of the case the wall has to be put on.
+     * @return a boolean indicating if the wall has been put correctly.
+     */
+    public boolean putWall (Coordinates aCoordinate){
+         if (aCoordinate == null) {
+            return false;
+        }
+        if (!isFree(aCoordinate)) {
+            return false;
+        }
+        checkerboard[aCoordinate.getX()][aCoordinate.getY()] = WALL;
+        return true;
     }
 
     /**
@@ -111,7 +128,7 @@ public class Board {
         if (aCoordinate == null) {
             throw new IllegalArgumentException("The coordinate is not valid!");
         }
-        return checkerboard[aCoordinate.getY()][aCoordinate.getX()];
+        return checkerboard[aCoordinate.getX()][aCoordinate.getY()];
     }
 
     /**
@@ -121,7 +138,7 @@ public class Board {
      * @return an int representing the number of pawns of a specified color that
      * are on the board at a given time.
      */
-    public int getScore(Color color) {
+    public int getScore(ColorPawn color) {
         int score = 0;
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COL; j++) {
@@ -154,5 +171,18 @@ public class Board {
         final Board other = (Board) obj;
         return Arrays.deepEquals(this.checkerboard, other.checkerboard);
     }
+    
+    public int nbCaseOccupied(){
+        int nbCasesOccupied = 0;
+        for (int i = 0; i < ROW; i++) {
+            for (int j = 0; j < COL; j++) {
+                if (checkerboard[i][j] != 0) {
+                    nbCasesOccupied ++;
+                }
+            }
+        }
+        return nbCasesOccupied;
+    }
+
 
 }

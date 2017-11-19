@@ -11,21 +11,23 @@ package esi.atlg3.g43320.othello.model;
  *
  * @author s_u_y_s_a
  */
-public enum Color {
+public enum ColorPawn {
 
     /**
      * The color black
      */
-    BLACK(1),
+    BLACK(1, "B"),
     /**
      * The color white
      */
-    WHITE(2);
+    WHITE(2, "W");
 
     private final int value;
+    private final String libelle;
 
-    private Color(int value) {
+    private ColorPawn(int value, String libelle) {
         this.value = value;
+        this.libelle = libelle;
     }
 
     /**
@@ -39,11 +41,7 @@ public enum Color {
 
     @Override
     public String toString() {
-        if (this == Color.BLACK) {
-            return "B";
-        } else {
-            return "W";
-        }
+        return libelle;
     }
 
 }

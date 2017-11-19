@@ -28,7 +28,7 @@ public class BoardTest {
         System.out.println("putPawn");
         Coordinates aCoordinate = new Coordinates(1,1);
         Board instance = new Board();
-        instance.putPawn(aCoordinate, Color.BLACK);
+        instance.putPawn(aCoordinate, ColorPawn.BLACK);
         System.out.println(instance.getCheckerboard()[1][1]);
         assertEquals(1, instance.getCheckerboard()[1][1]);
     }
@@ -54,7 +54,7 @@ public class BoardTest {
         System.out.println("isFree2");
         Coordinates aCoordinate = new Coordinates(1,1);
         Board instance = new Board();
-        instance.putPawn(aCoordinate, Color.WHITE);
+        instance.putPawn(aCoordinate, ColorPawn.WHITE);
         boolean expResult = false;
         boolean result = instance.isFree(aCoordinate);
         assertEquals(expResult, result);
@@ -66,11 +66,11 @@ public class BoardTest {
     @Test
     public void testGetScore() {
         System.out.println("getScore");
-        Color color = Color.BLACK;
+        ColorPawn color = ColorPawn.BLACK;
         Board instance = new Board();
-        instance.putPawn(new Coordinates(1,1), Color.BLACK);
-        instance.putPawn(new Coordinates(1,5), Color.WHITE);
-        instance.putPawn(new Coordinates(4,1), Color.BLACK);
+        instance.putPawn(new Coordinates(1,1), ColorPawn.BLACK);
+        instance.putPawn(new Coordinates(1,5), ColorPawn.WHITE);
+        instance.putPawn(new Coordinates(4,1), ColorPawn.BLACK);
         int expResult = 2;
         int result = instance.getScore(color);
         assertEquals(expResult, result);

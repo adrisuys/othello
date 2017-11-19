@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package esi.atlg3.g43320.othello.view;
+package esi.atlg3.g43320.othello.view.console;
 
 import esi.atlg3.g43320.othello.dp.Observable;
 import esi.atlg3.g43320.othello.dp.Observer;
-import esi.atlg3.g43320.othello.model.Color;
+import esi.atlg3.g43320.othello.model.ColorPawn;
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.Game;
 import esi.atlg3.g43320.othello.model.OthelloModel;
@@ -18,7 +18,7 @@ import java.util.Objects;
  *
  * @author s_u_y_s_a
  */
-public class BoardgameTerminal implements Observer {
+public class TerminalOthelloView implements Observer {
 
     private OthelloModel observable;
 
@@ -29,7 +29,7 @@ public class BoardgameTerminal implements Observer {
      * @param observable an Observable that is now observed by this object.
      */
     @SuppressWarnings("LeakingThisInConstructor")
-    public BoardgameTerminal(Observable observable) {
+    public TerminalOthelloView(Observable observable) {
         if (observable == null) {
             throw new IllegalArgumentException("Nothing to observe");
         }
@@ -45,9 +45,9 @@ public class BoardgameTerminal implements Observer {
      * @param game the game the players are currently playing.
      * @param color the color of the current player.
      */
-    public static void displayBoardgame(Game game, Color color) {
+    public static void displayBoardgame(Game game, ColorPawn color) {
         int cpt = 0;
-        game.updatePossibleMove(color);
+        //game.updatePossibleMove(color);
         StringBuilder buf = new StringBuilder();
         buf.append("-------------------------------------");
         buf.append("\n");
@@ -195,7 +195,7 @@ public class BoardgameTerminal implements Observer {
      */
     public String displayCurrentPlayer(Game game) {
         String s;
-        if (game.getCurrentColor() == Color.BLACK) {
+        if (game.getCurrentColor() == ColorPawn.BLACK) {
             s = "player BLACK";
         } else {
             s = "player WHITE";
@@ -208,11 +208,9 @@ public class BoardgameTerminal implements Observer {
      * displays the score of each player and declares the winner.
      */
     public void updateEndOfGame() {
-        if (observable.isUpdateScore()) {
+        if (observable.isUpdateEndOfGame()) {
             System.out.println("The score of the player BLACK is " + observable.getScorePlayer1());
             System.out.println("The score of the player WHITE is " + observable.getScorePlayer2());
-        }
-        if (observable.isUpdateEndOfGame()) {
             if (observable.getScorePlayer1() > observable.getScorePlayer2()) {
                 System.out.println("The player BLACK is the winner!");
             } else if (observable.getScorePlayer1() == observable.getScorePlayer2()) {
@@ -252,7 +250,7 @@ public class BoardgameTerminal implements Observer {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final BoardgameTerminal other = (BoardgameTerminal) obj;
+        final TerminalOthelloView other = (TerminalOthelloView) obj;
         return Objects.equals(this.observable, other.observable);
     }
 

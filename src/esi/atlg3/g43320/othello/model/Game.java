@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class represents the whole game of Othello.
@@ -38,8 +40,8 @@ public class Game {
      */
     public Game() {
         players = new ArrayList<>();
-        players.add(new Player(Color.BLACK));
-        players.add(new Player(Color.WHITE));
+        players.add(new Player(ColorPawn.BLACK));
+        players.add(new Player(ColorPawn.WHITE));
 
         board = new Board();
 
@@ -85,7 +87,7 @@ public class Game {
     /**
      * Change the current player.
      */
-    public void changePlayer() {
+    void changePlayer() {
         if (currentPlayer.equals(players.get(0))) {
             currentPlayer = players.get(1);
         } else {
@@ -107,7 +109,7 @@ public class Game {
      *
      * @return the color of the current player.
      */
-    public Color getCurrentColor() {
+    public ColorPawn getCurrentColor() {
         return currentPlayer.getColor();
     }
 
@@ -127,7 +129,7 @@ public class Game {
      * not.
      * @return a boolean true if the turn is passed, false otherwise.
      */
-    public boolean isTurnPassed(Player player) {
+    boolean isTurnPassed(Player player) {
         return (nbPossibleMove(player.getColor()) == 0);
     }
 
@@ -140,7 +142,7 @@ public class Game {
      * @param color the color of the pawn that has to be put on the board.
      * @return true if the pawn has been correctly put, false otherwise.
      */
-    public boolean putPawn(Coordinates aCoordinate, Color color) {
+    public boolean putPawn(Coordinates aCoordinate, ColorPawn color) {
         boolean ok;
         try {
             if (isMoveValid(aCoordinate, color)) {
@@ -162,7 +164,7 @@ public class Game {
      *
      * @param color the color of the player.
      */
-    public void updatePossibleMove(Color color) {
+    public void updatePossibleMove(ColorPawn color) {
         possibleMove.clear();
         for (int i = 0; i < board.getROW(); i++) {
             for (int j = 0; j < board.getCOL(); j++) {
@@ -181,7 +183,7 @@ public class Game {
      * @return an int representing the number of possible move the player of the
      * specified color has.
      */
-    public int nbPossibleMove(Color color) {
+    int nbPossibleMove(ColorPawn color) {
         updatePossibleMove(color);
         return possibleMove.size();
     }
@@ -195,7 +197,7 @@ public class Game {
      * @param color the color of the pawn (of the player).
      * @return a boolean true if the move is valid, false otherwise.
      */
-    public boolean isMoveValid(Coordinates aCoordinate, Color color) {
+    boolean isMoveValid(Coordinates aCoordinate, ColorPawn color) {
         boolean valid ;//= false;
         try {
             valid = isMoveValidTest(aCoordinate, color);
@@ -505,7 +507,7 @@ public class Game {
      *
      * @param board the board on which the pawns are put.
      */
-    public void changeColorPawn(Board board) {
+    void changeColorPawn() {
         for (int i = 0; i < pawnsToBeTurned.size(); i++) {
             for (int j = 0; j < pawnsToBeTurned.get(i).size(); j++) {
                 board.getCheckerboard()[pawnsToBeTurned.get(i).get(j).getX()][pawnsToBeTurned.get(i).get(j).getY()] = getCurrentColor().getValue();
@@ -620,7 +622,7 @@ public class Game {
         return Objects.equals(this.possibleMove, other.possibleMove);
     }
 
-    public boolean isMoveValidTest(Coordinates c, Color col) {
+    boolean isMoveValidTest(Coordinates c, ColorPawn col) {
         pawnsToBeTurned.clear();
         boolean valid = false;
         if (c == null) {
@@ -649,11 +651,11 @@ public class Game {
         return valid;
     }
 
-    public boolean isInsideBoard(Coordinates c) {
+    boolean isInsideBoard(Coordinates c) {
         return c.getX() >= 0 && c.getX() < board.getROW() && c.getY() >= 0 && c.getY() < board.getCOL();
     }
 
-    public boolean isGreaterThanCoordinates(Coordinates c1, Coordinates c2, Directions d) {
+    boolean isGreaterThanCoordinates(Coordinates c1, Coordinates c2, Directions d) {
         boolean ok = false;
         switch (d) {
             case S:
@@ -684,12 +686,24 @@ public class Game {
         return ok;
     }
     
-    public List<Coordinates> deepCopyList (List<Coordinates> l){
+    List<Coordinates> deepCopyList (List<Coordinates> l){
         List <Coordinates> l2 = new ArrayList<>();
         for (Coordinates c : l){
             Coordinates c2 = new Coordinates(c.getX(),c.getY());
             l2.add(c2);
         }
         return l2;
+    }
+    
+    int getNbPawnsToBeTurned(){
+        int cpt = 0;
+        for (int i = 0; i < pawnsToBeTurned.size(); i++) {
+            for (Coordinates get : pawnsToBeTurned.get(i)) {
+                if (get != null){
+                    cpt++;
+                }
+            }
+        }
+        return cpt;
     }
 }

@@ -15,14 +15,14 @@ import java.util.Objects;
  */
 public class Player {
 
-    private Color color;
+    private ColorPawn color;
 
     /**
      * Creates an instance of a player by giving it a specified color.
      *
      * @param color
      */
-    public Player(Color color) {
+    public Player(ColorPawn color) {
         if (color == null) {
             throw new IllegalArgumentException("the color can't be null");
         }
@@ -34,7 +34,7 @@ public class Player {
      *
      * @return the color of the player.
      */
-    public Color getColor() {
+    public ColorPawn getColor() {
         return color;
     }
 
@@ -43,7 +43,7 @@ public class Player {
      *
      * @param color the new color.
      */
-    public void setColor(Color color) {
+    public void setColor(ColorPawn color) {
         this.color = color;
     }
 
@@ -71,7 +71,7 @@ public class Player {
 
     @Override
     public String toString() {
-        if (getColor() == Color.BLACK) {
+        if (getColor() == ColorPawn.BLACK) {
             return "Player Black";
         } else {
             return "Player White";
