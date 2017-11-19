@@ -104,10 +104,12 @@ public class FXOthelloView implements Observer {
         updatePlay();
         updateTurnPassed();
         updateWall();
+        updateEndOfGame();
     }
 
     private void updateInit() {
         if (othello.isUpdateInit()) {
+            historyOfMoves.reinitMovesHistory();
             boardgame.updateBoardgame(othello);
             historyOfMoves.updateMovesHistory(othello);
             progressCake.updateProgressCake(othello);
@@ -160,6 +162,24 @@ public class FXOthelloView implements Observer {
                 progressCake.updateProgressCake(othello);
                 historyOfMoves.updateMovesHistory(othello);
             }
+        }
+    }
+    
+    private void updateEndOfGame(){
+        if (othello.isUpdateEndOfGame()){
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("");
+            alert.setHeaderText("The game is over!");
+            int score1 = othello.getScorePlayer1();
+            int score2 = othello.getScorePlayer2();
+            if (score1 > score2) {
+                alert.setContentText(resultFrame.getName1() + " has won! (" + score1 + "-" + score2 + ")");
+            } else if (score1 == score2) {
+                alert.setContentText("It is a draw! (" + score1 + "-" + score2 + ")");
+            } else {
+                alert.setContentText(resultFrame.getName2() + " has won! (" + score1 + "-" + score2 + ")");
+            }
+            alert.showAndWait();
         }
     }
 

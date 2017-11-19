@@ -50,8 +50,8 @@ public class FXOthelloUserInterface extends Application {
         mainFrame.setStyle("-fx-background : #f6ebba");
         mainFrame.getChildren().addAll(view.getLeftSubFrame(), view.getRightSubFrame());
 
-        //ASKING THE PLAYER'S NAME
         //INITIALIZING THE GAME
+        askName(view.getResultFrame());
         othello.init(view.getResultFrame().getName1());
 
         //WHEN MOUSE HOVER CASE
@@ -98,6 +98,7 @@ public class FXOthelloUserInterface extends Application {
                                     othello.changePlayer();
                                 }
                             }
+                            checkGameOver(othello, view.getResultFrame());
                         }
                     }
                 }
@@ -126,28 +127,9 @@ public class FXOthelloUserInterface extends Application {
 
     private static void checkGameOver(OthelloModel othello, GUIScoreFrame score) {
         if (othello.isOver()) {
-            //othello.endOfGame();
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("");
-            alert.setHeaderText("The game is over!");
-            int score1 = Integer.parseInt(score.getScore1());
-            int score2 = Integer.parseInt(score.getScore2());
-            if (score1 > score2) {
-                alert.setContentText(score.getName1() + " has won! (" + score1 + "-" + score2 + ")");
-            } else if (score1 == score2) {
-                alert.setContentText("It is a draw! (" + score1 + "-" + score2 + ")");
-            } else {
-                alert.setContentText(score.getName2() + " has won! (" + score1 + "-" + score2 + ")");
-            }
-            ButtonType buttonTypeOK = new ButtonType("OK", ButtonData.CANCEL_CLOSE);
-
-            alert.getButtonTypes().setAll(buttonTypeOK);
-
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == buttonTypeOK) {
-                //askName(score);
-                othello.init(score.getName1());
-            }
+            othello.endOfGame();
+            askName(score);
+            othello.init(score.getName1());
         }
     }
 
@@ -158,6 +140,7 @@ public class FXOthelloUserInterface extends Application {
         dialog.setHeaderText("Enter the names of the player");
         // Set the button types.
         ButtonType OKButtonType = new ButtonType("OK", ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(OKButtonType);
         // Create the username and password labels and fields.
         GridPane grid = new GridPane();
         grid.setHgap(10);

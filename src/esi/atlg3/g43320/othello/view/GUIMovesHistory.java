@@ -59,4 +59,8 @@ public class GUIMovesHistory extends TableView {
         String taken = othello.getMoveTaken();
         data.add(new Move(name, action, pos, taken));
     }
+    
+    public void reinitMovesHistory(){
+        data.clear();
+    }
 }
