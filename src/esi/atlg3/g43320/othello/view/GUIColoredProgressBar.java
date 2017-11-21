@@ -9,11 +9,15 @@ import esi.atlg3.g43320.othello.model.OthelloModel;
 import javafx.scene.control.ProgressBar;
 
 /**
- *
+ * This class represent the progress bar of the score.
  * @author s_u_y_s_a
  */
-class GUIColoredProgressBar extends ProgressBar {
+public class GUIColoredProgressBar extends ProgressBar {
         
+    /**
+     * Creates an instance of a GUIColoredProgressBar
+     * @param styleClass the color of the bar, stocked in a css sheet.
+     */
     public GUIColoredProgressBar(String styleClass) {
         super();
         getStyleClass().add(styleClass);
@@ -21,6 +25,10 @@ class GUIColoredProgressBar extends ProgressBar {
         setProgress(0.50F);
     }
     
+    /**
+     * Update the progress bar by changing its percentage of completion.
+     * @param othello the model of the game being played.
+     */
     public void updateProgressBar(OthelloModel othello){
         double score1 = othello.getScorePlayer1();
         double score2 = othello.getScorePlayer2();

@@ -110,7 +110,7 @@ public class Board {
      * @param aCoordinate the coordinates of the case we have to check.
      * @return a boolean indicating true if the case is empty, false otherwise.
      */
-    public boolean isFree(Coordinates aCoordinate) {
+    boolean isFree(Coordinates aCoordinate) {
         if (aCoordinate == null) {
             throw new IllegalArgumentException("The coordinate is not valid!");
         }
@@ -138,7 +138,7 @@ public class Board {
      * @return an int representing the number of pawns of a specified color that
      * are on the board at a given time.
      */
-    public int getScore(ColorPawn color) {
+    int getScore(ColorPawn color) {
         int score = 0;
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COL; j++) {
@@ -172,7 +172,11 @@ public class Board {
         return Arrays.deepEquals(this.checkerboard, other.checkerboard);
     }
     
-    public int nbCaseOccupied(){
+    /**
+     * Return the number of case already occupied by a wall or a pawn.
+     * @return the number of case already occupied by a wall or a pawn.
+     */
+    int nbCaseOccupied(){
         int nbCasesOccupied = 0;
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COL; j++) {

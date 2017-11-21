@@ -721,7 +721,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(3,4), ColorPawn.BLACK);
         instance.getBoard().putPawn(new Coordinates(4,4), ColorPawn.WHITE);
         boolean expResult = true;
-        boolean result = instance.isMoveValidTest(aCoordinate, ColorPawn.WHITE);
+        boolean result = instance.isMoveValidAllDirections(aCoordinate, ColorPawn.WHITE);
         assertEquals(expResult, result);
     }
     
@@ -733,7 +733,7 @@ public class GameTest {
         instance.getBoard().putPawn(new Coordinates(3,4), ColorPawn.BLACK);
         instance.getBoard().putPawn(new Coordinates(4,4), ColorPawn.WHITE);
         boolean expResult = false;
-        boolean result = instance.isMoveValidTest(aCoordinate, ColorPawn.WHITE);
+        boolean result = instance.isMoveValidAllDirections(aCoordinate, ColorPawn.WHITE);
         assertEquals(expResult, result);
     }
     

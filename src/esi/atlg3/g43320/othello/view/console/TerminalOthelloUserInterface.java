@@ -6,7 +6,6 @@
 package esi.atlg3.g43320.othello.view.console;
 
 import esi.atlg3.g43320.othello.model.Coordinates;
-import esi.atlg3.g43320.othello.model.Game;
 import esi.atlg3.g43320.othello.model.OthelloModel;
 import java.util.Locale;
 import java.util.Scanner;
@@ -23,14 +22,11 @@ public class TerminalOthelloUserInterface {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //Game game = new Game();
         OthelloModel othello = new OthelloModel();
         TerminalOthelloView view = new TerminalOthelloView(othello);
         
         othello.init("");
-        //othello.init(othello.getGame());
         while (!othello.isOver()) {
-            //othello.turnPassed(othello.getGame().isTurnPassed(othello.getGame().getCurrentPlayer()));
             othello.turnPassed();
             if (!othello.isTurnPassed()) {
                 playATurn(othello);
@@ -40,26 +36,15 @@ public class TerminalOthelloUserInterface {
         othello.endOfGame();
     }
 
-    /**
-     * Verify if the player has typed a valid coordinates : 2 int (x, y) ,
-     * between 0 and 7 (the size of the board). Here we do not take into account
-     * if he can put a pawn or not on the case specified by the coordinates.
-     *
-     * @param tabStr an array of string which represents the command typed by
-     * the user.
-     * @param game the game the players are currently playing.
-     * @return a boolean true if the coordinates typed by the player are valid,
-     * false otherwise.
-     */
-    public static boolean verifyArgsCoordinates(String[] tabStr, Game game) {
+    private static boolean verifyArgsCoordinates(String[] tabStr, OthelloModel othello) {
         boolean ok = true;
         try {
             int row = Integer.parseInt(tabStr[1]);
             int col = Integer.parseInt(tabStr[2]);
-            if (row < 0 || row >= game.getBoard().getROW()) {
+            if (row < 0 || row >= othello.getBoard().getROW()) {
                 ok = false;
             }
-            if (col < 0 || col >= game.getBoard().getCOL()) {
+            if (col < 0 || col >= othello.getBoard().getCOL()) {
                 ok = false;
             }
 
@@ -69,19 +54,8 @@ public class TerminalOthelloUserInterface {
         return ok;
     }
 
-    /**
-     * It represents a play in which a single player plays a single time. He has
-     * the choice to either see the scores, see the board or put a pawn on a
-     * case.
-     *
-     * @param othello the model that take care of the implementation of the
-     * game.
-     * @param game the game that is being implemented.
-     */
-    public static void playATurn(OthelloModel othello) {
+    private static void playATurn(OthelloModel othello) {
         boolean unvalid = true;
-        boolean validPlay = false;
-        boolean turnPassed = false;
         Scanner keyboard = new Scanner(System.in, "UTF-8");
         String input = keyboard.nextLine();
         while (unvalid) {
@@ -99,7 +73,7 @@ public class TerminalOthelloUserInterface {
                         othello.score();
                         break;
                     case "PLAY":
-                        if (verifyArgsCoordinates(inputArray, othello.getGame())) {
+                        if (verifyArgsCoordinates(inputArray, othello)) {
                             int x = Integer.parseInt(inputArray[1]);
                             int y = Integer.parseInt(inputArray[2]);
                             othello.play(new Coordinates(x, y), "");

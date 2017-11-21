@@ -14,17 +14,20 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
- *
+ * This class represents the table of all the moves of one game.
  * @author s_u_y_s_a
  */
 public class GUIMovesHistory extends TableView {
     
     ObservableList<Move> data;
 
+    /**
+     * Creates an instance of GUIMovesHistory.
+     */
     public GUIMovesHistory() {
-        TableColumn<Move, Number> idCol = new TableColumn<Move, Number>("ID");
+        TableColumn<Move, Number> idCol = new TableColumn<>("ID");
         idCol.setSortable(false);
-        idCol.setCellValueFactory(column -> new ReadOnlyObjectWrapper<Number>(getItems().indexOf(column.getValue())));
+        idCol.setCellValueFactory(column -> new ReadOnlyObjectWrapper<>(getItems().indexOf(column.getValue())));
         TableColumn nameCol = new TableColumn("Name");
         TableColumn actionCol = new TableColumn("Action");
         TableColumn positionCol = new TableColumn("Position");
@@ -32,26 +35,28 @@ public class GUIMovesHistory extends TableView {
         getColumns().addAll(idCol, nameCol, actionCol, positionCol, takenCol);
 
         data = FXCollections.observableArrayList();
-        
-        
 
         nameCol.setCellValueFactory(
-                new PropertyValueFactory<Move, String>("name")
+                new PropertyValueFactory<>("name")
         );
         actionCol.setCellValueFactory(
-                new PropertyValueFactory<Move, String>("action")
+                new PropertyValueFactory<>("action")
         );
         positionCol.setCellValueFactory(
-                new PropertyValueFactory<Move, String>("pos")
+                new PropertyValueFactory<>("pos")
         );
         takenCol.setCellValueFactory(
-                new PropertyValueFactory<Move, String>("taken")
+                new PropertyValueFactory<>("taken")
         );
 
         setItems(data);
         setMinHeight(550);
     }
     
+    /**
+     * Update the table after each turn.
+     * @param othello
+     */
     public void updateMovesHistory(OthelloModel othello){
         String name = othello.getMoveName();
         String action = othello.getMoveAction();
@@ -60,6 +65,9 @@ public class GUIMovesHistory extends TableView {
         data.add(new Move(name, action, pos, taken));
     }
     
+    /**
+     * Reinitialize the table.
+     */
     public void reinitMovesHistory(){
         data.clear();
     }

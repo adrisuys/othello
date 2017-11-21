@@ -8,50 +8,67 @@ package esi.atlg3.g43320.othello.view;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
- *
+ * This class represent a moves which is descriped by 
+ *   - the name of the player
+ *   - the type of action he played (put a pawn, put a wall, pass)
+ *   - the position of the case on which he played (if pawn or wall put)
+ *   - the number of pawn he has taken when he played (if pawn put)
  * @author s_u_y_s_a
  */
 public class Move {
     
-    private final SimpleStringProperty name;
-    private final SimpleStringProperty action;
-    private final SimpleStringProperty pos;
-    private final SimpleStringProperty taken;
+    private final String name;
+    private final String action;
+    private final String pos;
+    private final String taken;
  
+    /**
+     * Creates an instance of a Move.
+     * @param name the name of the player
+     * @param action the type of action the player played
+     * @param pos the position on which the player put a pawn or a wall
+     * @param taken the numnber of pawn he has taken when putting a pawn.
+     */
     public Move(String name, String action, String pos, String taken) {
-        this.name = new SimpleStringProperty(name);
-        this.action = new SimpleStringProperty(action);
-        this.pos = new SimpleStringProperty(pos);
-        this.taken = new SimpleStringProperty(taken);
+        this.name = name;
+        this.action = action;
+        this.pos = pos;
+        this.taken = taken;
         
     }
- 
+
+    /**
+     * Get the name of the player.
+     * @return the name of the player.
+     */
     public String getName() {
-        return name.get();
+        return name;
     }
-    public void setName(String s) {
-        name.set(s);
-    }
-    
+
+    /**
+     * Get the type of action he played.
+     * @return the type of action he played.
+     */
     public String getAction() {
-        return action.get();
+        return action;
     }
-    public void setAction(String s) {
-        action.set(s);
-    }
-    
+
+    /**
+     * Get the position at which he played.
+     * @return the position at which he played.
+     */
     public String getPos() {
-        return pos.get();
+        return pos;
     }
-    public void setPos(String s) {
-        pos.set(s);
+
+    /**
+     * Get the number of pawn he has taken.
+     * @return the number of pawn he has taken.
+     */
+    public String getTaken() {
+        return taken;
     }
     
-    public String getTaken() {
-        return taken.get();
-    }
-    public void setTaken(String s) {
-        taken.set(s);
-    }
+    
         
 }

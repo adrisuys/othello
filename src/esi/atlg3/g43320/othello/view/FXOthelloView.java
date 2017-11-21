@@ -21,6 +21,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
+ * This class creates the view of the application. It observes the model of the
+ * game.
  *
  * @author s_u_y_s_a
  */
@@ -35,6 +37,10 @@ public class FXOthelloView implements Observer {
     private VBox leftSubFrame;
     private VBox rightSubFrame;
     private boolean wallChosenOverPass;
+    private Button giveUp;
+    private Button pass;
+    private Button restart;
+    private boolean confirm;
 
     /**
      * Creates an instance of this class and register this object as an observer
@@ -86,9 +92,9 @@ public class FXOthelloView implements Observer {
         VBox.setMargin(progressScoreBarFrame, new Insets(0, 0, 10, 0));
 
         //CREATION OF BUTTONS FRAME
-        Button giveUp = new Button("ABANDON");
-        Button pass = new Button("PASSE");
-        Button restart = new Button("RECOMMENCER");
+        giveUp = new Button("ABANDON");
+        pass = new Button("PASSE");
+        restart = new Button("RECOMMENCER");
         btnFrame.getChildren().addAll(giveUp, pass, restart);
         VBox.setMargin(btnFrame, new Insets(10, 0, 0, 0));
         btnFrame.setAlignment(Pos.CENTER);
@@ -105,6 +111,9 @@ public class FXOthelloView implements Observer {
         updateTurnPassed();
         updateWall();
         updateEndOfGame();
+        updateConfirm();
+        updateGiveUp();
+        updateProblemPass();
     }
 
     private void updateInit() {
@@ -150,23 +159,23 @@ public class FXOthelloView implements Observer {
                 alert.getButtonTypes().setAll(btnWall, btnPass);
 
                 Optional<ButtonType> result = alert.showAndWait();
-                wallChosenOverPass = result.get() == btnWall;
+                wallChosenOverPass = (result.get() == btnWall);
             }
         }
     }
-    
-    private void updateWall(){
-        if (othello.isUpdateWall()){
-            if (othello.isWallValid()){
+
+    private void updateWall() {
+        if (othello.isUpdateWall()) {
+            if (othello.isWallValid()) {
                 boardgame.updateBoardgame(othello);
                 progressCake.updateProgressCake(othello);
                 historyOfMoves.updateMovesHistory(othello);
             }
         }
     }
-    
-    private void updateEndOfGame(){
-        if (othello.isUpdateEndOfGame()){
+
+    private void updateEndOfGame() {
+        if (othello.isUpdateEndOfGame()) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("");
             alert.setHeaderText("The game is over!");
@@ -183,40 +192,148 @@ public class FXOthelloView implements Observer {
         }
     }
 
-    public OthelloModel getOthello() {
-        return othello;
+    private void updateConfirm() {
+        if (othello.isUpdateConfirm()) {
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("");
+            alert.setHeaderText("Are you sure you want to do that?");
+            alert.setContentText("");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            confirm = result.get() == ButtonType.OK;
+        }
     }
 
+    private void updateGiveUp() {
+        if (othello.isUpdateGiveUp()) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("");
+            alert.setHeaderText(null);
+            alert.setContentText("You have given up! You have lost! ");
+
+            alert.showAndWait();
+        }
+    }
+
+    private void updateProblemPass() {
+        if (othello.isUpdateProblemPass()) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("");
+            alert.setHeaderText(null);
+            alert.setContentText("You can't pass, you still can put a pawn on the board !");
+
+            alert.showAndWait();
+        }
+    }
+
+    /**
+     * Returns the graphical interface of the boardgame.
+     *
+     * @return the graphical interface of the boardgame.
+     */
     public GUIBoardgame getBoardgame() {
         return boardgame;
     }
 
+    /**
+     * Returns the graphical interface of the progress bar of the score.
+     *
+     * @return the graphical interface of the progress bar of the score.
+     */
     public GUIColoredProgressBar getBar() {
         return bar;
     }
 
+    /**
+     * Returns the graphical interface of the history of moves.
+     *
+     * @return the graphical interface of the history of moves.
+     */
     public GUIMovesHistory getHistoryOfMoves() {
         return historyOfMoves;
     }
 
+    /**
+     * Returns the graphical interface of the progress cake of the game.
+     *
+     * @return the graphical interface of the progress cake of the game.
+     */
     public GUIProgressCake getProgressCake() {
         return progressCake;
     }
 
+    /**
+     * Returns the graphical interface of the score.
+     *
+     * @return the graphical interface of the score.
+     */
     public GUIScoreFrame getResultFrame() {
         return resultFrame;
     }
 
+    /**
+     * Returns the left part of the window with all its components.
+     *
+     * @return the left part of the window with all its components.
+     */
     public VBox getLeftSubFrame() {
         return leftSubFrame;
     }
 
+    /**
+     * Returns the right part of the window with all its components.
+     *
+     * @return the right part of the window with all its components.
+     */
     public VBox getRightSubFrame() {
         return rightSubFrame;
     }
-    
-    public boolean isWallChosenOverPass(){
+
+    /**
+     * Returns a boolean indicating if a player has chosen to put a wall instead
+     * of passing its turn.
+     *
+     * @return a boolean indicating if a player has chosen to put a wall instead
+     * of passing its turn.
+     */
+    public boolean isWallChosenOverPass() {
         return wallChosenOverPass;
+    }
+
+    /**
+     * Returns the button GIVE UP.
+     *
+     * @return the button GIVE UP.
+     */
+    public Button getGiveUp() {
+        return giveUp;
+    }
+
+    /**
+     * Returns the button PASS.
+     *
+     * @return the button PASS.
+     */
+    public Button getPass() {
+        return pass;
+    }
+
+    /**
+     * Returns the button RESTART.
+     *
+     * @return the button RESTART.
+     */
+    public Button getRestart() {
+        return restart;
+    }
+
+    /**
+     * Returns a boolean indication if a player has confirmed an action.
+     *
+     * @return a boolean indication if a player has confirmed an action.
+     */
+    public boolean hasConfirm() {
+        return confirm;
     }
 
 }

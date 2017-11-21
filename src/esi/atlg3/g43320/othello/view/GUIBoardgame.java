@@ -12,17 +12,19 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
 /**
+ * This class represents the graphical interface of the boardgame.
  *
  * @author s_u_y_s_a
  */
-public class GUIBoardgame extends GridPane{
-    
+public class GUIBoardgame extends GridPane {
+
     private final static int ROW = 8;
     private final static int COL = 8;
-    //private final GridPane board;
 
+    /**
+     * Creates an instance of GUIBoardgame.
+     */
     public GUIBoardgame() {
-        //board = new GridPane();
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COL; j++) {
                 GUISquare square = new GUISquare();
@@ -33,40 +35,50 @@ public class GUIBoardgame extends GridPane{
         }
     }
 
+    /**
+     * Display the boardgame at a given time.
+     *
+     * @param othello the model of the game.
+     */
     public void updateBoardgame(OthelloModel othello) {
-        for (int i=0; i<ROW; i++) {
-            for (int j=0; j<COL; j++) {
-                Coordinates coord = new Coordinates(i,j);
-                switch (othello.getGame().getBoard().getPawn(coord)) {
+        for (int i = 0; i < ROW; i++) {
+            for (int j = 0; j < COL; j++) {
+                Coordinates coord = new Coordinates(i, j);
+                switch (othello.getBoard().getPawn(coord)) {
                     case 0:
-                        getSquareAtCoordinates(i,j).getPawn().setFill(Color.TRANSPARENT);
+                        getSquareAtCoordinates(i, j).getPawn().setFill(Color.TRANSPARENT);
                         break;
                     case 1:
-                        getSquareAtCoordinates(i,j).getPawn().setFill(Color.BLACK);
+                        getSquareAtCoordinates(i, j).getPawn().setFill(Color.BLACK);
                         break;
                     case 2:
-                        getSquareAtCoordinates(i,j).getPawn().setFill(Color.WHITE);
+                        getSquareAtCoordinates(i, j).getPawn().setFill(Color.WHITE);
                         break;
                     default:
-                        getSquareAtCoordinates(i,j).setStyle("-fx-background-image: url(img/wall.png)");
-                        getSquareAtCoordinates(i,j).getPawn().setFill(Color.TRANSPARENT);
+                        getSquareAtCoordinates(i, j).getPawn().setFill(Color.BROWN);
                         break;
                 }
             }
         }
     }
 
-    public GUISquare getSquareAtCoordinates(int row, int col){
+    /**
+     * Get the Node at a certain coordinate in the GridPane (the specific case
+     * of the board)
+     *
+     * @param row the row of the coordinate
+     * @param col the column of the coordinate
+     * @return the Node at that coordinate if it exists.
+     */
+    public GUISquare getSquareAtCoordinates(int row, int col) {
         GUISquare aSquare = null;
         for (Node sq : getChildren()) {
-            if (getRowIndex(sq)==row && getColumnIndex(sq)==col){
+            if (getRowIndex(sq) == row && getColumnIndex(sq) == col) {
                 aSquare = (GUISquare) sq;
                 break;
             }
         }
         return aSquare;
     }
-    
-    
 
 }
