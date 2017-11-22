@@ -104,12 +104,19 @@ public class FXOthelloUserInterface extends Application {
                 } else {
                     if (!view.isWallChosenOverPass()) {
                         othello.changePlayer();
+                    } else{
+                       if (othello.getCurrentColor() == ColorPawn.BLACK) {
+                            othello.wall(coord, view.getResultFrame().getName1());
+                        } else {
+                            othello.wall(coord, view.getResultFrame().getName2());
+                        } 
                     }
                     checkGameOver(othello, view.getResultFrame());
                 }
             });
         });
         
+        //WHEN BUTTON ABANDONNER CLICKED
         view.getGiveUp().addEventHandler(ActionEvent.ACTION, (ActionEvent event) -> {
             othello.confirm();
             if (view.hasConfirm()){
@@ -119,6 +126,7 @@ public class FXOthelloUserInterface extends Application {
             }
         });
         
+        //WHEN BUTTON RECOMMENCER CLICKED
         view.getRestart().addEventHandler(ActionEvent.ACTION, (ActionEvent event) -> {
             othello.confirm();
             if (view.hasConfirm()){
@@ -127,6 +135,7 @@ public class FXOthelloUserInterface extends Application {
             }
         });
         
+        //WHEN BUTTON PASSER CLICKED
         view.getPass().addEventHandler(ActionEvent.ACTION, (ActionEvent event) -> {
             othello.turnPassedFX();
             if (othello.isTurnPassed()){
