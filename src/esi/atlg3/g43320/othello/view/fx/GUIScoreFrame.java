@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package esi.atlg3.g43320.othello.view;
+package esi.atlg3.g43320.othello.view.fx;
 
+import esi.atlg3.g43320.othello.model.ColorPawn;
 import esi.atlg3.g43320.othello.model.OthelloModel;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -28,15 +29,17 @@ public class GUIScoreFrame extends HBox {
     private Label score1;
     private Label name2;
     private Label score2;
+    private GridPane score1Frame;
+    private GridPane score2Frame;
 
     /**
      * Creates an instance of a GUIScoreFrame.
      */
     public GUIScoreFrame() {
-        GridPane score1Frame = new GridPane();
-        GridPane score2Frame = new GridPane();
-        score1Frame.setStyle("-fx-background-color: #f08c6b;");
-        score2Frame.setStyle("-fx-background-color: #c7f097;");
+        score1Frame = new GridPane();
+        score2Frame = new GridPane();
+        score1Frame.setStyle("-fx-background-color: #c7f097;");
+        score2Frame.setStyle("-fx-background-color: #f08c6b;");
         score1Frame.setGridLinesVisible(true);
         score2Frame.setGridLinesVisible(true);
 
@@ -105,7 +108,9 @@ public class GUIScoreFrame extends HBox {
     }
 
     /**
-     * Creates an instance of a GUIScoreFrame by updating the score with the current one.
+     * Creates an instance of a GUIScoreFrame by updating the score with the
+     * current one.
+     *
      * @param othello the game that is being played.
      */
     public GUIScoreFrame(OthelloModel othello) {
@@ -116,6 +121,7 @@ public class GUIScoreFrame extends HBox {
 
     /**
      * Returns the name of the player black.
+     *
      * @return the name of the player black.
      */
     public String getName1() {
@@ -124,6 +130,7 @@ public class GUIScoreFrame extends HBox {
 
     /**
      * Returns the score of the player black.
+     *
      * @return the score of the player black.
      */
     public String getScore1() {
@@ -132,6 +139,7 @@ public class GUIScoreFrame extends HBox {
 
     /**
      * Returns the name of the player white.
+     *
      * @return the name of the player white.
      */
     public String getName2() {
@@ -140,6 +148,7 @@ public class GUIScoreFrame extends HBox {
 
     /**
      * Returns the score of the player white.
+     *
      * @return the score of the player white.
      */
     public String getScore2() {
@@ -148,6 +157,7 @@ public class GUIScoreFrame extends HBox {
 
     /**
      * Change the name of the black player.
+     *
      * @param s its new name.
      */
     public void setName1(String s) {
@@ -156,6 +166,7 @@ public class GUIScoreFrame extends HBox {
 
     /**
      * Change the score of the black player.
+     *
      * @param s its new score.
      */
     public void setScore1(String s) {
@@ -164,6 +175,7 @@ public class GUIScoreFrame extends HBox {
 
     /**
      * Change the name of the white player.
+     *
      * @param s its new name.
      */
     public void setName2(String s) {
@@ -172,6 +184,7 @@ public class GUIScoreFrame extends HBox {
 
     /**
      * Change the score of the white player.
+     *
      * @param s its new score.
      */
     public void setScore2(String s) {
@@ -180,6 +193,7 @@ public class GUIScoreFrame extends HBox {
 
     /**
      * Update the score of the player after each turn.
+     *
      * @param othello the game being played.
      */
     public void updateScore(OthelloModel othello) {
@@ -187,6 +201,14 @@ public class GUIScoreFrame extends HBox {
         setScore2(Integer.toString(othello.getScorePlayer2()));
     }
 
-    
+    public void updateChangePlayer(OthelloModel othello) {
+            if (othello.getCurrentColor() == ColorPawn.BLACK) {
+                score1Frame.setStyle("-fx-background-color: #c7f097;");
+                score2Frame.setStyle("-fx-background-color: #f08c6b;");
+            } else {
+                score1Frame.setStyle("-fx-background-color: #f08c6b;");
+                score2Frame.setStyle("-fx-background-color: #c7f097;");
+            }
+    }
 
 }

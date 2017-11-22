@@ -15,7 +15,7 @@ import java.util.Objects;
  *
  * @author s_u_y_s_a
  */
-public class Game {
+class Game {
 
     private final List<Player> players;
     private final Board board;
@@ -33,7 +33,7 @@ public class Game {
         players.add(new Player(ColorPawn.WHITE));
 
         board = new Board();
-
+        
         currentPlayer = players.get(0);
         pawnsToBeTurned = new ArrayList<>();
         possibleMove = new ArrayList<>();
@@ -344,5 +344,17 @@ public class Game {
             }
         }
         return cpt;
+    }
+    
+    int getScore(ColorPawn color){
+        return board.getScore(color);
+    }
+    
+    boolean putWall(Coordinates c){
+        return board.putWall(c);
+    }
+    
+    int nbCaseOccupied(){
+        return board.nbCaseOccupied();
     }
 }

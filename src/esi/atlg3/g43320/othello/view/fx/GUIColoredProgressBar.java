@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package esi.atlg3.g43320.othello.view;
+package esi.atlg3.g43320.othello.view.fx;
 
 import esi.atlg3.g43320.othello.model.OthelloModel;
 import javafx.scene.control.ProgressBar;
@@ -12,17 +12,18 @@ import javafx.scene.control.ProgressBar;
  * This class represent the progress bar of the score.
  * @author s_u_y_s_a
  */
-public class GUIColoredProgressBar extends ProgressBar {
-        
+public class GUIColoredProgressBar {
+    
+    private final ProgressBar bar;
     /**
      * Creates an instance of a GUIColoredProgressBar
      * @param styleClass the color of the bar, stocked in a css sheet.
      */
     public GUIColoredProgressBar(String styleClass) {
-        super();
-        getStyleClass().add(styleClass);
-        setMinWidth(300);
-        setProgress(0.50F);
+        bar = new ProgressBar();
+        bar.getStyleClass().add(styleClass);
+        bar.setMinWidth(300);
+        bar.setProgress(0.50F);
     }
     
     /**
@@ -34,6 +35,16 @@ public class GUIColoredProgressBar extends ProgressBar {
         double score2 = othello.getScorePlayer2();
         double nbPawnsOnBoard = score1 + score2;
         double pcProgress = score1 / nbPawnsOnBoard;
-        setProgress(pcProgress);
+        bar.setProgress(pcProgress);
     }
+    
+    /**
+     * Returns the ProgressBar representing the bar of progress.
+     * @return the ProgressBar representing the bar of progress.
+     */
+    public ProgressBar getBar() {
+        return bar;
+    }
+    
+    
 }

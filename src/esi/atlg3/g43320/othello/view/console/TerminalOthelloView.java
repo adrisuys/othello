@@ -9,7 +9,7 @@ import esi.atlg3.g43320.othello.dp.Observable;
 import esi.atlg3.g43320.othello.dp.Observer;
 import esi.atlg3.g43320.othello.model.ColorPawn;
 import esi.atlg3.g43320.othello.model.Coordinates;
-import esi.atlg3.g43320.othello.model.Game;
+//import esi.atlg3.g43320.othello.model.Game;
 import esi.atlg3.g43320.othello.model.OthelloModel;
 import java.util.Objects;
 
@@ -38,7 +38,7 @@ public class TerminalOthelloView implements Observer {
 
     }
 
-    private void displayBoardgame(Game game, ColorPawn color) {
+    private void displayBoardgame(ColorPawn color) {
         int cpt = 0;
         StringBuilder buf = new StringBuilder();
         buf.append("-------------------------------------");
@@ -99,7 +99,7 @@ public class TerminalOthelloView implements Observer {
             if (!observable.isValidPlay()) {
                 System.out.println("You can't put a pawn on that coordinate! Try again!");
             } else {
-                displayBoardgame(observable.getGame(), observable.getCurrentColor());
+                displayBoardgame(observable.getCurrentColor());
                 System.out.println("It is now the turn of " + displayCurrentPlayer() + ".");
             }
         }
@@ -116,7 +116,7 @@ public class TerminalOthelloView implements Observer {
 
     private void updateShow() {
         if (observable.isUpdateShow()) {
-            displayBoardgame(observable.getGame(), observable.getCurrentColor());
+            displayBoardgame(observable.getCurrentColor());
         }
 
     }
@@ -126,7 +126,7 @@ public class TerminalOthelloView implements Observer {
             System.out.println("OTHELLO");
             System.out.println("-------");
             displayRules();
-            displayBoardgame(observable.getGame(), observable.getCurrentColor());
+            displayBoardgame(observable.getCurrentColor());
             displayUsage();
         }
     }
@@ -174,7 +174,7 @@ public class TerminalOthelloView implements Observer {
         if (observable.isUpdateTurnPassed()) {
             if (observable.isTurnPassed()) {
                 System.out.println("Your turn has been passed, it is now the " + displayCurrentPlayer() + "'s turn!");
-                displayBoardgame(observable.getGame(), observable.getCurrentColor());
+                displayBoardgame(observable.getCurrentColor());
             }
         }
 

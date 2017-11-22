@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package esi.atlg3.g43320.othello.view;
+package esi.atlg3.g43320.othello.view.fx;
 
 import esi.atlg3.g43320.othello.dp.Observable;
 import esi.atlg3.g43320.othello.dp.Observer;
+import esi.atlg3.g43320.othello.model.ColorPawn;
 import esi.atlg3.g43320.othello.model.OthelloModel;
 import java.util.Optional;
 import javafx.geometry.Insets;
@@ -16,9 +17,13 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Pair;
 
 /**
  * This class creates the view of the application. It observes the model of the
@@ -74,21 +79,21 @@ public class FXOthelloView implements Observer {
         HBox btnFrame = new HBox();
         HBox.setMargin(leftSubFrame, new Insets(20, 10, 20, 20));
         HBox.setMargin(rightSubFrame, new Insets(20, 20, 20, 10));
-        leftSubFrame.getChildren().addAll(boardgame, progressScoreBarFrame, progressGameFrame, btnFrame);
-        rightSubFrame.getChildren().addAll(resultFrame, historyOfMoves);
+        leftSubFrame.getChildren().addAll(boardgame.getBoard(), progressScoreBarFrame, progressGameFrame, btnFrame);
+        rightSubFrame.getChildren().addAll(resultFrame, historyOfMoves.getHistory());
         VBox.setMargin(resultFrame, new Insets(0, 0, 10, 0));
 
         //CREATION OF PROGRESS BAR (SCORE)
-        VBox.setMargin(boardgame, new Insets(0, 0, 10, 0));
+        VBox.setMargin(boardgame.getBoard(), new Insets(0, 0, 10, 0));
         bar = new GUIColoredProgressBar("black-bar");
         Label progressBarLabel = new Label("Noir/Blanc ");
-        progressScoreBarFrame.getChildren().addAll(progressBarLabel, bar);
-        progressScoreBarFrame.getStylesheets().add(getClass().getResource("style/stylesheet.css").toExternalForm());
+        progressScoreBarFrame.getChildren().addAll(progressBarLabel, bar.getBar());
+        progressScoreBarFrame.getStylesheets().add(getClass().getResource("./style/stylesheet.css").toExternalForm());
 
         //CREATION OF PROGRESS BAR (IS THE GAME CLOSE TO BE OVER)
         progressCake = new GUIProgressCake();
         Label progressCakeLabel = new Label("Partie complétée à ");
-        progressGameFrame.getChildren().addAll(progressCakeLabel, progressCake);
+        progressGameFrame.getChildren().addAll(progressCakeLabel, progressCake.getProgressCake());
         VBox.setMargin(progressScoreBarFrame, new Insets(0, 0, 10, 0));
 
         //CREATION OF BUTTONS FRAME
@@ -114,6 +119,9 @@ public class FXOthelloView implements Observer {
         updateConfirm();
         updateGiveUp();
         updateProblemPass();
+        updateAskName();
+        //resultFrame.updateChangePlayer(othello);
+        updatePass();
     }
 
     private void updateInit() {
@@ -123,6 +131,7 @@ public class FXOthelloView implements Observer {
             historyOfMoves.updateMovesHistory(othello);
             progressCake.updateProgressCake(othello);
             resultFrame.updateScore(othello);
+            resultFrame.updateChangePlayer(othello);
             bar.updateProgressBar(othello);
         }
     }
@@ -134,6 +143,7 @@ public class FXOthelloView implements Observer {
                 historyOfMoves.updateMovesHistory(othello);
                 progressCake.updateProgressCake(othello);
                 resultFrame.updateScore(othello);
+                resultFrame.updateChangePlayer(othello);
                 bar.updateProgressBar(othello);
             }
         }
@@ -170,6 +180,7 @@ public class FXOthelloView implements Observer {
                 boardgame.updateBoardgame(othello);
                 progressCake.updateProgressCake(othello);
                 historyOfMoves.updateMovesHistory(othello);
+                resultFrame.updateChangePlayer(othello);
             }
         }
     }
@@ -336,4 +347,51 @@ public class FXOthelloView implements Observer {
         return confirm;
     }
 
+    private void updateAskName() {
+        // Create the custom dialog.
+        if (othello.isUpdateAskName()) {
+            Dialog<Pair<String, String>> dialog = new Dialog<>();
+            dialog.setTitle("");
+            dialog.setHeaderText("Enter the names of the player");
+            // Set the button types.
+            ButtonType OKButtonType = new ButtonType("OK", ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(OKButtonType);
+            // Create the username and password labels and fields.
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 150, 10, 10));
+
+            TextField name1 = new TextField();
+            TextField name2 = new TextField();
+
+            grid.add(new Label("Name of the player 1 (max 5 lettres):"), 0, 0);
+            grid.add(name1, 1, 0);
+            grid.add(new Label("Name of the player 2 (max 5 lettres):"), 0, 1);
+            grid.add(name2, 1, 1);
+
+            dialog.getDialogPane().setContent(grid);
+
+            // Convert the result to a username-password-pair when the login button is clicked.
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == OKButtonType) {
+                    return new Pair<>(name1.getText(), name2.getText());
+                }
+                return null;
+            });
+
+            Optional<Pair<String, String>> result = dialog.showAndWait();
+
+            result.ifPresent(name1name2 -> {
+                resultFrame.setName1(name1name2.getKey());
+                resultFrame.setName2(name1name2.getValue());
+            });
+        }
+    }
+    
+    private void updatePass(){
+        if (othello.isUpdatePass()){
+            historyOfMoves.updateMovesHistory(othello);
+        }
+    }
 }

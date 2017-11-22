@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package esi.atlg3.g43320.othello.view;
+package esi.atlg3.g43320.othello.view.fx;
 
 import javafx.beans.property.SimpleStringProperty;
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package esi.atlg3.g43320.othello.view;
+package esi.atlg3.g43320.othello.view.fx;
 
 import esi.atlg3.g43320.othello.model.OthelloModel;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -17,22 +17,24 @@ import javafx.scene.control.cell.PropertyValueFactory;
  * This class represents the table of all the moves of one game.
  * @author s_u_y_s_a
  */
-public class GUIMovesHistory extends TableView {
+public class GUIMovesHistory {
     
+    private TableView history;
     ObservableList<Move> data;
 
     /**
      * Creates an instance of GUIMovesHistory.
      */
     public GUIMovesHistory() {
+        history = new TableView();
         TableColumn<Move, Number> idCol = new TableColumn<>("ID");
         idCol.setSortable(false);
-        idCol.setCellValueFactory(column -> new ReadOnlyObjectWrapper<>(getItems().indexOf(column.getValue())));
+        idCol.setCellValueFactory(column -> new ReadOnlyObjectWrapper<>(history.getItems().indexOf(column.getValue())));
         TableColumn nameCol = new TableColumn("Name");
         TableColumn actionCol = new TableColumn("Action");
         TableColumn positionCol = new TableColumn("Position");
         TableColumn takenCol = new TableColumn("Prises");
-        getColumns().addAll(idCol, nameCol, actionCol, positionCol, takenCol);
+        history.getColumns().addAll(idCol, nameCol, actionCol, positionCol, takenCol);
 
         data = FXCollections.observableArrayList();
 
@@ -49,8 +51,8 @@ public class GUIMovesHistory extends TableView {
                 new PropertyValueFactory<>("taken")
         );
 
-        setItems(data);
-        setMinHeight(550);
+        history.setItems(data);
+        history.setMinHeight(550);
     }
     
     /**
@@ -71,4 +73,13 @@ public class GUIMovesHistory extends TableView {
     public void reinitMovesHistory(){
         data.clear();
     }
+
+    /**
+     * Returns the TableView representing the history of moves of a game.
+     * @return the TableView representing the history of moves of a game.
+     */
+    public TableView getHistory() {
+        return history;
+    }
+    
 }

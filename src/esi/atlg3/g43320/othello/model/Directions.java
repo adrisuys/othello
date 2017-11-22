@@ -10,7 +10,7 @@ package esi.atlg3.g43320.othello.model;
  * 
  * @author s_u_y_s_a
  */
-public enum Directions {
+enum Directions {
     
     /**
      * The soutwest direction.

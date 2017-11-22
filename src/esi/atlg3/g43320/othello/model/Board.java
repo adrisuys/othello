@@ -8,7 +8,7 @@ package esi.atlg3.g43320.othello.model;
 import java.util.Arrays;
 
 /**
- * Thic class represents the board on which the game is played.
+ * This class represents the board on which the game is played.
  *
  * @author s_u_y_s_a
  */

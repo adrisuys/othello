@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package esi.atlg3.g43320.othello.view;
+package esi.atlg3.g43320.othello.view.fx;
 
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -16,7 +16,7 @@ import javafx.scene.shape.Rectangle;
  * @author s_u_y_s_a
  */
 public class GUISquare extends StackPane {
-
+    
     private final Rectangle square;
     private final Circle pawn;
 
@@ -24,6 +24,7 @@ public class GUISquare extends StackPane {
      * It creates an instance of a GUISquare.
      */
     public GUISquare() {
+        super();
         square = new Rectangle(60.0, 60.0, Color.GREEN);
         square.setStroke(Color.BLACK);
         pawn = new Circle(25.0, Color.TRANSPARENT);
@@ -64,5 +65,7 @@ public class GUISquare extends StackPane {
             square.setFill(Color.LIGHTCORAL);
         }
     }
+    
+    
 
 }

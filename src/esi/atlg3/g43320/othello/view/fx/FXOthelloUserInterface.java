@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package esi.atlg3.g43320.othello.view;
+package esi.atlg3.g43320.othello.view.fx;
 
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.OthelloModel;
@@ -12,7 +12,9 @@ import java.util.Optional;
 import javafx.scene.control.Label;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
@@ -55,14 +57,14 @@ public class FXOthelloUserInterface extends Application {
         primaryStage.show();
 
         //INITIALIZING THE GAME
-        askName(view.getResultFrame());
+        othello.askName();
         othello.init(view.getResultFrame().getName1());
 
         //WHEN MOUSE HOVER CASE
-        view.getBoardgame().getChildren().stream().map((node) -> {
+        view.getBoardgame().getBoard().getChildren().stream().map((node) -> {
             node.setOnMouseEntered((MouseEvent event) -> {
-                int x = GUIBoardgame.getRowIndex(node);
-                int y = GUIBoardgame.getColumnIndex(node);
+                int x = GridPane.getRowIndex(node);
+                int y = GridPane.getColumnIndex(node);
                 Coordinates coord = new Coordinates(x, y);
                 othello.mouseOverEnter(coord);
             });
@@ -73,49 +75,26 @@ public class FXOthelloUserInterface extends Application {
                 sq.getSquare().setFill(Color.GREEN);
             });
         });
-
-        //WHEN MOUSE PRESSED (LEFT CLICK)
-        view.getBoardgame().addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent e) -> {
-            view.getBoardgame().getChildren().stream().filter((node) -> (node instanceof GUISquare)).filter((node) -> (node.getBoundsInParent().contains(e.getSceneX(), e.getSceneY()))).map((node) -> {
-                int i = GridPane.getRowIndex(node);
-                int j = GridPane.getColumnIndex(node);
-                Coordinates coord = new Coordinates(i, j);
-                return coord;
-            }).map((coord) -> {
-                othello.turnPassedFX();
-                return coord;
-            }).forEachOrdered((coord) -> {
-                if (!othello.isTurnPassed()) {
-                    if (e.getButton() == MouseButton.PRIMARY) {
-                        if (othello.getCurrentColor() == ColorPawn.BLACK) {
-                            othello.play(coord, view.getResultFrame().getName1());
-                        } else {
-                            othello.play(coord, view.getResultFrame().getName2());
-                        }
-                        checkGameOver(othello, view.getResultFrame());
-                    } else if (e.getButton() == MouseButton.SECONDARY) {
-                        if (othello.getCurrentColor() == ColorPawn.BLACK) {
-                            othello.wall(coord, view.getResultFrame().getName1());
-                        } else {
-                            othello.wall(coord, view.getResultFrame().getName2());
-                        }
-                        checkGameOver(othello, view.getResultFrame());
-                    }
-                } else {
-                    if (!view.isWallChosenOverPass()) {
-                        othello.changePlayer();
-                    } else{
-                       if (othello.getCurrentColor() == ColorPawn.BLACK) {
-                            othello.wall(coord, view.getResultFrame().getName1());
-                        } else {
-                            othello.wall(coord, view.getResultFrame().getName2());
-                        } 
-                    }
-                    checkGameOver(othello, view.getResultFrame());
-                }
-            });
-        });
         
+        //WHEN MOUSE PRESSED
+        for (Node node : view.getBoardgame().getBoard().getChildren()){
+            node.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                @Override
+                public void handle(MouseEvent event) {
+                    int i = GridPane.getRowIndex(node);
+                    int j = GridPane.getColumnIndex(node);
+                    boolean primaryButtonMouseClicked = false;
+                    if (event.getButton()==MouseButton.PRIMARY){
+                        primaryButtonMouseClicked = true;
+                    } else if (event.getButton()==MouseButton.SECONDARY){
+                        primaryButtonMouseClicked = false;
+                    }
+                    othello.playATurn(primaryButtonMouseClicked, new Coordinates(i,j), view.getResultFrame().getName1(), view.getResultFrame().getName2(), view.isWallChosenOverPass());
+                }
+            
+            });
+        }
+
         //WHEN BUTTON ABANDONNER CLICKED
         view.getGiveUp().addEventHandler(ActionEvent.ACTION, (ActionEvent event) -> {
             othello.confirm();
