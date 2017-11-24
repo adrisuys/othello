@@ -5,8 +5,8 @@
  */
 package esi.atlg3.g43320.othello.view.fx;
 
-import esi.atlg3.g43320.othello.dp.Observable;
-import esi.atlg3.g43320.othello.dp.Observer;
+import esi.atlg3.g43320.othello.dpObs.Observable;
+import esi.atlg3.g43320.othello.dpObs.Observer;
 import esi.atlg3.g43320.othello.model.ColorPawn;
 import esi.atlg3.g43320.othello.model.OthelloModel;
 import java.util.Optional;
@@ -42,6 +42,7 @@ public class FXOthelloView implements Observer {
     private VBox leftSubFrame;
     private VBox rightSubFrame;
     private boolean wallChosenOverPass;
+    private boolean isIAPlaying;
     private Button giveUp;
     private Button pass;
     private Button restart;
@@ -120,8 +121,9 @@ public class FXOthelloView implements Observer {
         updateGiveUp();
         updateProblemPass();
         updateAskName();
-        //resultFrame.updateChangePlayer(othello);
         updatePass();
+        updateTypeGame();
+        updateChangePlayer();
     }
 
     private void updateInit() {
@@ -131,7 +133,6 @@ public class FXOthelloView implements Observer {
             historyOfMoves.updateMovesHistory(othello);
             progressCake.updateProgressCake(othello);
             resultFrame.updateScore(othello);
-            resultFrame.updateChangePlayer(othello);
             bar.updateProgressBar(othello);
         }
     }
@@ -143,7 +144,6 @@ public class FXOthelloView implements Observer {
                 historyOfMoves.updateMovesHistory(othello);
                 progressCake.updateProgressCake(othello);
                 resultFrame.updateScore(othello);
-                resultFrame.updateChangePlayer(othello);
                 bar.updateProgressBar(othello);
             }
         }
@@ -157,19 +157,21 @@ public class FXOthelloView implements Observer {
 
     private void updateTurnPassed() {
         if (othello.isUpdateTurnPassed()) {
-            if (othello.isTurnPassed()) {
-                Alert alert = new Alert(AlertType.CONFIRMATION);
-                alert.setTitle("");
-                alert.setHeaderText("Tu dois passer ton tour!");
-                alert.setContentText("Néanmois, tu as la possibilité de placer un mur. Que veux-tu faire");
+            if (!othello.isIsIA()) {
+                if (othello.isTurnPassed()) {
+                    Alert alert = new Alert(AlertType.CONFIRMATION);
+                    alert.setTitle("");
+                    alert.setHeaderText("Tu dois passer ton tour!");
+                    alert.setContentText("Néanmois, tu as la possibilité de placer un mur. Que veux-tu faire?");
 
-                ButtonType btnWall = new ButtonType("Je place un mur!");
-                ButtonType btnPass = new ButtonType("Je passe mon tour...", ButtonData.CANCEL_CLOSE);
+                    ButtonType btnWall = new ButtonType("Je place un mur!");
+                    ButtonType btnPass = new ButtonType("Je passe mon tour...", ButtonData.CANCEL_CLOSE);
 
-                alert.getButtonTypes().setAll(btnWall, btnPass);
+                    alert.getButtonTypes().setAll(btnWall, btnPass);
 
-                Optional<ButtonType> result = alert.showAndWait();
-                wallChosenOverPass = (result.get() == btnWall);
+                    Optional<ButtonType> result = alert.showAndWait();
+                    wallChosenOverPass = (result.get() == btnWall);
+                }
             }
         }
     }
@@ -180,7 +182,6 @@ public class FXOthelloView implements Observer {
                 boardgame.updateBoardgame(othello);
                 progressCake.updateProgressCake(othello);
                 historyOfMoves.updateMovesHistory(othello);
-                resultFrame.updateChangePlayer(othello);
             }
         }
     }
@@ -363,10 +364,14 @@ public class FXOthelloView implements Observer {
             grid.setPadding(new Insets(20, 150, 10, 10));
 
             TextField name1 = new TextField();
-            TextField name2 = new TextField();
-
             grid.add(new Label("Name of the player 1 (max 5 lettres):"), 0, 0);
             grid.add(name1, 1, 0);
+
+            TextField name2 = new TextField();
+            if (othello.isIsIAChosen()) {
+                name2.setText("IA");
+                name2.setEditable(false);
+            }
             grid.add(new Label("Name of the player 2 (max 5 lettres):"), 0, 1);
             grid.add(name2, 1, 1);
 
@@ -388,10 +393,38 @@ public class FXOthelloView implements Observer {
             });
         }
     }
-    
-    private void updatePass(){
-        if (othello.isUpdatePass()){
+
+    private void updatePass() {
+        if (othello.isUpdatePass()) {
             historyOfMoves.updateMovesHistory(othello);
         }
     }
+
+    private void updateTypeGame() {
+        if (othello.isUpdateTypeGame()) {
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("");
+            alert.setHeaderText("Quel sera ton adversaire?");
+            alert.setContentText("Veux-tu jouer avec un ami ou contre l'ordinateur?");
+
+            ButtonType btn1 = new ButtonType("Mon ami");
+            ButtonType btn2 = new ButtonType("L'ordi!", ButtonData.CANCEL_CLOSE);
+
+            alert.getButtonTypes().setAll(btn1, btn2);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            isIAPlaying = (result.get() == btn2);
+        }
+    }
+
+    public boolean isIsIAPlaying() {
+        return isIAPlaying;
+    }
+    
+    public void updateChangePlayer(){
+        if (othello.isUpdateChangePlayer()){
+            resultFrame.updateChangePlayer(othello);
+        }
+    }
+
 }

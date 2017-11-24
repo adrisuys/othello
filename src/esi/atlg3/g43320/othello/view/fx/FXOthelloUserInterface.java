@@ -57,7 +57,8 @@ public class FXOthelloUserInterface extends Application {
         primaryStage.show();
 
         //INITIALIZING THE GAME
-        othello.askName();
+        othello.askTypeGame();
+        othello.askName(view.isIsIAPlaying());
         othello.init(view.getResultFrame().getName1());
 
         //WHEN MOUSE HOVER CASE
@@ -89,7 +90,7 @@ public class FXOthelloUserInterface extends Application {
                     } else if (event.getButton()==MouseButton.SECONDARY){
                         primaryButtonMouseClicked = false;
                     }
-                    othello.playATurn(primaryButtonMouseClicked, new Coordinates(i,j), view.getResultFrame().getName1(), view.getResultFrame().getName2(), view.isWallChosenOverPass());
+                    othello.playATurn(primaryButtonMouseClicked, new Coordinates(i,j), view.getResultFrame().getName1(), view.getResultFrame().getName2(), view.isWallChosenOverPass(), view.isIsIAPlaying());
                 }
             
             });
@@ -100,7 +101,9 @@ public class FXOthelloUserInterface extends Application {
             othello.confirm();
             if (view.hasConfirm()){
                 othello.giveUp();
-                askName(view.getResultFrame());
+                othello.askTypeGame();
+                othello.askName(view.isIsIAPlaying());
+                //askName(view.getResultFrame());
                 othello.init(view.getResultFrame().getName1());
             }
         });
@@ -109,14 +112,16 @@ public class FXOthelloUserInterface extends Application {
         view.getRestart().addEventHandler(ActionEvent.ACTION, (ActionEvent event) -> {
             othello.confirm();
             if (view.hasConfirm()){
-                askName(view.getResultFrame());
+                othello.askTypeGame();
+                othello.askName(view.isIsIAPlaying());
+                //askName(view.getResultFrame());
                 othello.init(view.getResultFrame().getName1());
             }
         });
         
         //WHEN BUTTON PASSER CLICKED
         view.getPass().addEventHandler(ActionEvent.ACTION, (ActionEvent event) -> {
-            othello.turnPassedFX();
+            othello.turnPassedFX(view.isIsIAPlaying());
             if (othello.isTurnPassed()){
                 othello.changePlayer();
             } else {
@@ -132,52 +137,52 @@ public class FXOthelloUserInterface extends Application {
         launch(args);
     }
 
-    private static void checkGameOver(OthelloModel othello, GUIScoreFrame score) {
-        if (othello.isOver()) {
-            othello.endOfGame();
-            askName(score);
-            othello.init(score.getName1());
-        }
-    }
+//    private static void checkGameOver(OthelloModel othello, GUIScoreFrame score) {
+//        if (othello.isOver()) {
+//            othello.endOfGame();
+//            askName(score);
+//            othello.init(score.getName1());
+//        }
+//    }
 
-    private static void askName(GUIScoreFrame score) {
-        // Create the custom dialog.
-        Dialog<Pair<String, String>> dialog = new Dialog<>();
-        dialog.setTitle("");
-        dialog.setHeaderText("Enter the names of the player");
-        // Set the button types.
-        ButtonType OKButtonType = new ButtonType("OK", ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(OKButtonType);
-        // Create the username and password labels and fields.
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
-
-        TextField name1 = new TextField();
-        TextField name2 = new TextField();
-
-        grid.add(new Label("Name of the player 1 (max 5 lettres):"), 0, 0);
-        grid.add(name1, 1, 0);
-        grid.add(new Label("Name of the player 2 (max 5 lettres):"), 0, 1);
-        grid.add(name2, 1, 1);
-
-        dialog.getDialogPane().setContent(grid);
-
-        // Convert the result to a username-password-pair when the login button is clicked.
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == OKButtonType) {
-                return new Pair<>(name1.getText(), name2.getText());
-            }
-            return null;
-        });
-
-        Optional<Pair<String, String>> result = dialog.showAndWait();
-
-        result.ifPresent(name1name2 -> {
-            score.setName1(name1name2.getKey());
-            score.setName2(name1name2.getValue());
-        });
-    }
+//    private static void askName(GUIScoreFrame score) {
+//        // Create the custom dialog.
+//        Dialog<Pair<String, String>> dialog = new Dialog<>();
+//        dialog.setTitle("");
+//        dialog.setHeaderText("Enter the names of the player");
+//        // Set the button types.
+//        ButtonType OKButtonType = new ButtonType("OK", ButtonData.OK_DONE);
+//        dialog.getDialogPane().getButtonTypes().addAll(OKButtonType);
+//        // Create the username and password labels and fields.
+//        GridPane grid = new GridPane();
+//        grid.setHgap(10);
+//        grid.setVgap(10);
+//        grid.setPadding(new Insets(20, 150, 10, 10));
+//
+//        TextField name1 = new TextField();
+//        TextField name2 = new TextField();
+//
+//        grid.add(new Label("Name of the player 1 (max 5 lettres):"), 0, 0);
+//        grid.add(name1, 1, 0);
+//        grid.add(new Label("Name of the player 2 (max 5 lettres):"), 0, 1);
+//        grid.add(name2, 1, 1);
+//
+//        dialog.getDialogPane().setContent(grid);
+//
+//        // Convert the result to a username-password-pair when the login button is clicked.
+//        dialog.setResultConverter(dialogButton -> {
+//            if (dialogButton == OKButtonType) {
+//                return new Pair<>(name1.getText(), name2.getText());
+//            }
+//            return null;
+//        });
+//
+//        Optional<Pair<String, String>> result = dialog.showAndWait();
+//
+//        result.ifPresent(name1name2 -> {
+//            score.setName1(name1name2.getKey());
+//            score.setName2(name1name2.getValue());
+//        });
+//    }
 
 }

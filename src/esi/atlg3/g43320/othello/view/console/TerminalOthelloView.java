@@ -5,8 +5,8 @@
  */
 package esi.atlg3.g43320.othello.view.console;
 
-import esi.atlg3.g43320.othello.dp.Observable;
-import esi.atlg3.g43320.othello.dp.Observer;
+import esi.atlg3.g43320.othello.dpObs.Observable;
+import esi.atlg3.g43320.othello.dpObs.Observer;
 import esi.atlg3.g43320.othello.model.ColorPawn;
 import esi.atlg3.g43320.othello.model.Coordinates;
 //import esi.atlg3.g43320.othello.model.Game;
@@ -47,12 +47,12 @@ public class TerminalOthelloView implements Observer {
         buf.append("\n");
         buf.append("-------------------------------------");
         buf.append("\n");
-        for (int i = 0; i < observable.getBoard().getROW(); i++) {
+        for (int i = 0; i < observable.getROW(); i++) {
             buf.append("| ");
             buf.append(cpt);
             buf.append(" ");
-            for (int j = 0; j < observable.getBoard().getCOL(); j++) {
-                switch (observable.getBoard().getCheckerboard()[i][j]) {
+            for (int j = 0; j < observable.getCOL(); j++) {
+                switch (observable.getCheckerboard()[i][j]) {
                     case 0:
                         if (observable.getPossibleMove().contains(new Coordinates(i, j))) {
                             buf.append("| ");

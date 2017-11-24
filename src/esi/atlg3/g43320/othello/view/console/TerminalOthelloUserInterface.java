@@ -41,10 +41,10 @@ public class TerminalOthelloUserInterface {
         try {
             int row = Integer.parseInt(tabStr[1]);
             int col = Integer.parseInt(tabStr[2]);
-            if (row < 0 || row >= othello.getBoard().getROW()) {
+            if (row < 0 || row >= othello.getROW()) {
                 ok = false;
             }
-            if (col < 0 || col >= othello.getBoard().getCOL()) {
+            if (col < 0 || col >= othello.getCOL()) {
                 ok = false;
             }
 

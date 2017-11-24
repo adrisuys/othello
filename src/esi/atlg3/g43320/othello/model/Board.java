@@ -49,7 +49,7 @@ public class Board {
      *
      * @return the checkerboard of the Board, an array of int.
      */
-    public int[][] getCheckerboard() {
+    int[][] getCheckerboard() {
         return Arrays.copyOf(checkerboard, checkerboard.length);
     }
 
@@ -58,7 +58,7 @@ public class Board {
      *
      * @return the number of rows the board has.
      */
-    public int getROW() {
+    int getROW() {
         return ROW;
     }
 
@@ -67,7 +67,7 @@ public class Board {
      *
      * @return the number of columns the board has.
      */
-    public int getCOL() {
+    int getCOL() {
         return COL;
     }
 
@@ -77,7 +77,7 @@ public class Board {
      * @param aCoordinate the coordinates of the case the pawn has to be put on.
      * @param color the color of the pawn.
      */
-    public void putPawn(Coordinates aCoordinate, ColorPawn color){
+    void putPawn(Coordinates aCoordinate, ColorPawn color){
         if (aCoordinate == null) {
             throw new IllegalArgumentException("The coordinate is not valid!");
         }
@@ -93,7 +93,7 @@ public class Board {
      * @param aCoordinate the coordinates of the case the wall has to be put on.
      * @return a boolean indicating if the wall has been put correctly.
      */
-    public boolean putWall (Coordinates aCoordinate){
+    boolean putWall (Coordinates aCoordinate){
          if (aCoordinate == null) {
             return false;
         }
@@ -124,7 +124,7 @@ public class Board {
      * @return 1 if there is a black pawn on the case, 2 if there is a white
      * pawn and 0 if the case is empty.
      */
-    public int getPawn(Coordinates aCoordinate) {
+    int getPawn(Coordinates aCoordinate) {
         if (aCoordinate == null) {
             throw new IllegalArgumentException("The coordinate is not valid!");
         }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package esi.atlg3.g43320.othello.dp;
+package esi.atlg3.g43320.othello.dpObs;
 
 /**
  * The interface Observer contains all the methods classes have to have if they

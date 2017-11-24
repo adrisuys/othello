@@ -47,7 +47,7 @@ public class GUIBoardgame {
         for (int i = 0; i < ROW; i++) {
             for (int j = 0; j < COL; j++) {
                 Coordinates coord = new Coordinates(i, j);
-                switch (othello.getBoard().getPawn(coord)) {
+                switch (othello.getPawn(coord)) {
                     case 0:
                         getSquareAtCoordinates(i, j).getPawn().setFill(Color.TRANSPARENT);
                         break;
