@@ -10,6 +10,7 @@ import esi.atlg3.g43320.othello.dpObs.Observer;
 import esi.atlg3.g43320.othello.model.ColorPawn;
 import esi.atlg3.g43320.othello.model.OthelloModel;
 import java.util.Optional;
+import javafx.animation.PauseTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -23,6 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import javafx.util.Pair;
 
 /**
@@ -130,6 +132,7 @@ public class FXOthelloView implements Observer {
         if (othello.isUpdateInit()) {
             historyOfMoves.reinitMovesHistory();
             boardgame.updateBoardgame(othello);
+            boardgame.setDisableOnFalse();
             historyOfMoves.updateMovesHistory(othello);
             progressCake.updateProgressCake(othello);
             resultFrame.updateScore(othello);
@@ -171,6 +174,16 @@ public class FXOthelloView implements Observer {
 
                     Optional<ButtonType> result = alert.showAndWait();
                     wallChosenOverPass = (result.get() == btnWall);
+                }
+            } else {
+                if (othello.isTurnPassed()){
+                    Alert alert = new Alert(AlertType.INFORMATION);
+                    alert.setTitle("");
+                    alert.setHeaderText("L'ordinateur a passé son tour !");
+                    PauseTransition delay = new PauseTransition(Duration.seconds(3));
+                    delay.setOnFinished(e -> alert.hide());
+                    alert.showAndWait();
+                    delay.play();
                 }
             }
         }

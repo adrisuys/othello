@@ -28,12 +28,16 @@ public class GUIMovesHistory {
     public GUIMovesHistory() {
         history = new TableView();
         TableColumn<Move, Number> idCol = new TableColumn<>("ID");
+        idCol.setPrefWidth(30);
         idCol.setSortable(false);
         idCol.setCellValueFactory(column -> new ReadOnlyObjectWrapper<>(history.getItems().indexOf(column.getValue())));
         TableColumn nameCol = new TableColumn("Name");
         TableColumn actionCol = new TableColumn("Action");
+        actionCol.setPrefWidth(120);
         TableColumn positionCol = new TableColumn("Position");
+        positionCol.setPrefWidth(100);
         TableColumn takenCol = new TableColumn("Prises");
+        takenCol.setPrefWidth(70);
         history.getColumns().addAll(idCol, nameCol, actionCol, positionCol, takenCol);
 
         data = FXCollections.observableArrayList();

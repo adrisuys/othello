@@ -10,6 +10,7 @@ import esi.atlg3.g43320.othello.dpObs.Observer;
 import esi.atlg3.g43320.othello.strategy.RandomStrategy;
 import esi.atlg3.g43320.othello.strategy.StrategyIA;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -56,6 +57,7 @@ public class OthelloModel implements Observable {
     private boolean updatePass;
     private boolean updateTypeGame;
     private boolean updateChangePlayer;
+    private final boolean [] tabBool;
 
     /**
      * Creates an instance of a model of Othello.
@@ -64,6 +66,11 @@ public class OthelloModel implements Observable {
         observers = new ArrayList<>();
         game = new Game();
         strategy = new RandomStrategy(this);
+        tabBool = new boolean []{updatePlay,updateScore,updateShow,updateInit,updateTurnPassed,
+            updateEndOfGame,updateCoordinatesError,updateCommandsError,updateMouseOver,updateWall,
+            updateConfirm,updateGiveUp,updateProblemPass,updateAskName,updatePass,updateTypeGame,
+            updateChangePlayer};
+        
     }
 
     /**
@@ -175,7 +182,7 @@ public class OthelloModel implements Observable {
         updateAskName = false;
         updatePass = false;
         updateTypeGame = false;
-        updateChangePlayer = true;
+        updateChangePlayer = false;
         notifyObservers();
     }
 
@@ -201,7 +208,7 @@ public class OthelloModel implements Observable {
         updateAskName = false;
         updatePass = false;
         updateTypeGame = false;
-        updateChangePlayer = true;
+        updateChangePlayer = false;
         game.updatePossibleMove(game.getCurrentColor());
         notifyObservers();
     }
@@ -314,7 +321,7 @@ public class OthelloModel implements Observable {
         updateAskName = false;
         updatePass = false;
         updateTypeGame = false;
-        updateChangePlayer = true;
+        updateChangePlayer = false;
         notifyObservers();
     }
 
@@ -371,7 +378,7 @@ public class OthelloModel implements Observable {
         updateAskName = false;
         updatePass = false;
         updateTypeGame = false;
-        updateChangePlayer = true;
+        updateChangePlayer = false;
         notifyObservers();
     }
 
@@ -478,7 +485,7 @@ public class OthelloModel implements Observable {
         updateAskName = false;
         updatePass = false;
         updateTypeGame = false;
-        updateChangePlayer = true;
+        updateChangePlayer = false;
         notifyObservers();
     }
 
@@ -503,7 +510,7 @@ public class OthelloModel implements Observable {
         updateAskName = false;
         updatePass = false;
         updateTypeGame = false;
-        updateChangePlayer = true;
+        updateChangePlayer = false;
         notifyObservers();
     }
 
@@ -582,7 +589,7 @@ public class OthelloModel implements Observable {
         updateAskName = false;
         updatePass = false;
         updateTypeGame = false;
-        updateChangePlayer = true;
+        updateChangePlayer = false;
         notifyObservers();
     }
 
@@ -730,7 +737,7 @@ public class OthelloModel implements Observable {
         updateAskName = false;
         updatePass = false;
         updateTypeGame = false;
-        updateChangePlayer = true;
+        updateChangePlayer = false;
         notifyObservers();
     }
 
@@ -765,7 +772,7 @@ public class OthelloModel implements Observable {
         updateAskName = false;
         updatePass = false;
         updateTypeGame = false;
-        updateChangePlayer = true;
+        updateChangePlayer = false;
         notifyObservers();
     }
 
@@ -800,7 +807,7 @@ public class OthelloModel implements Observable {
         updateAskName = false;
         updatePass = false;
         updateTypeGame = false;
-        updateChangePlayer = true;
+        updateChangePlayer = false;
         notifyObservers();
     }
 
@@ -921,7 +928,7 @@ public class OthelloModel implements Observable {
         updateAskName = true;
         updatePass = false;
         updateTypeGame = false;
-        updateChangePlayer = true;
+        updateChangePlayer = false;
         notifyObservers();
     }
 
@@ -950,7 +957,7 @@ public class OthelloModel implements Observable {
         updateAskName = false;
         updatePass = false;
         updateTypeGame = true;
-        updateChangePlayer = true;
+        updateChangePlayer = false;
         notifyObservers();
     }
 
@@ -979,7 +986,7 @@ public class OthelloModel implements Observable {
         movePos = "/";
         moveTaken = "/";
         updateTypeGame = false;
-        updateChangePlayer = true;
+        updateChangePlayer = false;
         notifyObservers();
     }
 
@@ -1015,6 +1022,11 @@ public class OthelloModel implements Observable {
         return updateChangePlayer;
     }
     
-    
+    public void setBoolToBeUsed(boolean [] tab, int indice){
+        for (boolean b : tab){
+            b = false;
+        }
+        tab[indice] = true;
+    }
 
 }

@@ -8,9 +8,10 @@ package esi.atlg3.g43320.othello.view.fx;
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.OthelloModel;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 
 /**
  * This class represents the graphical interface of the boardgame.
@@ -19,7 +20,7 @@ import javafx.scene.paint.Color;
  */
 public class GUIBoardgame {
     
-    private GridPane board;
+    private final GridPane board;
     private final static int ROW = 8;
     private final static int COL = 8;
 
@@ -53,12 +54,17 @@ public class GUIBoardgame {
                         break;
                     case 1:
                         getSquareAtCoordinates(i, j).getPawn().setFill(Color.BLACK);
+                        getSquareAtCoordinates(i, j).setDisable(true);
                         break;
                     case 2:
                         getSquareAtCoordinates(i, j).getPawn().setFill(Color.WHITE);
+                        getSquareAtCoordinates(i, j).setDisable(true);
                         break;
                     default:
-                        getSquareAtCoordinates(i, j).getPawn().setFill(Color.BROWN);
+                        Image image = new Image(getClass().getResourceAsStream("./img/wall.png"));
+                        getSquareAtCoordinates(i, j).getPawn().setFill(new ImagePattern(image));
+                        //getSquareAtCoordinates(i, j).getPawn().setFill(Color.BROWN);
+                        getSquareAtCoordinates(i, j).setDisable(true);
                         break;
                 }
             }
@@ -90,6 +96,12 @@ public class GUIBoardgame {
      */
     public GridPane getBoard() {
         return board;
+    }
+    
+    public void setDisableOnFalse (){
+        for (Node n : board.getChildren()){
+            n.setDisable(false);
+        }
     }
     
     
