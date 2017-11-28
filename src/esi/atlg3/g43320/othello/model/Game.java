@@ -15,7 +15,7 @@ import java.util.Objects;
  *
  * @author s_u_y_s_a
  */
-class Game {
+public class Game {
 
     private final List<Player> players;
     private final Board board;
@@ -129,6 +129,14 @@ class Game {
         }
         return ok;
 
+    }
+    
+    /**
+     * Remove a pawn of a case of the board.
+     * @param aCoordinate the coordinates of the case of the board.
+     */
+    void removePawn(Coordinates aCoordinate){
+        board.getCheckerboard()[aCoordinate.getX()][aCoordinate.getY()] = 0;
     }
 
     /**

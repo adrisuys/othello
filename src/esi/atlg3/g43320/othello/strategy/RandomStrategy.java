@@ -10,19 +10,24 @@ import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.OthelloModel;
 
 /**
- *
+ * This class represents the following strategy : the IA will chose a random move amongs all its possible move.
  * @author s_u_y_s_a
  */
 public class RandomStrategy extends AbstractStrategyIA {
 
     private final OthelloModel othello;
 
+    /**
+     * It creates an instance of RandomStrategy.
+     * @param othello the game being played.
+     */
     public RandomStrategy(OthelloModel othello) {
         this.othello = othello;
     }
 
     @Override
     public void play(String name) {
+        //PauseTransition pause = new PauseTransition(Duration.millis(10000));
         othello.turnPassedFX(true);
         if (othello.isTurnPassed()) {
             othello.pass("IA");

@@ -7,10 +7,11 @@ package esi.atlg3.g43320.othello.view.fx;
 
 import esi.atlg3.g43320.othello.dpObs.Observable;
 import esi.atlg3.g43320.othello.dpObs.Observer;
-import esi.atlg3.g43320.othello.model.ColorPawn;
 import esi.atlg3.g43320.othello.model.OthelloModel;
 import java.util.Optional;
 import javafx.animation.PauseTransition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -377,10 +378,12 @@ public class FXOthelloView implements Observer {
             grid.setPadding(new Insets(20, 150, 10, 10));
 
             TextField name1 = new TextField();
+            addTextLimiter(name1,5);
             grid.add(new Label("Name of the player 1 (max 5 lettres):"), 0, 0);
             grid.add(name1, 1, 0);
 
             TextField name2 = new TextField();
+            addTextLimiter(name2,5);
             if (othello.isIsIAChosen()) {
                 name2.setText("IA");
                 name2.setEditable(false);
@@ -439,5 +442,14 @@ public class FXOthelloView implements Observer {
             resultFrame.updateChangePlayer(othello);
         }
     }
+    
+    public static void addTextLimiter(final TextField tf, final int maxLength) {
+    tf.textProperty().addListener((final ObservableValue<? extends String> ov, final String oldValue, final String newValue) -> {
+        if (tf.getText().length() > maxLength) {
+            String s = tf.getText().substring(0, maxLength);
+            tf.setText(s);
+        }
+    });
+}
 
 }

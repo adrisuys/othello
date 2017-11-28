@@ -99,9 +99,9 @@ public class GUIBoardgame {
     }
     
     public void setDisableOnFalse (){
-        for (Node n : board.getChildren()){
+        board.getChildren().forEach((n) -> {
             n.setDisable(false);
-        }
+        });
     }
     
     

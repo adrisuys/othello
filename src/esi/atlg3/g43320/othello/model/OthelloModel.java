@@ -10,7 +10,6 @@ import esi.atlg3.g43320.othello.dpObs.Observer;
 import esi.atlg3.g43320.othello.strategy.RandomStrategy;
 import esi.atlg3.g43320.othello.strategy.StrategyIA;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,7 +56,6 @@ public class OthelloModel implements Observable {
     private boolean updatePass;
     private boolean updateTypeGame;
     private boolean updateChangePlayer;
-    private final boolean [] tabBool;
 
     /**
      * Creates an instance of a model of Othello.
@@ -66,11 +64,6 @@ public class OthelloModel implements Observable {
         observers = new ArrayList<>();
         game = new Game();
         strategy = new RandomStrategy(this);
-        tabBool = new boolean []{updatePlay,updateScore,updateShow,updateInit,updateTurnPassed,
-            updateEndOfGame,updateCoordinatesError,updateCommandsError,updateMouseOver,updateWall,
-            updateConfirm,updateGiveUp,updateProblemPass,updateAskName,updatePass,updateTypeGame,
-            updateChangePlayer};
-        
     }
 
     /**
@@ -358,6 +351,7 @@ public class OthelloModel implements Observable {
     /**
      * If a player's turn is passed, it changes the current player (FX version).
      *
+     * @param aBool indicating if the IA is playing against a player or not.
      */
     public void turnPassedFX(boolean aBool) {
         isIA = aBool;
@@ -849,6 +843,21 @@ public class OthelloModel implements Observable {
         return game.getCurrentPlayer().getColor();
     }
 
+    /**
+     * Play a full turn of 1 player if the game is on mode 'Player vs Player'.
+     * If the game is on mode 'Player vs IA', it plays the turn of the IA
+     * directly after the players has played.
+     *
+     * @param primaryKeyPressed indicates if the left button of the mouse has
+     * been pressed.
+     * @param coord the coordinates of the case on which the player wants to
+     * play.
+     * @param name1 the name of the first player.
+     * @param name2 the name of the second player.
+     * @param wallChosenOverPass a boolean indicating that the player has chosen
+     * to play a wall when he had to pass his turn.
+     * @param iaChosen a boolean indicating if the IA is playing.
+     */
     public void playATurn(boolean primaryKeyPressed, Coordinates coord,
             String name1, String name2, boolean wallChosenOverPass, boolean iaChosen) {
         turnPassedFX(iaChosen);
@@ -861,7 +870,7 @@ public class OthelloModel implements Observable {
                 }
                 changePlayer();
                 checkGameOver(name1, iaChosen);
-                if (iaChosen){
+                if (iaChosen) {
                     strategy.play(name1);
                 }
             } else {
@@ -871,7 +880,7 @@ public class OthelloModel implements Observable {
                     wall(coord, name2);
                 }
                 checkGameOver(name1, iaChosen);
-                if (iaChosen){
+                if (iaChosen) {
                     strategy.play(name1);
                 }
             }
@@ -883,7 +892,7 @@ public class OthelloModel implements Observable {
                     play(coord, name2);
                 }
                 checkGameOver(name1, iaChosen);
-                if (iaChosen){
+                if (iaChosen) {
                     strategy.play(name1);
                 }
             } else {
@@ -893,7 +902,7 @@ public class OthelloModel implements Observable {
                     wall(coord, name2);
                 }
                 checkGameOver(name1, iaChosen);
-                if (iaChosen){
+                if (iaChosen) {
                     strategy.play(name1);
                 }
             }
@@ -901,6 +910,14 @@ public class OthelloModel implements Observable {
 
     }
 
+    /**
+     * Checks if the game is over. If true, it ends the game and reinitialize a
+     * new game by asking the type of game (against a player or an IA) and the
+     * name of the players.
+     *
+     * @param name1 the name of the first player.
+     * @param bool a boolean indicating if an IA is playing.
+     */
     public void checkGameOver(String name1, boolean bool) {
         if (isOver()) {
             endOfGame();
@@ -910,6 +927,12 @@ public class OthelloModel implements Observable {
         }
     }
 
+    /**
+     * Asks the players to enter their names. If the IA is playing, its name
+     * will always be "IA".
+     *
+     * @param aBool a boolean indicating if the IA is playing.
+     */
     public void askName(boolean aBool) {
         isIAChosen = aBool;
         updateInit = false;
@@ -932,14 +955,29 @@ public class OthelloModel implements Observable {
         notifyObservers();
     }
 
+    /**
+     * Returns a boolean indicating if an IA is playing.
+     *
+     * @return a boolean indicating if an IA is playing.
+     */
     public boolean isIsIAChosen() {
         return isIAChosen;
     }
 
+    /**
+     * Returns a boolean indicating the the game must be updated following the
+     * choosing of the names of the players.
+     *
+     * @return a boolean indicating the the game must be updated following the
+     * choosing of the names of the players.
+     */
     public boolean isUpdateAskName() {
         return updateAskName;
     }
 
+    /**
+     * Asks the type of game to be played (human vs human or human vs IA).
+     */
     public void askTypeGame() {
         updateInit = false;
         updateScore = false;
@@ -961,10 +999,23 @@ public class OthelloModel implements Observable {
         notifyObservers();
     }
 
+    /**
+     * Returns a boolean indicating that the game must be updated following the
+     * choosing of the type of game.
+     *
+     * @return a boolean indicating that the game must be updated following the
+     * choosing of the type of game.
+     */
     public boolean isUpdateTypeGame() {
         return updateTypeGame;
     }
 
+    /**
+     * Indicating the frame of history of moves has to be updated following the
+     * decision of a player to pass.
+     *
+     * @param name the name of the player that passes his turn.
+     */
     public void pass(String name) {
         updateInit = false;
         updateScore = false;
@@ -990,43 +1041,113 @@ public class OthelloModel implements Observable {
         notifyObservers();
     }
 
+    /**
+     * Returns a boolean indicating that the game must be updated following the
+     * passing of a player.
+     *
+     * @return a boolean indicating that the game must be updated following the
+     * passing of a player.
+     */
     public boolean isUpdatePass() {
         return updatePass;
     }
 
+    /**
+     * Gets the pawn at a certain case specified by the coordinate.
+     *
+     * @param c the coordinate of the case.
+     * @return the pawn on that coordinate.
+     */
     public int getPawn(Coordinates c) {
         return game.getBoard().getPawn(c);
     }
 
+    /**
+     * Get the number of row of the boardgame.
+     *
+     * @return the number of row of the boardgame.
+     */
     public int getROW() {
         return game.getBoard().getROW();
     }
 
+    /**
+     * Gets the number of columns of the boardgame.
+     *
+     * @return the number of columns of the boardgame.
+     */
     public int getCOL() {
         return game.getBoard().getCOL();
     }
 
+    /**
+     * Returns the array of int representing the boardgame.
+     *
+     * @return the array of int representing the boardgame.
+     */
     public int[][] getCheckerboard() {
         return game.getBoard().getCheckerboard();
     }
 
+    /**
+     * Returns a boolean indicating if an IA is playing.
+     *
+     * @return a boolean indicating if an IA is playing.
+     */
     public boolean isIsIA() {
         return isIA;
     }
-    
-    public void updatePossibleMove(ColorPawn color){
+
+    /**
+     * Updates the list of the possible move for the player of the specified
+     * color.
+     *
+     * @param color the color of the player.
+     */
+    public void updatePossibleMove(ColorPawn color) {
         game.updatePossibleMove(color);
     }
 
+    /**
+     * Returns a boolean indicating that the game must be updated following the
+     * change of player.
+     *
+     * @return a boolean indicating that the game must be updated following the
+     * change of player.
+     */
     public boolean isUpdateChangePlayer() {
         return updateChangePlayer;
     }
-    
-    public void setBoolToBeUsed(boolean [] tab, int indice){
-        for (boolean b : tab){
-            b = false;
-        }
-        tab[indice] = true;
+
+    /**
+     * Remove a pawn at a certain coordinate.
+     *
+     * @param aCoordinate the coordinate of the case from which the pawn must be
+     * removed.
+     */
+    public void removePawn(Coordinates aCoordinate) {
+        game.removePawn(aCoordinate);
+    }
+
+    /**
+     * Put a pawn on a specified case.
+     *
+     * @param c the coordinates of the case.
+     * @return true if the pawn could be put properly, false otherwise.
+     */
+    public boolean putPawn(Coordinates c) {
+        return game.putPawn(c, ColorPawn.WHITE);
+    }
+
+    /**
+     * Returns the number of pawn that a player can take from the other one by
+     * playing.
+     *
+     * @return the number of pawn that a player can take from the other one by
+     * playing.
+     */
+    public int getNbPawnsTaken() {
+        return game.getNbPawnsToBeTurned();
     }
 
 }

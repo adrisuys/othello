@@ -5,8 +5,6 @@
  */
 package esi.atlg3.g43320.othello.view.fx;
 
-import javafx.beans.property.SimpleStringProperty;
-
 /**
  * This class represent a moves which is descriped by 
  *   - the name of the player

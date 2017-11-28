@@ -9,8 +9,6 @@ import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.OthelloModel;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -78,23 +76,19 @@ public class FXOthelloUserInterface extends Application {
         });
 
         //WHEN MOUSE PRESSED
-        for (Node node : view.getBoardgame().getBoard().getChildren()) {
-            node.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    int i = GridPane.getRowIndex(node);
-                    int j = GridPane.getColumnIndex(node);
-                    boolean primaryButtonMouseClicked = false;
-                    if (event.getButton() == MouseButton.PRIMARY) {
-                        primaryButtonMouseClicked = true;
-                    } else if (event.getButton() == MouseButton.SECONDARY) {
-                        primaryButtonMouseClicked = false;
-                    }
-                    othello.playATurn(primaryButtonMouseClicked, new Coordinates(i, j), view.getResultFrame().getName1(), view.getResultFrame().getName2(), view.isWallChosenOverPass(), view.isIsIAPlaying());
+        view.getBoardgame().getBoard().getChildren().forEach((node) -> {
+            node.setOnMouseClicked((MouseEvent event) -> {
+                int i = GridPane.getRowIndex(node);
+                int j = GridPane.getColumnIndex(node);
+                boolean primaryButtonMouseClicked = false;
+                if (event.getButton() == MouseButton.PRIMARY) {
+                    primaryButtonMouseClicked = true;
+                } else if (event.getButton() == MouseButton.SECONDARY) {
+                    primaryButtonMouseClicked = false;
                 }
-
+                othello.playATurn(primaryButtonMouseClicked, new Coordinates(i, j), view.getResultFrame().getName1(), view.getResultFrame().getName2(), view.isWallChosenOverPass(), view.isIsIAPlaying());
             });
-        }
+        });
 
         //WHEN BUTTON ABANDONNER CLICKED
         view.getGiveUp().addEventHandler(ActionEvent.ACTION, (ActionEvent event) -> {
@@ -130,19 +124,13 @@ public class FXOthelloUserInterface extends Application {
         });
 
         //WHEN MENU JOUER IS PRESSED
-        menu.getGame().getGraphic().setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                mainFrame.setCenter(contentGame);
-            }
+        menu.getGame().getGraphic().setOnMouseClicked((MouseEvent event) -> {
+            mainFrame.setCenter(contentGame);
         });
 
         //WHEN MENU REGLES IS PRESSED
-        menu.getRules().getGraphic().setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                mainFrame.setCenter(contentRules.getFrame());
-            }
+        menu.getRules().getGraphic().setOnMouseClicked((MouseEvent event) -> {
+            mainFrame.setCenter(contentRules.getFrame());
         });
 
         Scene scene = new Scene(mainFrame, 1000, 750);

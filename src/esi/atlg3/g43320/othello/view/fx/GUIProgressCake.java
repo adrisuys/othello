@@ -14,7 +14,7 @@ import javafx.scene.control.ProgressIndicator;
  */
 public class GUIProgressCake{
     
-    private ProgressIndicator progressCake;
+    private final ProgressIndicator progressCake;
     /**
      * Creates an instance of a GUIProgressCake.
      */
