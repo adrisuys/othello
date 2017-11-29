@@ -9,7 +9,6 @@ import esi.atlg3.g43320.othello.dpObs.Observable;
 import esi.atlg3.g43320.othello.dpObs.Observer;
 import esi.atlg3.g43320.othello.model.ColorPawn;
 import esi.atlg3.g43320.othello.model.Coordinates;
-//import esi.atlg3.g43320.othello.model.Game;
 import esi.atlg3.g43320.othello.model.OthelloModel;
 import java.util.Objects;
 

@@ -13,13 +13,16 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 /**
- *
+ * This class displays the title "Othello" and the rules of the game.
  * @author s_u_y_s_a
  */
 public class GUIRules {
 
     private final VBox frame;
 
+    /**
+     * Creates an instance of GUIRules.
+     */
     public GUIRules() {
         frame = new VBox();
         Label title = new Label("Othello");
@@ -44,6 +47,10 @@ public class GUIRules {
         VBox.setMargin(rules, new Insets(10,10,10,10));
     }
 
+    /**
+     * Returns the VBox representing on which the rules are displayed.
+     * @return the VBox representing on which the rules are displayed.
+     */
     public VBox getFrame() {
         return frame;
     }

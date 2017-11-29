@@ -201,14 +201,20 @@ public class GUIScoreFrame extends HBox {
         setScore2(Integer.toString(othello.getScorePlayer2()));
     }
 
+    /**
+     * Indicates who the current player is by coloring the player's frame in
+     * green. The other player's frame is red when it is not his turn.
+     *
+     * @param othello the game being played.
+     */
     public void updateChangePlayer(OthelloModel othello) {
-            if (othello.getCurrentColor() == ColorPawn.BLACK) {
-                score1Frame.setStyle("-fx-background-color: #c7f097;");
-                score2Frame.setStyle("-fx-background-color: #f08c6b;");
-            } else {
-                score1Frame.setStyle("-fx-background-color: #f08c6b;");
-                score2Frame.setStyle("-fx-background-color: #c7f097;");
-            }
+        if (othello.getCurrentColor() == ColorPawn.BLACK) {
+            score1Frame.setStyle("-fx-background-color: #c7f097;");
+            score2Frame.setStyle("-fx-background-color: #f08c6b;");
+        } else {
+            score1Frame.setStyle("-fx-background-color: #f08c6b;");
+            score2Frame.setStyle("-fx-background-color: #c7f097;");
+        }
     }
 
 }

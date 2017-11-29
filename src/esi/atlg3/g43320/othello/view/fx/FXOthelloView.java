@@ -10,7 +10,6 @@ import esi.atlg3.g43320.othello.dpObs.Observer;
 import esi.atlg3.g43320.othello.model.OthelloModel;
 import java.util.Optional;
 import javafx.animation.PauseTransition;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -177,7 +176,7 @@ public class FXOthelloView implements Observer {
                     wallChosenOverPass = (result.get() == btnWall);
                 }
             } else {
-                if (othello.isTurnPassed()){
+                if (othello.isTurnPassed()) {
                     Alert alert = new Alert(AlertType.INFORMATION);
                     alert.setTitle("");
                     alert.setHeaderText("L'ordinateur a passé son tour !");
@@ -378,12 +377,12 @@ public class FXOthelloView implements Observer {
             grid.setPadding(new Insets(20, 150, 10, 10));
 
             TextField name1 = new TextField();
-            addTextLimiter(name1,5);
+            addTextLimiter(name1, 5);
             grid.add(new Label("Name of the player 1 (max 5 lettres):"), 0, 0);
             grid.add(name1, 1, 0);
 
             TextField name2 = new TextField();
-            addTextLimiter(name2,5);
+            addTextLimiter(name2, 5);
             if (othello.isIsIAChosen()) {
                 name2.setText("IA");
                 name2.setEditable(false);
@@ -433,23 +432,35 @@ public class FXOthelloView implements Observer {
         }
     }
 
+    /**
+     * Returns a boolean indicating if the IA is playing.
+     *
+     * @return a boolean indicating if the IA is playing.
+     */
     public boolean isIsIAPlaying() {
         return isIAPlaying;
     }
-    
-    public void updateChangePlayer(){
-        if (othello.isUpdateChangePlayer()){
+
+    private void updateChangePlayer() {
+        if (othello.isUpdateChangePlayer()) {
             resultFrame.updateChangePlayer(othello);
         }
     }
-    
+
+    /**
+     * Limits the number of character a player can enter in a TextField.
+     *
+     * @param tf the TextField.
+     * @param maxLength the maximum number of character a player can enter in
+     * the TextField.
+     */
     public static void addTextLimiter(final TextField tf, final int maxLength) {
-    tf.textProperty().addListener((final ObservableValue<? extends String> ov, final String oldValue, final String newValue) -> {
-        if (tf.getText().length() > maxLength) {
-            String s = tf.getText().substring(0, maxLength);
-            tf.setText(s);
-        }
-    });
-}
+        tf.textProperty().addListener((final ObservableValue<? extends String> ov, final String oldValue, final String newValue) -> {
+            if (tf.getText().length() > maxLength) {
+                String s = tf.getText().substring(0, maxLength);
+                tf.setText(s);
+            }
+        });
+    }
 
 }

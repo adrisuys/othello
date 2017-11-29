@@ -8,6 +8,8 @@ package esi.atlg3.g43320.othello.strategy;
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.OthelloModel;
 import java.util.List;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 
 /**
  * This class represent the following strategy : the IA will checks its possible
@@ -22,6 +24,7 @@ public class MostGainStrategy extends AbstractStrategyIA {
 
     /**
      * Creates an instance of MostGainStrategy.
+     *
      * @param othello the game being played.
      */
     public MostGainStrategy(OthelloModel othello) {
@@ -30,17 +33,18 @@ public class MostGainStrategy extends AbstractStrategyIA {
 
     @Override
     public void play(String name) {
-        //PauseTransition pause = new PauseTransition(Duration.millis(10000));
-        othello.turnPassedFX(true);
-        if (othello.isTurnPassed()) {
-            othello.pass("IA");
-            othello.changePlayer();
-            othello.checkGameOver(name, true);
-        } else {
-            othello.play(getBestPossibleMove(othello.getPossibleMove()), "IA");
-            //othello.changePlayer();
-            othello.checkGameOver(name, true);
-        }
+        PauseTransition pause = new PauseTransition(Duration.millis(1000));
+        pause.setOnFinished(event -> {
+            othello.turnPassedFX(true);
+            if (othello.isTurnPassed()) {
+                othello.pass("IA");
+                othello.changePlayer();
+                othello.checkGameOver(name, true);
+            } else {
+                othello.play(getBestPossibleMove(othello.getPossibleMove()), "IA");
+                othello.checkGameOver(name, true);
+            }
+        });
     }
 
     private Coordinates getBestPossibleMove(List<Coordinates> possibleMoves) {

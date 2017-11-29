@@ -19,7 +19,7 @@ import javafx.scene.paint.ImagePattern;
  * @author s_u_y_s_a
  */
 public class GUIBoardgame {
-    
+
     private final GridPane board;
     private final static int ROW = 8;
     private final static int COL = 8;
@@ -92,18 +92,21 @@ public class GUIBoardgame {
 
     /**
      * Returns the GridPane representing the boardgame.
+     *
      * @return the GridPane representing the boardgame.
      */
     public GridPane getBoard() {
         return board;
     }
-    
-    public void setDisableOnFalse (){
+
+    /**
+     * Allows all the cases of the board to be responsive to the different
+     * events.
+     */
+    public void setDisableOnFalse() {
         board.getChildren().forEach((n) -> {
             n.setDisable(false);
         });
     }
-    
-    
 
 }
