@@ -5,6 +5,7 @@
  */
 package esi.atlg3.g43320.othello.model;
 
+import esi.atlg3.g43320.othello.strategy.Strategy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +24,7 @@ public class Game {
     private final List<List<Coordinates>> pawnsToBeTurned;
     private final List<Coordinates> possibleMove;
     private final List<Coordinates> pawnsToBeTurnedInterm;
+    private GameStatus status;
 
     /**
      * Creates an instance of a game of Othello.
@@ -38,6 +40,7 @@ public class Game {
         pawnsToBeTurned = new ArrayList<>();
         possibleMove = new ArrayList<>();
         pawnsToBeTurnedInterm = new ArrayList<>();
+        status = GameStatus.INIT;
     }
 
     /**
@@ -55,6 +58,7 @@ public class Game {
         this.pawnsToBeTurned = game.pawnsToBeTurned;
         this.possibleMove = game.possibleMove;
         this.pawnsToBeTurnedInterm = game.pawnsToBeTurnedInterm;
+        this.status = game.status;
     }
 
     /**
@@ -115,7 +119,10 @@ public class Game {
      * @param color the color of the pawn that has to be put on the board.
      * @return true if the pawn has been correctly put, false otherwise.
      */
-    boolean putPawn(Coordinates aCoordinate, ColorPawn color) {
+    boolean putPawn(Coordinates aCoordinate, ColorPawn color) throws GameException {
+        if (status != GameStatus.PLAY){
+            throw new GameException("Status Error : A player can't play right now");
+        }
         boolean ok;
         try {
             if (isMoveValid(aCoordinate, color)) {
@@ -235,7 +242,12 @@ public class Game {
      * @return true if none of the players can't play anymore, false otherwise.
      */
     boolean isOver() {
-        return isTurnPassed(players.get(0)) && isTurnPassed(players.get(1));
+        boolean isOver;
+        isOver = isTurnPassed(players.get(0)) && isTurnPassed(players.get(1));
+        if (isOver){
+            status = GameStatus.INIT;
+        }
+        return isOver;
     }
 
     @Override
@@ -358,11 +370,24 @@ public class Game {
         return board.getScore(color);
     }
     
-    boolean putWall(Coordinates c){
+    boolean putWall(Coordinates c) throws GameException{
+        if (status != GameStatus.PLAY){
+            throw new GameException("Status error : a player can't play right now");
+        }
         return board.putWall(c);
     }
     
     int nbCaseOccupied(){
         return board.nbCaseOccupied();
     }
+
+    public GameStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(GameStatus status) {
+        this.status = status;
+    }
+    
+    
 }

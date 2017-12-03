@@ -124,7 +124,7 @@ public class FXOthelloView implements Observer {
         updateProblemPass();
         updateAskName();
         updatePass();
-        updateTypeGame();
+        //updateTypeGame();
         updateChangePlayer();
     }
 
@@ -203,15 +203,15 @@ public class FXOthelloView implements Observer {
         if (othello.isUpdateEndOfGame()) {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("");
-            alert.setHeaderText("The game is over!");
+            alert.setHeaderText("La partie est finie!");
             int score1 = othello.getScorePlayer1();
             int score2 = othello.getScorePlayer2();
             if (score1 > score2) {
-                alert.setContentText(resultFrame.getName1() + " has won! (" + score1 + "-" + score2 + ")");
+                alert.setContentText(resultFrame.getName1() + " a gagné! (" + score1 + "-" + score2 + ")");
             } else if (score1 == score2) {
-                alert.setContentText("It is a draw! (" + score1 + "-" + score2 + ")");
+                alert.setContentText("Match nul! (" + score1 + "-" + score2 + ")");
             } else {
-                alert.setContentText(resultFrame.getName2() + " has won! (" + score1 + "-" + score2 + ")");
+                alert.setContentText(resultFrame.getName2() + " a gagné! (" + score1 + "-" + score2 + ")");
             }
             alert.showAndWait();
         }
@@ -221,7 +221,7 @@ public class FXOthelloView implements Observer {
         if (othello.isUpdateConfirm()) {
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("");
-            alert.setHeaderText("Are you sure you want to do that?");
+            alert.setHeaderText("Etes-vous sûr?");
             alert.setContentText("");
 
             Optional<ButtonType> result = alert.showAndWait();
@@ -234,7 +234,7 @@ public class FXOthelloView implements Observer {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("");
             alert.setHeaderText(null);
-            alert.setContentText("You have given up! You have lost! ");
+            alert.setContentText("Tu as abandonné! Perdu... ");
 
             alert.showAndWait();
         }
@@ -245,7 +245,7 @@ public class FXOthelloView implements Observer {
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("");
             alert.setHeaderText(null);
-            alert.setContentText("You can't pass, you still can put a pawn on the board !");
+            alert.setContentText("Tu ne peux pas passer ton tour, par contre tu peux mettre un mur!");
 
             alert.showAndWait();
         }
@@ -362,49 +362,21 @@ public class FXOthelloView implements Observer {
     }
 
     private void updateAskName() {
-        // Create the custom dialog.
         if (othello.isUpdateAskName()) {
-            Dialog<Pair<String, String>> dialog = new Dialog<>();
-            dialog.setTitle("");
-            dialog.setHeaderText("Enter the names of the player");
-            // Set the button types.
-            ButtonType OKButtonType = new ButtonType("OK", ButtonData.OK_DONE);
-            dialog.getDialogPane().getButtonTypes().addAll(OKButtonType);
-            // Create the username and password labels and fields.
-            GridPane grid = new GridPane();
-            grid.setHgap(10);
-            grid.setVgap(10);
-            grid.setPadding(new Insets(20, 150, 10, 10));
-
-            TextField name1 = new TextField();
-            addTextLimiter(name1, 5);
-            grid.add(new Label("Name of the player 1 (max 5 lettres):"), 0, 0);
-            grid.add(name1, 1, 0);
-
-            TextField name2 = new TextField();
-            addTextLimiter(name2, 5);
-            if (othello.isIsIAChosen()) {
-                name2.setText("IA");
-                name2.setEditable(false);
-            }
-            grid.add(new Label("Name of the player 2 (max 5 lettres):"), 0, 1);
-            grid.add(name2, 1, 1);
-
-            dialog.getDialogPane().setContent(grid);
-
-            // Convert the result to a username-password-pair when the login button is clicked.
-            dialog.setResultConverter(dialogButton -> {
-                if (dialogButton == OKButtonType) {
-                    return new Pair<>(name1.getText(), name2.getText());
-                }
-                return null;
-            });
-
-            Optional<Pair<String, String>> result = dialog.showAndWait();
-
+            GUIIntroMsg introMsg = new GUIIntroMsg(othello, "Othello");
+            Optional<Pair<String, String>> result = introMsg.getDialog().showAndWait();
             result.ifPresent(name1name2 -> {
-                resultFrame.setName1(name1name2.getKey());
-                resultFrame.setName2(name1name2.getValue());
+                if (introMsg.getTypeGame().getSelectedToggle() == introMsg.getHumVShum()) {
+                    resultFrame.setName1(name1name2.getKey());
+                    resultFrame.setName2(name1name2.getValue());
+                } else if (introMsg.getTypeGame().getSelectedToggle() == introMsg.getHumVScomp()) {
+                    resultFrame.setName1(name1name2.getKey());
+                    resultFrame.setName2("IA");
+                    isIAPlaying = true;
+                } else {
+                    resultFrame.setName1("IA 1");
+                    resultFrame.setName2("IA 2");
+                }
             });
         }
     }
@@ -415,23 +387,22 @@ public class FXOthelloView implements Observer {
         }
     }
 
-    private void updateTypeGame() {
-        if (othello.isUpdateTypeGame()) {
-            Alert alert = new Alert(AlertType.CONFIRMATION);
-            alert.setTitle("");
-            alert.setHeaderText("Quel sera ton adversaire?");
-            alert.setContentText("Veux-tu jouer avec un ami ou contre l'ordinateur?");
-
-            ButtonType btn1 = new ButtonType("Mon ami");
-            ButtonType btn2 = new ButtonType("L'ordi!", ButtonData.CANCEL_CLOSE);
-
-            alert.getButtonTypes().setAll(btn1, btn2);
-
-            Optional<ButtonType> result = alert.showAndWait();
-            isIAPlaying = (result.get() == btn2);
-        }
-    }
-
+//    private void updateTypeGame() {
+//        if (othello.isUpdateTypeGame()) {
+//            Alert alert = new Alert(AlertType.CONFIRMATION);
+//            alert.setTitle("");
+//            alert.setHeaderText("Quel sera ton adversaire?");
+//            alert.setContentText("Veux-tu jouer avec un ami ou contre l'ordinateur?");
+//
+//            ButtonType btn1 = new ButtonType("Mon ami");
+//            ButtonType btn2 = new ButtonType("L'ordi!", ButtonData.CANCEL_CLOSE);
+//
+//            alert.getButtonTypes().setAll(btn1, btn2);
+//
+//            Optional<ButtonType> result = alert.showAndWait();
+//            isIAPlaying = (result.get() == btn2);
+//        }
+//    }
     /**
      * Returns a boolean indicating if the IA is playing.
      *

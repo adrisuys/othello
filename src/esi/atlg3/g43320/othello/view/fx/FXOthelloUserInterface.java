@@ -6,7 +6,10 @@
 package esi.atlg3.g43320.othello.view.fx;
 
 import esi.atlg3.g43320.othello.model.Coordinates;
+import esi.atlg3.g43320.othello.model.GameException;
 import esi.atlg3.g43320.othello.model.OthelloModel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -55,9 +58,11 @@ public class FXOthelloUserInterface extends Application {
         mainFrame.setCenter(contentGame);
 
         //INITIALIZING THE GAME
-        othello.askTypeGame();
-        othello.askName(view.isIsIAPlaying());
-        othello.init(view.getResultFrame().getName1());
+        othello.askName();
+        try {
+            othello.init(view.getResultFrame().getName1());
+        } catch (GameException ex) {
+        }
 
         //WHEN MOUSE HOVER CASE
         view.getBoardgame().getBoard().getChildren().stream().map((node) -> {
@@ -86,7 +91,10 @@ public class FXOthelloUserInterface extends Application {
                 } else if (event.getButton() == MouseButton.SECONDARY) {
                     primaryButtonMouseClicked = false;
                 }
-                othello.playATurn(primaryButtonMouseClicked, new Coordinates(i, j), view.getResultFrame().getName1(), view.getResultFrame().getName2(), view.isWallChosenOverPass(), view.isIsIAPlaying());
+                try {
+                    othello.playATurn(primaryButtonMouseClicked, new Coordinates(i, j), view.getResultFrame().getName1(), view.getResultFrame().getName2(), view.isWallChosenOverPass(), view.isIsIAPlaying());
+                } catch (GameException e) {
+                }
             });
         });
 
@@ -95,10 +103,12 @@ public class FXOthelloUserInterface extends Application {
             othello.confirm();
             if (view.hasConfirm()) {
                 othello.giveUp();
-                othello.askTypeGame();
-                othello.askName(view.isIsIAPlaying());
-                //askName(view.getResultFrame());
-                othello.init(view.getResultFrame().getName1());
+                othello.askName();
+                try {
+                    //askName(view.getResultFrame());
+                    othello.init(view.getResultFrame().getName1());
+                } catch (GameException ex) {
+                }
             }
         });
 
@@ -106,10 +116,14 @@ public class FXOthelloUserInterface extends Application {
         view.getRestart().addEventHandler(ActionEvent.ACTION, (ActionEvent event) -> {
             othello.confirm();
             if (view.hasConfirm()) {
-                othello.askTypeGame();
-                othello.askName(view.isIsIAPlaying());
-                //askName(view.getResultFrame());
-                othello.init(view.getResultFrame().getName1());
+                //othello.askTypeGame();
+                othello.askName();
+                try {
+                    //askName(view.getResultFrame());
+                    othello.init(view.getResultFrame().getName1());
+                } catch (GameException ex) {
+                }
+
             }
         });
 

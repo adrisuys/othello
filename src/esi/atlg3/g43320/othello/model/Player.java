@@ -5,6 +5,8 @@
  */
 package esi.atlg3.g43320.othello.model;
 
+import esi.atlg3.g43320.othello.strategy.IARandomStrategy;
+import esi.atlg3.g43320.othello.strategy.Strategy;
 import java.util.Objects;
 
 /**
@@ -23,8 +25,8 @@ public class Player {
      * @param color
      */
     public Player(ColorPawn color) {
-        if (color == null) {
-            throw new IllegalArgumentException("the color can't be null");
+        if (color == null ) {
+            throw new IllegalArgumentException("the color or strategy can't be null");
         }
         this.color = color;
     }
@@ -77,5 +79,7 @@ public class Player {
             return "Player White";
         }
     }
+    
+    
 
 }

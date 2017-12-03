@@ -6,8 +6,11 @@
 package esi.atlg3.g43320.othello.strategy;
 
 import esi.atlg3.g43320.othello.model.Coordinates;
+import esi.atlg3.g43320.othello.model.GameException;
 import esi.atlg3.g43320.othello.model.OthelloModel;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 
@@ -18,7 +21,7 @@ import javafx.util.Duration;
  *
  * @author s_u_y_s_a
  */
-public class MostGainStrategy extends AbstractStrategyIA {
+public class IAMostGainStrategy implements Strategy {
 
     private final OthelloModel othello;
 
@@ -27,7 +30,7 @@ public class MostGainStrategy extends AbstractStrategyIA {
      *
      * @param othello the game being played.
      */
-    public MostGainStrategy(OthelloModel othello) {
+    public IAMostGainStrategy(OthelloModel othello) {
         this.othello = othello;
     }
 
@@ -37,12 +40,18 @@ public class MostGainStrategy extends AbstractStrategyIA {
         pause.setOnFinished(event -> {
             othello.turnPassedFX(true);
             if (othello.isTurnPassed()) {
-                othello.pass("IA");
-                othello.changePlayer();
-                othello.checkGameOver(name, true);
+                try {
+                    othello.pass("IA");
+                    othello.changePlayer();
+                    othello.checkGameOver(name, true);
+                } catch (GameException ex) {
+                }
             } else {
-                othello.play(getBestPossibleMove(othello.getPossibleMove()), "IA");
-                othello.checkGameOver(name, true);
+                try {
+                    othello.play(getBestPossibleMove(othello.getPossibleMove()), "IA");
+                    othello.checkGameOver(name, true);
+                } catch (GameException ex) {
+                }
             }
         });
     }
@@ -51,15 +60,23 @@ public class MostGainStrategy extends AbstractStrategyIA {
         Coordinates bestMove = null;
         int nbPawnsTaken = 0;
         for (Coordinates c : possibleMoves) {
-            if (othello.putPawn(c) == true) {
-                if (nbPawnsTaken <= othello.getNbPawnsTaken()) {
-                    nbPawnsTaken = othello.getNbPawnsTaken();
-                    bestMove = c;
+            try {
+                if (othello.putPawn(c) == true) {
+                    if (nbPawnsTaken <= othello.getNbPawnsTaken()) {
+                        nbPawnsTaken = othello.getNbPawnsTaken();
+                        bestMove = c;
+                    }
                 }
+            } catch (GameException ex) {
             }
             othello.removePawn(c);
         }
         return bestMove;
+    }
+
+    @Override
+    public boolean isIA() {
+        return true;
     }
 
 }

@@ -11,7 +11,7 @@ package esi.atlg3.g43320.othello.strategy;
  *
  * @author s_u_y_s_a
  */
-public interface StrategyIA {
+public interface Strategy {
 
     /**
      * Plays following a certain strategy.
@@ -19,4 +19,6 @@ public interface StrategyIA {
      * @param name
      */
     public void play(String name);
+    
+    public boolean isIA();
 }

@@ -209,11 +209,11 @@ public class GUIScoreFrame extends HBox {
      */
     public void updateChangePlayer(OthelloModel othello) {
         if (othello.getCurrentColor() == ColorPawn.BLACK) {
-            score1Frame.setStyle("-fx-background-color: #c7f097;");
-            score2Frame.setStyle("-fx-background-color: #f08c6b;");
+            score1Frame.setStyle("-fx-background-color: #c7f097;-fx-border-width : 5; -fx-border-color: #FFD700;");
+            score2Frame.setStyle("-fx-background-color: #f08c6b;-fx-border-width : 5; -fx-border-color: #f6ebba;");
         } else {
-            score1Frame.setStyle("-fx-background-color: #f08c6b;");
-            score2Frame.setStyle("-fx-background-color: #c7f097;");
+            score1Frame.setStyle("-fx-background-color: #f08c6b;-fx-border-width : 5; -fx-border-color: #f6ebba;");
+            score2Frame.setStyle("-fx-background-color: #c7f097;-fx-border-width : 5; -fx-border-color: #FFD700;");
         }
     }
 

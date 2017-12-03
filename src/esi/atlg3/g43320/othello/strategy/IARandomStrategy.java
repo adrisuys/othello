@@ -7,7 +7,11 @@ package esi.atlg3.g43320.othello.strategy;
 
 import esi.atlg3.g43320.othello.model.ColorPawn;
 import esi.atlg3.g43320.othello.model.Coordinates;
+import esi.atlg3.g43320.othello.model.GameException;
 import esi.atlg3.g43320.othello.model.OthelloModel;
+import esi.atlg3.g43320.othello.view.console.TerminalOthelloView;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 
@@ -17,7 +21,7 @@ import javafx.util.Duration;
  *
  * @author s_u_y_s_a
  */
-public class RandomStrategy extends AbstractStrategyIA {
+public class IARandomStrategy implements Strategy {
 
     private final OthelloModel othello;
 
@@ -26,7 +30,16 @@ public class RandomStrategy extends AbstractStrategyIA {
      *
      * @param othello the game being played.
      */
-    public RandomStrategy(OthelloModel othello) {
+    public IARandomStrategy(IARandomStrategy strategy) {
+        this.othello = strategy.othello;
+    }
+    
+    /**
+     * It creates an instance of RandomStrategy.
+     *
+     * @param othello the game being played.
+     */
+    public IARandomStrategy(OthelloModel othello) {
         this.othello = othello;
     }
 
@@ -38,17 +51,31 @@ public class RandomStrategy extends AbstractStrategyIA {
             if (othello.isTurnPassed()) {
                 othello.pass("IA");
                 othello.changePlayer();
-                othello.checkGameOver(name, true);
+                try {
+                    othello.checkGameOver(name, true);
+                } catch (GameException ex) {
+                }
             } else {
                 othello.updatePossibleMove(ColorPawn.WHITE);
                 int nbPossibleMove = othello.getPossibleMove().size();
                 int random = (int) (Math.random() * nbPossibleMove);
                 Coordinates playedCoord = othello.getPossibleMove().get(random);
-                othello.play(playedCoord, "IA");
-                othello.checkGameOver(name, true);
+                try {
+                    othello.play(playedCoord, "IA");
+                } catch (GameException ex) {
+                }
+                try {
+                    othello.checkGameOver(name, true);
+                } catch (GameException ex) {
+                }
             }
         });
         pause.play();
+    }
+
+    @Override
+    public boolean isIA() {
+        return true;
     }
 
 }
