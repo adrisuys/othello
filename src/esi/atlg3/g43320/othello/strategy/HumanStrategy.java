@@ -16,7 +16,7 @@ public class HumanStrategy implements Strategy {
     }
 
     @Override
-    public void play(String name) {
+    public void execute() {
 
     }
 

@@ -29,7 +29,7 @@ public class TerminalOthelloUserInterface {
         TerminalOthelloView view = new TerminalOthelloView(othello);
 
         try {
-            othello.init("");
+            othello.init("", false);
         } catch (GameException ex) {
             Logger.getLogger(TerminalOthelloUserInterface.class.getName()).log(Level.SEVERE, null, ex);
         }

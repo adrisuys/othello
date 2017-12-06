@@ -92,10 +92,9 @@ public class Player {
     
     /**
      * Makes the player plays according to its own strategy.
-     * @param name the name of the first player.
      */
-    public void runStrategy(String name){
-        strategy.play(name);
+    public void runStrategy(){
+        strategy.execute();
     }
 
     /**
@@ -113,6 +112,8 @@ public class Player {
     public void setStrategy(Strategy strategy) {
         this.strategy = strategy;
     }
+    
+    
     
     
     

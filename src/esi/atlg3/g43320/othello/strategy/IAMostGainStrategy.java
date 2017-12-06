@@ -9,8 +9,6 @@ import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.GameException;
 import esi.atlg3.g43320.othello.model.OthelloModel;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 
@@ -35,25 +33,22 @@ public class IAMostGainStrategy implements Strategy {
     }
 
     @Override
-    public void play(String name) {
+    public void execute() {
         PauseTransition pause = new PauseTransition(Duration.millis(1000));
         pause.setOnFinished(event -> {
             othello.turnPassedFX(true);
             if (othello.isTurnPassed()) {
-                try {
-                    othello.pass("IA");
-                    othello.changePlayer();
-                    othello.checkGameOver(name);
-                } catch (GameException ex) {
-                }
+                othello.pass("IA");
+                othello.changePlayer();
+
             } else {
                 try {
                     othello.play(getBestPossibleMove(othello.getPossibleMove()), "IA");
-                    othello.checkGameOver(name);
                 } catch (GameException ex) {
                 }
             }
         });
+        pause.play();
     }
 
     private Coordinates getBestPossibleMove(List<Coordinates> possibleMoves) {

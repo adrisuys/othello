@@ -18,7 +18,7 @@ public interface Strategy {
      *
      * @param name
      */
-    public void play(String name);
+    public void execute();
     
     public boolean isIA();
 }

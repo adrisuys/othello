@@ -95,7 +95,7 @@ public class Game {
      * @return the current player.
      */
     Player getCurrentPlayer() {
-        return new Player(getCurrentColor());
+        return currentPlayer;
     }
 
     /**
