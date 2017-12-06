@@ -7,11 +7,18 @@ package esi.atlg3.g43320.othello.view.fx;
 
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.OthelloModel;
+import java.util.List;
+import javafx.animation.Interpolator;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.util.Duration;
 
 /**
  * This class represents the graphical interface of the boardgame.
@@ -38,6 +45,14 @@ public class GUIBoardgame {
             }
         }
     }
+    
+    /**
+     * Creates an instance of GUIBoardgame that takes the attributes of another GUIBoardgame.
+     * @param boardgame the GUIBoardgame the new instance takes its value from.
+     */
+    public GUIBoardgame(GUIBoardgame boardgame){
+        this.board = boardgame.board;
+    }
 
     /**
      * Display the boardgame at a given time.
@@ -63,7 +78,6 @@ public class GUIBoardgame {
                     default:
                         Image image = new Image(getClass().getResourceAsStream("./img/wall.png"));
                         getSquareAtCoordinates(i, j).getPawn().setFill(new ImagePattern(image));
-                        //getSquareAtCoordinates(i, j).getPawn().setFill(Color.BROWN);
                         getSquareAtCoordinates(i, j).setDisable(true);
                         break;
                 }
@@ -108,5 +122,31 @@ public class GUIBoardgame {
             n.setDisable(false);
         });
     }
+
+//    public void makeAnimatedTurn(List<List<Coordinates>> list, OthelloModel othello) {
+//        for (int i = 0; i < list.size(); i++) {
+//            for (int j = 0; j < list.get(i).size(); j++) {
+//                final GUISquare aSquare = getSquareAtCoordinates(i, j);
+//                ScaleTransition scaleFwd = new ScaleTransition(Duration.millis(125), aSquare.getPawn());
+//                scaleFwd.setToX(0.0);
+//                scaleFwd.setToY(0.0);
+//                scaleFwd.setInterpolator(Interpolator.EASE_OUT);
+//                scaleFwd.setOnFinished(new EventHandler<ActionEvent>() {
+//                    @Override
+//                    public void handle(ActionEvent event) {
+//                        if (aSquare.getPawn().getFill() == Color.BLACK) {
+//                            aSquare.getPawn().setFill(Color.WHITE);
+//                        } else {
+//                            aSquare.getPawn().setFill(Color.BLACK);
+//                        }
+//                    }
+//                });
+//                ScaleTransition scaleBck = new ScaleTransition(Duration.millis(125), aSquare.getPawn());
+//                scaleBck.setToX(1.0);
+//                scaleBck.setToY(1.0);
+//                scaleBck.setInterpolator(Interpolator.EASE_OUT);
+//            }
+//        }
+//    }
 
 }

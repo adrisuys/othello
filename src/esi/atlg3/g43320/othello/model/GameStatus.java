@@ -6,11 +6,20 @@
 package esi.atlg3.g43320.othello.model;
 
 /**
- *
+ * This class represents all the different status the game can have.
  * @author s_u_y_s_a
  */
 public enum GameStatus {
-    INIT("Initialization"), PLAY("Play");
+
+    /**
+     * The game status INITIALIZATION.
+     */
+    INIT("Initialization"),
+
+    /**
+     * The game status PLAY.
+     */
+    PLAY("Play");
     
     private final String libelle;
     
@@ -18,6 +27,7 @@ public enum GameStatus {
         this.libelle = libelle;
     }
     
+    @Override
     public String toString(){
         return libelle;
     }

@@ -15,10 +15,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
  * This class represents the table of all the moves of one game.
+ *
  * @author s_u_y_s_a
  */
 public class GUIMovesHistory {
-    
+
     private TableView history;
     ObservableList<Move> data;
 
@@ -56,34 +57,48 @@ public class GUIMovesHistory {
         );
 
         history.setItems(data);
-        history.setMinHeight(550);
+        history.setMinHeight(525);
     }
-    
+
+    /**
+     * Creates an instance of an GUIMovesHistory which takes its values from
+     * another one.
+     *
+     * @param historic the GUIMovesHistory the new instance takes its values
+     * from.
+     */
+    public GUIMovesHistory(GUIMovesHistory historic) {
+        this.data = historic.data;
+        this.history = historic.history;
+    }
+
     /**
      * Update the table after each turn.
+     *
      * @param othello
      */
-    public void updateMovesHistory(OthelloModel othello){
+    public void updateMovesHistory(OthelloModel othello) {
         String name = othello.getMoveName();
         String action = othello.getMoveAction();
         String pos = othello.getMovePos();
         String taken = othello.getMoveTaken();
         data.add(new Move(name, action, pos, taken));
     }
-    
+
     /**
      * Reinitialize the table.
      */
-    public void reinitMovesHistory(){
+    public void reinitMovesHistory() {
         data.clear();
     }
 
     /**
      * Returns the TableView representing the history of moves of a game.
+     *
      * @return the TableView representing the history of moves of a game.
      */
     public TableView getHistory() {
         return history;
     }
-    
+
 }

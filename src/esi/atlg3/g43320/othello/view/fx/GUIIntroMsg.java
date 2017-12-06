@@ -19,17 +19,27 @@ import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 
 /**
+ * This class represent the message that is displayed at the beginning of each
+ * game. It allows the players to enter their names and to choose the type of
+ * game they want to play : human vs computer, human vs human or computer vs
+ * computer.
  *
  * @author s_u_y_s_a
  */
 public class GUIIntroMsg {
-    
+
     private Dialog<Pair<String, String>> dialog;
     private RadioButton humVShum;
     private RadioButton humVScomp;
     private RadioButton compVScomp;
     private ToggleGroup typeGame;
 
+    /**
+     * Creates an instance of GUIIntroMsg.
+     *
+     * @param othello the game being played.
+     * @param title the name of the windows that is opened.
+     */
     public GUIIntroMsg(OthelloModel othello, String title) {
         dialog = new Dialog<>();
         dialog.setTitle(title);
@@ -50,13 +60,9 @@ public class GUIIntroMsg {
 
         TextField name2 = new TextField();
         addTextLimiter(name2, 5);
-        if (othello.isIsIAChosen()) {
-            name2.setText("IA");
-            name2.setEditable(false);
-        }
         grid.add(new Label("Nom du deuxième joueur (max 5 caractères):"), 0, 1);
         grid.add(name2, 1, 1);
-        
+
         compVScomp = new RadioButton("Ordinateur vs Ordinateur");
         humVScomp = new RadioButton("Humain vs Ordinateur");
         humVShum = new RadioButton("Humain vs Humain");
@@ -68,7 +74,7 @@ public class GUIIntroMsg {
         grid.add(new Label("Choisissez un type de partie:"), 0, 2);
         grid.add(humVShum, 1, 2);
         grid.add(humVScomp, 2, 2);
-        grid.add(compVScomp,3,2);
+        grid.add(compVScomp, 3, 2);
 
         dialog.getDialogPane().setContent(grid);
 
@@ -81,27 +87,53 @@ public class GUIIntroMsg {
         });
     }
 
+    /**
+     * Return a Dialog box, a window with all the elements the players need to
+     * enter their names and to select the type of game.
+     *
+     * @return
+     */
     public Dialog<Pair<String, String>> getDialog() {
         return dialog;
     }
 
+    /**
+     * A RadioButton representing the type of game : human vs human.
+     *
+     * @return a RadioButton representing the type of game : human vs human.
+     */
     public RadioButton getHumVShum() {
         return humVShum;
     }
 
+    /**
+     * A RadioButton representing the type of game : human vs computer.
+     *
+     * @return a RadioButton representing the type of game : human vs computer.
+     */
     public RadioButton getHumVScomp() {
         return humVScomp;
     }
 
+    /**
+     * A RadioButton representing the type of game : computer vs computer.
+     *
+     * @return a RadioButton representing the type of game : computer vs
+     * computer.
+     */
     public RadioButton getCompVScomp() {
         return compVScomp;
     }
 
+    /**
+     * A ToggleGroup containing all the RadioButton represening the types of
+     * game.
+     *
+     * @return a ToggleGroup containing all the RadioButton represening the
+     * types of game.
+     */
     public ToggleGroup getTypeGame() {
         return typeGame;
     }
-    
-    
-    
 
 }

@@ -18,10 +18,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -45,6 +43,7 @@ public class FXOthelloView implements Observer {
     private VBox rightSubFrame;
     private boolean wallChosenOverPass;
     private boolean isIAPlaying;
+    private boolean onlyIAPlaying;
     private Button giveUp;
     private Button pass;
     private Button restart;
@@ -69,19 +68,29 @@ public class FXOthelloView implements Observer {
 
         //CREATION OF THE BOARDGAME
         boardgame = new GUIBoardgame();
+        boardgame.getBoard().setStyle("-fx-background-color:#a7682b; -fx-border-color:#723102; -fx-border-width:2;");
 
         //CREATION OF LIST OF ACTION
         historyOfMoves = new GUIMovesHistory();
+        historyOfMoves.getHistory().setStyle("-fx-background-color:#a7682b; -fx-border-color:#723102; -fx-border-width:2;");
 
         //CREATION OF SCORE FRAME
         resultFrame = new GUIScoreFrame(othello);
+        resultFrame.setStyle("-fx-background-color:#a7682b; -fx-border-color:#723102; -fx-border-width:2;");
+        resultFrame.setPadding(new Insets(5, 2, 5, 2));
 
         //CREATION AND DECORATION OF FRAMES OF THE DISPLAY
         HBox progressScoreBarFrame = new HBox();
+        progressScoreBarFrame.setStyle("-fx-background-color:#a7682b; -fx-border-color:#723102; -fx-border-width:2;");
+        progressScoreBarFrame.setPadding(new Insets(5, 2, 5, 2));
         HBox progressGameFrame = new HBox();
+        progressGameFrame.setStyle("-fx-background-color:#a7682b; -fx-border-color:#723102; -fx-border-width:2;");
+        progressGameFrame.setPadding(new Insets(5, 2, 5, 2));
         HBox btnFrame = new HBox();
-        HBox.setMargin(leftSubFrame, new Insets(20, 10, 20, 20));
-        HBox.setMargin(rightSubFrame, new Insets(20, 20, 20, 10));
+        btnFrame.setStyle("-fx-background-color:#a7682b; -fx-border-color:#723102; -fx-border-width:2;");
+        btnFrame.setPadding(new Insets(5, 2, 5, 2));
+        HBox.setMargin(leftSubFrame, new Insets(10, 10, 10, 10));
+        HBox.setMargin(rightSubFrame, new Insets(20, 10, 10, 10));
         leftSubFrame.getChildren().addAll(boardgame.getBoard(), progressScoreBarFrame, progressGameFrame, btnFrame);
         rightSubFrame.getChildren().addAll(resultFrame, historyOfMoves.getHistory());
         VBox.setMargin(resultFrame, new Insets(0, 0, 10, 0));
@@ -113,37 +122,28 @@ public class FXOthelloView implements Observer {
 
     @Override
     public void update() {
-        updateInit();
-        updateMouseOver();
-        updatePlay();
-        updateTurnPassed();
-        updateWall();
-        updateEndOfGame();
-        updateConfirm();
-        updateGiveUp();
-        updateProblemPass();
-        updateAskName();
-        updatePass();
-        //updateTypeGame();
-        updateChangePlayer();
-    }
-
-    private void updateInit() {
-        if (othello.isUpdateInit()) {
-            historyOfMoves.reinitMovesHistory();
-            boardgame.updateBoardgame(othello);
-            boardgame.setDisableOnFalse();
-            historyOfMoves.updateMovesHistory(othello);
-            progressCake.updateProgressCake(othello);
-            resultFrame.updateScore(othello);
-            bar.updateProgressBar(othello);
+        synchronized (othello) {
+            updateInit();
+            updateMouseOver();
+            updatePlay();
+            updateTurnPassed();
+            updateWall();
+            updateEndOfGame();
+            updateConfirm();
+            updateGiveUp();
+            updateProblemPass();
+            updateAskName();
+            updatePass();
+            updateChangePlayer();
         }
     }
 
-    private void updatePlay() {
-        if (othello.isUpdatePlay()) {
-            if (othello.isValidPlay()) {
+    private void updateInit() {
+        synchronized (othello) {
+            if (othello.isUpdateInit()) {
+                historyOfMoves.reinitMovesHistory();
                 boardgame.updateBoardgame(othello);
+                boardgame.setDisableOnFalse();
                 historyOfMoves.updateMovesHistory(othello);
                 progressCake.updateProgressCake(othello);
                 resultFrame.updateScore(othello);
@@ -152,102 +152,130 @@ public class FXOthelloView implements Observer {
         }
     }
 
+    private void updatePlay() {
+        synchronized (othello) {
+            if (othello.isUpdatePlay()) {
+                if (othello.isValidPlay()) {
+                    boardgame.updateBoardgame(othello);
+                    historyOfMoves.updateMovesHistory(othello);
+                    progressCake.updateProgressCake(othello);
+                    resultFrame.updateScore(othello);
+                    bar.updateProgressBar(othello);
+                }
+            }
+        }
+    }
+
     private void updateMouseOver() {
-        if (othello.isUpdateMouseOver()) {
-            boardgame.getSquareAtCoordinates(othello.getCoordX(), othello.getCoordY()).updateSquare(othello.isPossibleCase());
+        synchronized (othello) {
+            if (othello.isUpdateMouseOver()) {
+                boardgame.getSquareAtCoordinates(othello.getCoordX(), othello.getCoordY()).updateSquare(othello.isPossibleCase());
+            }
         }
     }
 
     private void updateTurnPassed() {
-        if (othello.isUpdateTurnPassed()) {
-            if (!othello.isIsIA()) {
-                if (othello.isTurnPassed()) {
-                    Alert alert = new Alert(AlertType.CONFIRMATION);
-                    alert.setTitle("");
-                    alert.setHeaderText("Tu dois passer ton tour!");
-                    alert.setContentText("Néanmois, tu as la possibilité de placer un mur. Que veux-tu faire?");
+        synchronized (othello) {
+            if (othello.isUpdateTurnPassed()) {
+                if (!othello.isIsIA()) {
+                    if (othello.isTurnPassed()) {
+                        Alert alert = new Alert(AlertType.CONFIRMATION);
+                        alert.setTitle("");
+                        alert.setHeaderText("Tu dois passer ton tour!");
+                        alert.setContentText("Néanmois, tu as la possibilité de placer un mur. Que veux-tu faire?");
 
-                    ButtonType btnWall = new ButtonType("Je place un mur!");
-                    ButtonType btnPass = new ButtonType("Je passe mon tour...", ButtonData.CANCEL_CLOSE);
+                        ButtonType btnWall = new ButtonType("Je place un mur!");
+                        ButtonType btnPass = new ButtonType("Je passe mon tour...", ButtonData.CANCEL_CLOSE);
 
-                    alert.getButtonTypes().setAll(btnWall, btnPass);
+                        alert.getButtonTypes().setAll(btnWall, btnPass);
 
-                    Optional<ButtonType> result = alert.showAndWait();
-                    wallChosenOverPass = (result.get() == btnWall);
-                }
-            } else {
-                if (othello.isTurnPassed()) {
-                    Alert alert = new Alert(AlertType.INFORMATION);
-                    alert.setTitle("");
-                    alert.setHeaderText("L'ordinateur a passé son tour !");
-                    PauseTransition delay = new PauseTransition(Duration.seconds(3));
-                    delay.setOnFinished(e -> alert.hide());
-                    alert.showAndWait();
-                    delay.play();
+                        Optional<ButtonType> result = alert.showAndWait();
+                        wallChosenOverPass = (result.get() == btnWall);
+                    }
+                } else {
+                    if (othello.isTurnPassed()) {
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("");
+                        alert.setHeaderText("L'ordinateur a passé son tour !");
+                        PauseTransition delay = new PauseTransition(Duration.seconds(3));
+                        delay.setOnFinished(e -> alert.hide());
+                        alert.showAndWait();
+                        delay.play();
+                    }
                 }
             }
         }
     }
 
     private void updateWall() {
-        if (othello.isUpdateWall()) {
-            if (othello.isWallValid()) {
-                boardgame.updateBoardgame(othello);
-                progressCake.updateProgressCake(othello);
-                historyOfMoves.updateMovesHistory(othello);
+        synchronized (othello) {
+            if (othello.isUpdateWall()) {
+                if (othello.isWallValid()) {
+                    boardgame.updateBoardgame(othello);
+                    progressCake.updateProgressCake(othello);
+                    historyOfMoves.updateMovesHistory(othello);
+                }
             }
         }
     }
 
     private void updateEndOfGame() {
-        if (othello.isUpdateEndOfGame()) {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("");
-            alert.setHeaderText("La partie est finie!");
-            int score1 = othello.getScorePlayer1();
-            int score2 = othello.getScorePlayer2();
-            if (score1 > score2) {
-                alert.setContentText(resultFrame.getName1() + " a gagné! (" + score1 + "-" + score2 + ")");
-            } else if (score1 == score2) {
-                alert.setContentText("Match nul! (" + score1 + "-" + score2 + ")");
-            } else {
-                alert.setContentText(resultFrame.getName2() + " a gagné! (" + score1 + "-" + score2 + ")");
+        synchronized (othello) {
+            if (othello.isUpdateEndOfGame()) {
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("");
+                alert.setHeaderText("La partie est finie!");
+                int score1 = othello.getScorePlayer1();
+                int score2 = othello.getScorePlayer2();
+                if (score1 > score2) {
+                    alert.setContentText(resultFrame.getName1() + " a gagné! (" + score1 + "-" + score2 + ")");
+                } else if (score1 == score2) {
+                    alert.setContentText("Match nul! (" + score1 + "-" + score2 + ")");
+                } else {
+                    alert.setContentText(resultFrame.getName2() + " a gagné! (" + score1 + "-" + score2 + ")");
+                }
+                alert.showAndWait();
             }
-            alert.showAndWait();
         }
     }
 
     private void updateConfirm() {
-        if (othello.isUpdateConfirm()) {
-            Alert alert = new Alert(AlertType.CONFIRMATION);
-            alert.setTitle("");
-            alert.setHeaderText("Etes-vous sûr?");
-            alert.setContentText("");
+        synchronized (othello) {
+            if (othello.isUpdateConfirm()) {
+                Alert alert = new Alert(AlertType.CONFIRMATION);
+                alert.setTitle("");
+                alert.setHeaderText("Etes-vous sûr?");
+                alert.setContentText("");
 
-            Optional<ButtonType> result = alert.showAndWait();
-            confirm = result.get() == ButtonType.OK;
+                Optional<ButtonType> result = alert.showAndWait();
+                confirm = result.get() == ButtonType.OK;
+            }
         }
     }
 
     private void updateGiveUp() {
-        if (othello.isUpdateGiveUp()) {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("");
-            alert.setHeaderText(null);
-            alert.setContentText("Tu as abandonné! Perdu... ");
+        synchronized (othello) {
+            if (othello.isUpdateGiveUp()) {
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("");
+                alert.setHeaderText(null);
+                alert.setContentText("Tu as abandonné! Perdu... ");
 
-            alert.showAndWait();
+                alert.showAndWait();
+            }
         }
     }
 
     private void updateProblemPass() {
-        if (othello.isUpdateProblemPass()) {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("");
-            alert.setHeaderText(null);
-            alert.setContentText("Tu ne peux pas passer ton tour, par contre tu peux mettre un mur!");
+        synchronized (othello) {
+            if (othello.isUpdateProblemPass()) {
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("");
+                alert.setHeaderText(null);
+                alert.setContentText("Tu ne peux pas passer ton tour, par contre tu peux mettre un mur!");
 
-            alert.showAndWait();
+                alert.showAndWait();
+            }
         }
     }
 
@@ -257,7 +285,7 @@ public class FXOthelloView implements Observer {
      * @return the graphical interface of the boardgame.
      */
     public GUIBoardgame getBoardgame() {
-        return boardgame;
+        return new GUIBoardgame(boardgame);
     }
 
     /**
@@ -362,47 +390,36 @@ public class FXOthelloView implements Observer {
     }
 
     private void updateAskName() {
-        if (othello.isUpdateAskName()) {
-            GUIIntroMsg introMsg = new GUIIntroMsg(othello, "Othello");
-            Optional<Pair<String, String>> result = introMsg.getDialog().showAndWait();
-            result.ifPresent(name1name2 -> {
-                if (introMsg.getTypeGame().getSelectedToggle() == introMsg.getHumVShum()) {
-                    resultFrame.setName1(name1name2.getKey());
-                    resultFrame.setName2(name1name2.getValue());
-                } else if (introMsg.getTypeGame().getSelectedToggle() == introMsg.getHumVScomp()) {
-                    resultFrame.setName1(name1name2.getKey());
-                    resultFrame.setName2("IA");
-                    isIAPlaying = true;
-                } else {
-                    resultFrame.setName1("IA 1");
-                    resultFrame.setName2("IA 2");
-                }
-            });
+        synchronized (othello) {
+            if (othello.isUpdateAskName()) {
+                GUIIntroMsg introMsg = new GUIIntroMsg(othello, "Othello");
+                Optional<Pair<String, String>> result = introMsg.getDialog().showAndWait();
+                result.ifPresent(name1name2 -> {
+                    if (introMsg.getTypeGame().getSelectedToggle() == introMsg.getHumVShum()) {
+                        resultFrame.setName1(name1name2.getKey());
+                        resultFrame.setName2(name1name2.getValue());
+                    } else if (introMsg.getTypeGame().getSelectedToggle() == introMsg.getHumVScomp()) {
+                        resultFrame.setName1(name1name2.getKey());
+                        resultFrame.setName2("IA");
+                        isIAPlaying = true;
+                    } else {
+                        resultFrame.setName1("IA 1");
+                        resultFrame.setName2("IA 2");
+                        onlyIAPlaying = true;
+                    }
+                });
+            }
         }
     }
 
     private void updatePass() {
-        if (othello.isUpdatePass()) {
-            historyOfMoves.updateMovesHistory(othello);
+        synchronized (othello) {
+            if (othello.isUpdatePass()) {
+                historyOfMoves.updateMovesHistory(othello);
+            }
         }
     }
 
-//    private void updateTypeGame() {
-//        if (othello.isUpdateTypeGame()) {
-//            Alert alert = new Alert(AlertType.CONFIRMATION);
-//            alert.setTitle("");
-//            alert.setHeaderText("Quel sera ton adversaire?");
-//            alert.setContentText("Veux-tu jouer avec un ami ou contre l'ordinateur?");
-//
-//            ButtonType btn1 = new ButtonType("Mon ami");
-//            ButtonType btn2 = new ButtonType("L'ordi!", ButtonData.CANCEL_CLOSE);
-//
-//            alert.getButtonTypes().setAll(btn1, btn2);
-//
-//            Optional<ButtonType> result = alert.showAndWait();
-//            isIAPlaying = (result.get() == btn2);
-//        }
-//    }
     /**
      * Returns a boolean indicating if the IA is playing.
      *
@@ -411,10 +428,23 @@ public class FXOthelloView implements Observer {
     public boolean isIsIAPlaying() {
         return isIAPlaying;
     }
+    
+    /**
+     * Returns a boolean indicating if 2 IAs are playing.
+     *
+     * @return a boolean indicating if 2 IAs are playing.
+     */
+    public boolean isOnlyIAPlaying() {
+        return onlyIAPlaying;
+    }
+    
+    
 
     private void updateChangePlayer() {
-        if (othello.isUpdateChangePlayer()) {
-            resultFrame.updateChangePlayer(othello);
+        synchronized (othello) {
+            if (othello.isUpdateChangePlayer()) {
+                resultFrame.updateChangePlayer(othello);
+            }
         }
     }
 

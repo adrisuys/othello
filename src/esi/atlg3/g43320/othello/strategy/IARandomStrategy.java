@@ -28,12 +28,12 @@ public class IARandomStrategy implements Strategy {
     /**
      * It creates an instance of RandomStrategy.
      *
-     * @param othello the game being played.
+     * @param strategy the strategy from which the new instance is copied.
      */
     public IARandomStrategy(IARandomStrategy strategy) {
         this.othello = strategy.othello;
     }
-    
+
     /**
      * It creates an instance of RandomStrategy.
      *
@@ -45,32 +45,34 @@ public class IARandomStrategy implements Strategy {
 
     @Override
     public void play(String name) {
-        PauseTransition pause = new PauseTransition(Duration.millis(1000));
-        pause.setOnFinished(event -> {
-            othello.turnPassedFX(true);
-            if (othello.isTurnPassed()) {
-                othello.pass("IA");
-                othello.changePlayer();
-                try {
-                    othello.checkGameOver(name, true);
-                } catch (GameException ex) {
+        synchronized (othello) {
+            PauseTransition pause = new PauseTransition(Duration.millis(1000));
+            pause.setOnFinished(event -> {
+                othello.turnPassedFX(true);
+                if (othello.isTurnPassed()) {
+                    othello.pass("IA");
+                    othello.changePlayer();
+                    try {
+                        othello.checkGameOver(name);
+                    } catch (GameException ex) {
+                    }
+                } else {
+                    othello.updatePossibleMove(ColorPawn.WHITE);
+                    int nbPossibleMove = othello.getPossibleMove().size();
+                    int random = (int) (Math.random() * nbPossibleMove);
+                    Coordinates playedCoord = othello.getPossibleMove().get(random);
+                    try {
+                        othello.play(playedCoord, "IA");
+                    } catch (GameException ex) {
+                    }
+                    try {
+                        othello.checkGameOver(name);
+                    } catch (GameException ex) {
+                    }
                 }
-            } else {
-                othello.updatePossibleMove(ColorPawn.WHITE);
-                int nbPossibleMove = othello.getPossibleMove().size();
-                int random = (int) (Math.random() * nbPossibleMove);
-                Coordinates playedCoord = othello.getPossibleMove().get(random);
-                try {
-                    othello.play(playedCoord, "IA");
-                } catch (GameException ex) {
-                }
-                try {
-                    othello.checkGameOver(name, true);
-                } catch (GameException ex) {
-                }
-            }
-        });
-        pause.play();
+            });
+            pause.play();
+        }
     }
 
     @Override

@@ -13,6 +13,8 @@ import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -42,7 +44,10 @@ public class FXOthelloUserInterface extends Application {
         view = new FXOthelloView(othello);
 
         BorderPane mainFrame = new BorderPane();
-        mainFrame.setStyle("-fx-background : #f6ebba");
+        Image img = new Image(getClass().getResourceAsStream("./img/bckground.jpg"));
+        ImageView imgView = new ImageView(img);
+        imgView.fitWidthProperty().bind(primaryStage.widthProperty());
+        mainFrame.getChildren().add(imgView);
 
         //CREATION OF FRAMES OF THE DISPLAY (THE GAME SCENE)
         HBox contentGame = new HBox();

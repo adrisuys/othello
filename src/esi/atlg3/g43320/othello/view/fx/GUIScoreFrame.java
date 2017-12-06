@@ -120,6 +120,21 @@ public class GUIScoreFrame extends HBox {
     }
 
     /**
+     * Creates an instance of GUIScoreFrame which takes its value from another
+     * one.
+     *
+     * @param frame the GUIScoreFrame the new instance takes its values from.
+     */
+    public GUIScoreFrame(GUIScoreFrame frame) {
+        this.name1 = frame.name1;
+        this.name2 = frame.name2;
+        this.score1 = frame.score1;
+        this.score2 = frame.score2;
+        this.score1Frame = frame.score1Frame;
+        this.score2Frame = frame.score2Frame;
+    }
+
+    /**
      * Returns the name of the player black.
      *
      * @return the name of the player black.
@@ -210,9 +225,9 @@ public class GUIScoreFrame extends HBox {
     public void updateChangePlayer(OthelloModel othello) {
         if (othello.getCurrentColor() == ColorPawn.BLACK) {
             score1Frame.setStyle("-fx-background-color: #c7f097;-fx-border-width : 5; -fx-border-color: #FFD700;");
-            score2Frame.setStyle("-fx-background-color: #f08c6b;-fx-border-width : 5; -fx-border-color: #f6ebba;");
+            score2Frame.setStyle("-fx-background-color: #f08c6b;-fx-border-width : 5; -fx-border-color: #a7682b;");
         } else {
-            score1Frame.setStyle("-fx-background-color: #f08c6b;-fx-border-width : 5; -fx-border-color: #f6ebba;");
+            score1Frame.setStyle("-fx-background-color: #f08c6b;-fx-border-width : 5; -fx-border-color: #a7682b;");
             score2Frame.setStyle("-fx-background-color: #c7f097;-fx-border-width : 5; -fx-border-color: #FFD700;");
         }
     }

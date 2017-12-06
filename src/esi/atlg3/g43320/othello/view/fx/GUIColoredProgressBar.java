@@ -27,6 +27,14 @@ public class GUIColoredProgressBar {
     }
     
     /**
+     * Creates an instance of GUIColoredProgressBar that takes its values from another one.
+     * @param uiBar the GUIColoredProgressBar the new instance takes its values from.
+     */
+    public GUIColoredProgressBar(GUIColoredProgressBar uiBar){
+        this.bar = uiBar.bar;
+    }
+    
+    /**
      * Update the progress bar by changing its percentage of completion.
      * @param othello the model of the game being played.
      */

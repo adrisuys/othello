@@ -5,7 +5,7 @@
  */
 package esi.atlg3.g43320.othello.model;
 
-import esi.atlg3.g43320.othello.strategy.IARandomStrategy;
+import esi.atlg3.g43320.othello.strategy.HumanStrategy;
 import esi.atlg3.g43320.othello.strategy.Strategy;
 import java.util.Objects;
 
@@ -18,6 +18,7 @@ import java.util.Objects;
 public class Player {
 
     private ColorPawn color;
+    private Strategy strategy;
 
     /**
      * Creates an instance of a player by giving it a specified color.
@@ -25,10 +26,11 @@ public class Player {
      * @param color
      */
     public Player(ColorPawn color) {
-        if (color == null ) {
+        if (color == null) {
             throw new IllegalArgumentException("the color or strategy can't be null");
         }
         this.color = color;
+        this.strategy = new HumanStrategy();
     }
 
     /**
@@ -79,6 +81,40 @@ public class Player {
             return "Player White";
         }
     }
+    
+    /**
+     * Indicates if the player is an IA.
+     * @return true if the player is an IA.
+     */
+    public boolean isAutomatic(){
+        return strategy.isIA();
+    }
+    
+    /**
+     * Makes the player plays according to its own strategy.
+     * @param name the name of the first player.
+     */
+    public void runStrategy(String name){
+        strategy.play(name);
+    }
+
+    /**
+     * Returns the strategy of the player.
+     * @return the strategy of the player.
+     */
+    public Strategy getStrategy() {
+        return strategy;
+    }
+
+    /**
+     * Changes the strategy of the player.
+     * @param strategy the new strategy.
+     */
+    public void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
+    }
+    
+    
     
     
 

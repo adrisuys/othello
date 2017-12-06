@@ -5,7 +5,6 @@
  */
 package esi.atlg3.g43320.othello.model;
 
-import esi.atlg3.g43320.othello.strategy.Strategy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -292,8 +291,6 @@ public class Game {
         return Objects.equals(this.pawnsToBeTurnedInterm, other.pawnsToBeTurnedInterm);
     }
 
-    
-
     boolean isMoveValidAllDirections(Coordinates c, ColorPawn col) {
         pawnsToBeTurned.clear();
         boolean valid = false;
@@ -381,11 +378,11 @@ public class Game {
         return board.nbCaseOccupied();
     }
 
-    public GameStatus getStatus() {
+    GameStatus getStatus() {
         return status;
     }
 
-    public void setStatus(GameStatus status) {
+    void setStatus(GameStatus status) {
         this.status = status;
     }
     

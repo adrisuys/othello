@@ -43,13 +43,13 @@ public class IAMostGainStrategy implements Strategy {
                 try {
                     othello.pass("IA");
                     othello.changePlayer();
-                    othello.checkGameOver(name, true);
+                    othello.checkGameOver(name);
                 } catch (GameException ex) {
                 }
             } else {
                 try {
                     othello.play(getBestPossibleMove(othello.getPossibleMove()), "IA");
-                    othello.checkGameOver(name, true);
+                    othello.checkGameOver(name);
                 } catch (GameException ex) {
                 }
             }

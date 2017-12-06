@@ -11,7 +11,6 @@ import esi.atlg3.g43320.othello.strategy.IARandomStrategy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import esi.atlg3.g43320.othello.strategy.Strategy;
 
 /**
  * This class is the model of the Game, it implements Observable.
@@ -34,9 +33,7 @@ public class OthelloModel implements Observable {
     private String movePos;
     private String moveTaken;
     private boolean isWallValid;
-    private boolean isIAChosen;
     private boolean isIA;
-    private final Strategy strategy;
 
     //booleans to be used to check updates
     private boolean updatePlay;
@@ -54,7 +51,6 @@ public class OthelloModel implements Observable {
     private boolean updateProblemPass;
     private boolean updateAskName;
     private boolean updatePass;
-    private boolean updateTypeGame;
     private boolean updateChangePlayer;
 
     /**
@@ -63,7 +59,6 @@ public class OthelloModel implements Observable {
     public OthelloModel() {
         observers = new ArrayList<>();
         game = new Game();
-        strategy = new IARandomStrategy(this);
     }
 
     /**
@@ -113,8 +108,10 @@ public class OthelloModel implements Observable {
      * @param aCoordinate the coordinates of the case the player wants to put a
      * pawn on
      * @param namePlayer the name of the player that has to play.
+     * @throws esi.atlg3.g43320.othello.model.GameException if the game status
+     * is not the right one.
      */
-    public void play(Coordinates aCoordinate, String namePlayer) throws GameException {
+    public synchronized void play(Coordinates aCoordinate, String namePlayer) throws GameException {
         game.updatePossibleMove(game.getCurrentColor());
         if (!game.getPossibleMove().contains(aCoordinate)) {
             validPlay = false;
@@ -145,7 +142,6 @@ public class OthelloModel implements Observable {
         updateProblemPass = false;
         updateAskName = false;
         updatePass = false;
-        updateTypeGame = false;
         updateChangePlayer = true;
         game.updatePossibleMove(game.getCurrentColor());
         notifyObservers();
@@ -156,7 +152,7 @@ public class OthelloModel implements Observable {
      * observers.
      *
      */
-    public void score() {
+    public synchronized void score() {
         scorePlayer1 = game.getScore(ColorPawn.BLACK);
         scorePlayer2 = game.getScore(ColorPawn.WHITE);
         updateInit = false;
@@ -174,7 +170,6 @@ public class OthelloModel implements Observable {
         updateProblemPass = false;
         updateAskName = false;
         updatePass = false;
-        updateTypeGame = false;
         updateChangePlayer = false;
         notifyObservers();
     }
@@ -184,7 +179,7 @@ public class OthelloModel implements Observable {
      * observers.
      *
      */
-    public void show() {
+    public synchronized void show() {
         updateInit = false;
         updateScore = false;
         updatePlay = false;
@@ -200,7 +195,6 @@ public class OthelloModel implements Observable {
         updateProblemPass = false;
         updateAskName = false;
         updatePass = false;
-        updateTypeGame = false;
         updateChangePlayer = false;
         game.updatePossibleMove(game.getCurrentColor());
         notifyObservers();
@@ -210,9 +204,11 @@ public class OthelloModel implements Observable {
      * Initializes the game.
      *
      * @param name1 the name of the first player (always the black one).
+     * @throws esi.atlg3.g43320.othello.model.GameException if the game status
+     * is not the right one.
      */
-    public void init(String name1) throws GameException {
-        if (game.getStatus() != GameStatus.INIT){
+    public synchronized void init(String name1) throws GameException {
+        if (game.getStatus() != GameStatus.INIT) {
             throw new GameException("Status error : game has to be initialize now");
         }
         game = new Game();
@@ -242,7 +238,6 @@ public class OthelloModel implements Observable {
         updateProblemPass = false;
         updateAskName = false;
         updatePass = false;
-        updateTypeGame = false;
         updateChangePlayer = true;
         game.updatePossibleMove(game.getCurrentColor());
         notifyObservers();
@@ -291,7 +286,7 @@ public class OthelloModel implements Observable {
      *
      * @return a boolean indicating if the player's turn has been passed.s
      */
-    public boolean isTurnPassed() {
+    public synchronized boolean isTurnPassed() {
         return turnPassed;
     }
 
@@ -299,7 +294,7 @@ public class OthelloModel implements Observable {
      * End the game by telling who the winner is.
      *
      */
-    public void endOfGame() {
+    public synchronized void endOfGame() {
         scorePlayer1 = game.getScore(ColorPawn.BLACK);
         scorePlayer2 = game.getScore(ColorPawn.WHITE);
         updateInit = false;
@@ -317,7 +312,6 @@ public class OthelloModel implements Observable {
         updateProblemPass = false;
         updateAskName = false;
         updatePass = false;
-        updateTypeGame = false;
         updateChangePlayer = false;
         notifyObservers();
     }
@@ -327,7 +321,7 @@ public class OthelloModel implements Observable {
      * version).
      *
      */
-    public void turnPassed() {
+    public synchronized void turnPassed() {
         turnPassed = game.isTurnPassed(game.getCurrentPlayer());
         if (turnPassed) {
             game.changePlayer();
@@ -347,7 +341,6 @@ public class OthelloModel implements Observable {
         updateProblemPass = false;
         updateAskName = false;
         updatePass = false;
-        updateTypeGame = false;
         updateChangePlayer = true;
         notifyObservers();
     }
@@ -357,7 +350,7 @@ public class OthelloModel implements Observable {
      *
      * @param aBool indicating if the IA is playing against a player or not.
      */
-    public void turnPassedFX(boolean aBool) {
+    public synchronized void turnPassedFX(boolean aBool) {
         isIA = aBool;
         turnPassed = game.isTurnPassed(game.getCurrentPlayer());
         updateInit = false;
@@ -375,7 +368,6 @@ public class OthelloModel implements Observable {
         updateProblemPass = false;
         updateAskName = false;
         updatePass = false;
-        updateTypeGame = false;
         updateChangePlayer = false;
         notifyObservers();
     }
@@ -466,7 +458,7 @@ public class OthelloModel implements Observable {
      * Throws an error if an error occured when the player entered a wrong
      * coordinates.
      */
-    public void throwCoordinatesError() {
+    public synchronized void throwCoordinatesError() {
         updateInit = false;
         updateScore = false;
         updatePlay = false;
@@ -482,7 +474,6 @@ public class OthelloModel implements Observable {
         updateProblemPass = false;
         updateAskName = false;
         updatePass = false;
-        updateTypeGame = false;
         updateChangePlayer = false;
         notifyObservers();
     }
@@ -491,7 +482,7 @@ public class OthelloModel implements Observable {
      * Throws an error if an error occured when the player entered a wrong
      * command line.
      */
-    public void throwCommandsError() {
+    public synchronized void throwCommandsError() {
         updateInit = false;
         updateScore = false;
         updatePlay = false;
@@ -507,7 +498,6 @@ public class OthelloModel implements Observable {
         updateProblemPass = false;
         updateAskName = false;
         updatePass = false;
-        updateTypeGame = false;
         updateChangePlayer = false;
         notifyObservers();
     }
@@ -566,7 +556,7 @@ public class OthelloModel implements Observable {
      *
      * @param coord the coordinates of the case the mouse has entered in.
      */
-    public void mouseOverEnter(Coordinates coord) {
+    public synchronized void mouseOverEnter(Coordinates coord) {
         game.updatePossibleMove(game.getCurrentColor());
         isPossibleCase = game.getPossibleMove().contains(coord);
         coordX = coord.getX();
@@ -586,7 +576,6 @@ public class OthelloModel implements Observable {
         updateProblemPass = false;
         updateAskName = false;
         updatePass = false;
-        updateTypeGame = false;
         updateChangePlayer = false;
         notifyObservers();
     }
@@ -632,8 +621,10 @@ public class OthelloModel implements Observable {
      *
      * @param aCoordinate the coordinate of the case the wall is to be put.
      * @param namePlayer the name of the current player.
+     * @throws esi.atlg3.g43320.othello.model.GameException if the game status
+     * is not the right one.
      */
-    public void wall(Coordinates aCoordinate, String namePlayer) throws GameException {
+    public synchronized void wall(Coordinates aCoordinate, String namePlayer) throws GameException {
         isWallValid = game.putWall(aCoordinate);
         if (isWallValid) {
             game.changePlayer();
@@ -657,7 +648,6 @@ public class OthelloModel implements Observable {
         updateProblemPass = false;
         updateAskName = false;
         updatePass = false;
-        updateTypeGame = false;
         updateChangePlayer = true;
         notifyObservers();
     }
@@ -685,7 +675,7 @@ public class OthelloModel implements Observable {
     /**
      * Change the current player.
      */
-    public void changePlayer() {
+    public synchronized void changePlayer() {
         game.changePlayer();
         updateInit = false;
         updateScore = false;
@@ -702,7 +692,6 @@ public class OthelloModel implements Observable {
         updateProblemPass = false;
         updateAskName = false;
         updatePass = false;
-        updateTypeGame = false;
         updateChangePlayer = true;
     }
 
@@ -718,7 +707,7 @@ public class OthelloModel implements Observable {
     /**
      * Confirms an action.
      */
-    public void confirm() {
+    public synchronized void confirm() {
         updateInit = false;
         updateScore = false;
         updatePlay = false;
@@ -734,7 +723,6 @@ public class OthelloModel implements Observable {
         updateProblemPass = false;
         updateAskName = false;
         updatePass = false;
-        updateTypeGame = false;
         updateChangePlayer = false;
         notifyObservers();
     }
@@ -753,7 +741,7 @@ public class OthelloModel implements Observable {
     /**
      * States that the player has given up.
      */
-    public void giveUp() {
+    public synchronized void giveUp() {
         updateInit = false;
         updateScore = false;
         updatePlay = false;
@@ -769,7 +757,6 @@ public class OthelloModel implements Observable {
         updateProblemPass = false;
         updateAskName = false;
         updatePass = false;
-        updateTypeGame = false;
         updateChangePlayer = false;
         notifyObservers();
     }
@@ -788,7 +775,7 @@ public class OthelloModel implements Observable {
     /**
      * States that a player can't pass its turn even if he wants to.
      */
-    public void problemPass() {
+    public synchronized void problemPass() {
         updateInit = false;
         updateScore = false;
         updatePlay = false;
@@ -804,7 +791,6 @@ public class OthelloModel implements Observable {
         updateProblemPass = true;
         updateAskName = false;
         updatePass = false;
-        updateTypeGame = false;
         updateChangePlayer = false;
         notifyObservers();
     }
@@ -843,7 +829,7 @@ public class OthelloModel implements Observable {
      *
      * @return the color of the current player.
      */
-    public ColorPawn getCurrentColor() {
+    public synchronized ColorPawn getCurrentColor() {
         return game.getCurrentPlayer().getColor();
     }
 
@@ -861,9 +847,20 @@ public class OthelloModel implements Observable {
      * @param wallChosenOverPass a boolean indicating that the player has chosen
      * to play a wall when he had to pass his turn.
      * @param iaChosen a boolean indicating if the IA is playing.
+     * @throws esi.atlg3.g43320.othello.model.GameException if the game status
+     * is not the right one.
      */
-    public void playATurn(boolean primaryKeyPressed, Coordinates coord,
+    public synchronized void playATurn(boolean primaryKeyPressed, Coordinates coord,
             String name1, String name2, boolean wallChosenOverPass, boolean iaChosen) throws GameException {
+//        if (onlyComputers) {
+//            game.getPlayers().get(0).setStrategy(new IARandomStrategy(this));
+//            game.getPlayers().get(1).setStrategy(new IARandomStrategy(this));
+//            playOnlyComputers(game.getCurrentPlayer(), name1);
+//        } else {
+
+        if (iaChosen) {
+            game.getPlayers().get(1).setStrategy(new IARandomStrategy(this));
+        }
         turnPassedFX(iaChosen);
         if (isTurnPassed()) {
             if (!wallChosenOverPass) {
@@ -873,20 +870,16 @@ public class OthelloModel implements Observable {
                     pass(name2);
                 }
                 changePlayer();
-                checkGameOver(name1, iaChosen);
-                if (iaChosen) {
-                    strategy.play(name1);
-                }
+                checkGameOver(name1);
+                game.getCurrentPlayer().runStrategy(name1);
             } else {
                 if (getCurrentColor() == ColorPawn.BLACK) {
                     wall(coord, name1);
                 } else {
                     wall(coord, name2);
                 }
-                checkGameOver(name1, iaChosen);
-                if (iaChosen) {
-                    strategy.play(name1);
-                }
+                checkGameOver(name1);
+                game.getCurrentPlayer().runStrategy(name1);
             }
         } else {
             if (primaryKeyPressed) {
@@ -895,23 +888,19 @@ public class OthelloModel implements Observable {
                 } else {
                     play(coord, name2);
                 }
-                checkGameOver(name1, iaChosen);
-                if (iaChosen) {
-                    strategy.play(name1);
-                }
+                checkGameOver(name1);
+                game.getPlayers().get(1).runStrategy(name1);
             } else {
                 if (getGame().getCurrentColor() == ColorPawn.BLACK) {
                     wall(coord, name1);
                 } else {
                     wall(coord, name2);
                 }
-                checkGameOver(name1, iaChosen);
-                if (iaChosen) {
-                    strategy.play(name1);
-                }
+                checkGameOver(name1);
+                game.getCurrentPlayer().runStrategy(name1);
             }
         }
-
+        //}
     }
 
     /**
@@ -920,12 +909,12 @@ public class OthelloModel implements Observable {
      * name of the players.
      *
      * @param name1 the name of the first player.
-     * @param bool a boolean indicating if an IA is playing.
+     * @throws esi.atlg3.g43320.othello.model.GameException if the game status
+     * is not the right one.
      */
-    public void checkGameOver(String name1, boolean bool) throws GameException {
+    public synchronized void checkGameOver(String name1) throws GameException {
         if (isOver()) {
             endOfGame();
-            askTypeGame();
             askName();
             init(name1);
         }
@@ -935,10 +924,8 @@ public class OthelloModel implements Observable {
      * Asks the players to enter their names. If the IA is playing, its name
      * will always be "IA".
      *
-     * @param aBool a boolean indicating if the IA is playing.
      */
-    public void askName(){
-        //isIAChosen = aBool;
+    public synchronized void askName() {
         updateInit = false;
         updateScore = false;
         updatePlay = false;
@@ -954,19 +941,9 @@ public class OthelloModel implements Observable {
         updateProblemPass = false;
         updateAskName = true;
         updatePass = false;
-        updateTypeGame = false;
         updateChangePlayer = false;
         game.setStatus(GameStatus.INIT);
         notifyObservers();
-    }
-
-    /**
-     * Returns a boolean indicating if an IA is playing.
-     *
-     * @return a boolean indicating if an IA is playing.
-     */
-    public boolean isIsIAChosen() {
-        return isIAChosen;
     }
 
     /**
@@ -981,47 +958,12 @@ public class OthelloModel implements Observable {
     }
 
     /**
-     * Asks the type of game to be played (human vs human or human vs IA).
-     */
-    public void askTypeGame() {
-        updateInit = false;
-        updateScore = false;
-        updatePlay = false;
-        updateShow = false;
-        updateTurnPassed = false;
-        updateEndOfGame = false;
-        updateCommandsError = false;
-        updateCoordinatesError = false;
-        updateMouseOver = false;
-        updateWall = false;
-        updateConfirm = false;
-        updateGiveUp = false;
-        updateProblemPass = false;
-        updateAskName = false;
-        updatePass = false;
-        updateTypeGame = true;
-        updateChangePlayer = false;
-        notifyObservers();
-    }
-
-    /**
-     * Returns a boolean indicating that the game must be updated following the
-     * choosing of the type of game.
-     *
-     * @return a boolean indicating that the game must be updated following the
-     * choosing of the type of game.
-     */
-    public boolean isUpdateTypeGame() {
-        return updateTypeGame;
-    }
-
-    /**
      * Indicating the frame of history of moves has to be updated following the
      * decision of a player to pass.
      *
      * @param name the name of the player that passes his turn.
      */
-    public void pass(String name) {
+    public synchronized void pass(String name) {
         updateInit = false;
         updateScore = false;
         updatePlay = false;
@@ -1041,7 +983,6 @@ public class OthelloModel implements Observable {
         moveAction = "Passe son tour";
         movePos = "/";
         moveTaken = "/";
-        updateTypeGame = false;
         updateChangePlayer = false;
         notifyObservers();
     }
@@ -1139,6 +1080,8 @@ public class OthelloModel implements Observable {
      *
      * @param c the coordinates of the case.
      * @return true if the pawn could be put properly, false otherwise.
+     * @throws esi.atlg3.g43320.othello.model.GameException if the game status
+     * is not the right one.
      */
     public boolean putPawn(Coordinates c) throws GameException {
         return game.putPawn(c, ColorPawn.WHITE);
@@ -1155,4 +1098,42 @@ public class OthelloModel implements Observable {
         return game.getNbPawnsToBeTurned();
     }
 
+    /**
+     * Get the list of all the pawn to be turned after one player has played.
+     * @return the list of all the pawn to be turned after one player has played.
+     */
+    public List<List<Coordinates>> getPawnsToBeTurned() {
+        return Collections.unmodifiableList(game.getPawnsToBeTurned());
+    }
+
+    /**
+     * Change the color of the pawn won by a player after its move.
+     */
+    public synchronized void changeColorPawn() {
+        game.changeColorPawn();
+        updateInit = false;
+        updateScore = false;
+        updatePlay = false;
+        updateShow = false;
+        updateTurnPassed = false;
+        updateEndOfGame = false;
+        updateCommandsError = false;
+        updateCoordinatesError = false;
+        updateMouseOver = false;
+        updateWall = false;
+        updateConfirm = false;
+        updateGiveUp = false;
+        updateProblemPass = false;
+        updateAskName = false;
+        updatePass = false;
+        updateChangePlayer = false;
+        notifyObservers();
+    }
+
+    private void playOnlyComputers(Player currentPlayer, String name) throws GameException {
+        while (!isOver()) {
+            currentPlayer.runStrategy(name);
+        }
+        checkGameOver(name);
+    }
 }
