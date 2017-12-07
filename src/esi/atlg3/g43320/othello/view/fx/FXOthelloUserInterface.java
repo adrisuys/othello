@@ -141,6 +141,8 @@ public class FXOthelloUserInterface extends Application {
                 othello.giveUp();
                 othello.setINITStatus();
                 primaryStage.setScene(sceneStart);
+                start.cleanTxtField();
+                start.getHumVShum().setSelected(true);
             }
         });
 
@@ -150,6 +152,8 @@ public class FXOthelloUserInterface extends Application {
             if (view.hasConfirm()) {
                 othello.setINITStatus();
                 primaryStage.setScene(sceneStart);
+                start.cleanTxtField();
+                start.getHumVShum().setSelected(true);
             }
         });
 

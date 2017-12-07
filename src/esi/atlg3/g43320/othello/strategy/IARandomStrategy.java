@@ -5,12 +5,9 @@
  */
 package esi.atlg3.g43320.othello.strategy;
 
-import esi.atlg3.g43320.othello.model.ColorPawn;
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.GameException;
 import esi.atlg3.g43320.othello.model.GameModel;
-import javafx.animation.PauseTransition;
-import javafx.util.Duration;
 
 /**
  * This class represents the following strategy : the IA will chose a random
@@ -42,17 +39,19 @@ public class IARandomStrategy implements Strategy {
 
     @Override
     public void execute() {
-        othello.turnPassedFX(true);
-        if (othello.isTurnPassed()) {
-            othello.pass(othello.getCurrentPlayer().getName());
-        } else {
-            othello.updatePossibleMove(othello.getCurrentColor());
-            int nbPossibleMove = othello.getPossibleMove().size();
-            int random = (int) (Math.random() * nbPossibleMove);
-            Coordinates playedCoord = othello.getPossibleMove().get(random);
-            try {
-                othello.play(playedCoord, othello.getCurrentPlayer().getName());
-            } catch (GameException ex) {
+        synchronized (othello) {
+            othello.turnPassedFX(true);
+            if (othello.isTurnPassed()) {
+                othello.pass(othello.getCurrentPlayer().getName());
+            } else {
+                othello.updatePossibleMove(othello.getCurrentColor());
+                int nbPossibleMove = othello.getPossibleMove().size();
+                int random = (int) (Math.random() * nbPossibleMove);
+                Coordinates playedCoord = othello.getPossibleMove().get(random);
+                try {
+                    othello.play(playedCoord, othello.getCurrentPlayer().getName());
+                } catch (GameException ex) {
+                }
             }
         }
     }

@@ -8,9 +8,14 @@ package esi.atlg3.g43320.othello.model;
 import esi.atlg3.g43320.othello.dpObs.Observable;
 import esi.atlg3.g43320.othello.dpObs.Observer;
 import esi.atlg3.g43320.othello.strategy.IARandomStrategy;
+import esi.atlg3.g43320.othello.view.fx.FXOthelloView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 
 /**
  * This class is the model of the Game, it implements Observable.
@@ -49,7 +54,6 @@ public class GameModel implements Observable {
     private boolean updateConfirm;
     private boolean updateGiveUp;
     private boolean updateProblemPass;
-    private boolean updateAskName;
     private boolean updatePass;
     private boolean updateChangePlayer;
 
@@ -111,15 +115,15 @@ public class GameModel implements Observable {
      * @throws esi.atlg3.g43320.othello.model.GameException if the game status
      * is not the right one.
      */
-    public void play(Coordinates aCoordinate, String namePlayer) throws GameException {
-        game.updatePossibleMove(game.getCurrentColor());
-        if (!game.getPossibleMove().contains(aCoordinate)) {
+    public synchronized void play(Coordinates aCoordinate, String namePlayer) throws GameException {
+        updatePossibleMove(getCurrentColor());
+        if (!getPossibleMove().contains(aCoordinate)) {
             validPlay = false;
         } else {
             validPlay = true;
-            game.putPawn(aCoordinate, game.getCurrentColor());
+            game.putPawn(aCoordinate, getCurrentColor());
             game.changeColorPawn();
-            game.changePlayer();
+            changePlayer();
         }
         scorePlayer1 = game.getScore(ColorPawn.BLACK);
         scorePlayer2 = game.getScore(ColorPawn.WHITE);
@@ -140,7 +144,6 @@ public class GameModel implements Observable {
         updateConfirm = false;
         updateGiveUp = false;
         updateProblemPass = false;
-        updateAskName = false;
         updatePass = false;
         updateChangePlayer = true;
         game.updatePossibleMove(game.getCurrentColor());
@@ -152,7 +155,7 @@ public class GameModel implements Observable {
      * observers.
      *
      */
-    public void score() {
+    public synchronized void score() {
         scorePlayer1 = game.getScore(ColorPawn.BLACK);
         scorePlayer2 = game.getScore(ColorPawn.WHITE);
         updateInit = false;
@@ -168,7 +171,6 @@ public class GameModel implements Observable {
         updateConfirm = false;
         updateGiveUp = false;
         updateProblemPass = false;
-        updateAskName = false;
         updatePass = false;
         updateChangePlayer = false;
         notifyObservers();
@@ -179,7 +181,7 @@ public class GameModel implements Observable {
      * observers.
      *
      */
-    public void show() {
+    public synchronized void show() {
         updateInit = false;
         updateScore = false;
         updatePlay = false;
@@ -193,7 +195,6 @@ public class GameModel implements Observable {
         updateConfirm = false;
         updateGiveUp = false;
         updateProblemPass = false;
-        updateAskName = false;
         updatePass = false;
         updateChangePlayer = false;
         game.updatePossibleMove(game.getCurrentColor());
@@ -208,7 +209,7 @@ public class GameModel implements Observable {
      * @throws esi.atlg3.g43320.othello.model.GameException if the game status
      * is not the right one.
      */
-    public void init(String name2, String name3) throws GameException {
+    public synchronized void init(String name2, String name3) throws GameException {
         if (game.getStatus() != GameStatus.INIT) {
             throw new GameException("Status error : game has to be initialize now");
         }
@@ -239,7 +240,6 @@ public class GameModel implements Observable {
         updateConfirm = false;
         updateGiveUp = false;
         updateProblemPass = false;
-        updateAskName = false;
         updatePass = false;
         updateChangePlayer = true;
         game.updatePossibleMove(game.getCurrentColor());
@@ -251,7 +251,7 @@ public class GameModel implements Observable {
      *
      * @return the game.
      */
-    public Game getGame() {
+    public synchronized Game getGame() {
         return new Game(game);
     }
 
@@ -260,7 +260,7 @@ public class GameModel implements Observable {
      *
      * @return the score of the player that has the black pawns.
      */
-    public int getScorePlayer1() {
+    public synchronized int getScorePlayer1() {
         return scorePlayer1;
     }
 
@@ -269,7 +269,7 @@ public class GameModel implements Observable {
      *
      * @return the score of the player that has the white pawns.
      */
-    public int getScorePlayer2() {
+    public synchronized int getScorePlayer2() {
         return scorePlayer2;
     }
 
@@ -280,7 +280,7 @@ public class GameModel implements Observable {
      * @return a boolean indicating if the play happened correctly (if the
      * player has been able to put a pawn on the board).
      */
-    public boolean isValidPlay() {
+    public synchronized boolean isValidPlay() {
         return validPlay;
     }
 
@@ -289,7 +289,7 @@ public class GameModel implements Observable {
      *
      * @return a boolean indicating if the player's turn has been passed.s
      */
-    public boolean isTurnPassed() {
+    public synchronized boolean isTurnPassed() {
         return turnPassed;
     }
 
@@ -297,7 +297,7 @@ public class GameModel implements Observable {
      * End the game by telling who the winner is.
      *
      */
-    public void endOfGame() {
+    public synchronized void endOfGame() {
         scorePlayer1 = game.getScore(ColorPawn.BLACK);
         scorePlayer2 = game.getScore(ColorPawn.WHITE);
         updateInit = false;
@@ -313,38 +313,8 @@ public class GameModel implements Observable {
         updateConfirm = false;
         updateGiveUp = false;
         updateProblemPass = false;
-        updateAskName = false;
         updatePass = false;
         updateChangePlayer = false;
-        notifyObservers();
-    }
-
-    /**
-     * If a player's turn is passed, it changes the current player (terminal
-     * version).
-     *
-     */
-    public void turnPassed() {
-        turnPassed = game.isTurnPassed(game.getCurrentPlayer());
-        if (turnPassed) {
-            game.changePlayer();
-        }
-        updateInit = false;
-        updateScore = false;
-        updatePlay = false;
-        updateShow = false;
-        updateTurnPassed = true;
-        updateEndOfGame = false;
-        updateCommandsError = false;
-        updateCoordinatesError = false;
-        updateMouseOver = false;
-        updateWall = false;
-        updateConfirm = false;
-        updateGiveUp = false;
-        updateProblemPass = false;
-        updateAskName = false;
-        updatePass = false;
-        updateChangePlayer = true;
         notifyObservers();
     }
 
@@ -353,7 +323,7 @@ public class GameModel implements Observable {
      *
      * @param aBool indicating if the IA is playing against a player or not.
      */
-    public void turnPassedFX(boolean aBool) {
+    public synchronized void turnPassedFX(boolean aBool) {
         isIA = aBool;
         turnPassed = game.isTurnPassed(game.getCurrentPlayer());
         updateInit = false;
@@ -369,7 +339,6 @@ public class GameModel implements Observable {
         updateConfirm = false;
         updateGiveUp = false;
         updateProblemPass = false;
-        updateAskName = false;
         updatePass = false;
         updateChangePlayer = false;
         notifyObservers();
@@ -382,7 +351,7 @@ public class GameModel implements Observable {
      * @return a boolean indicating that the display of the game must be updated
      * after a player has played.
      */
-    public boolean isUpdatePlay() {
+    public synchronized boolean isUpdatePlay() {
         return updatePlay;
     }
 
@@ -391,7 +360,7 @@ public class GameModel implements Observable {
      *
      * @return a boolean indicating that the score must be updated.
      */
-    public boolean isUpdateScore() {
+    public synchronized boolean isUpdateScore() {
         return updateScore;
     }
 
@@ -400,7 +369,7 @@ public class GameModel implements Observable {
      *
      * @return a boolean indicating that the board must be updated.
      */
-    public boolean isUpdateShow() {
+    public synchronized boolean isUpdateShow() {
         return updateShow;
     }
 
@@ -411,7 +380,7 @@ public class GameModel implements Observable {
      * @return a boolean indicating that the display of the game must be updated
      * after an initialization.
      */
-    public boolean isUpdateInit() {
+    public synchronized boolean isUpdateInit() {
         return updateInit;
     }
 
@@ -422,7 +391,7 @@ public class GameModel implements Observable {
      * @return a boolean indicating that the game must be updated after a player
      * has passed its turn.
      */
-    public boolean isUpdateTurnPassed() {
+    public synchronized boolean isUpdateTurnPassed() {
         return updateTurnPassed;
     }
 
@@ -431,7 +400,7 @@ public class GameModel implements Observable {
      *
      * @return a boolean indicating that the game must be updated it has ended.
      */
-    public boolean isUpdateEndOfGame() {
+    public synchronized boolean isUpdateEndOfGame() {
         return updateEndOfGame;
     }
 
@@ -442,7 +411,7 @@ public class GameModel implements Observable {
      * @return a boolean indicating that the game must be updated after an error
      * occured when a player choose coordinates for its pawn to be put.
      */
-    public boolean isUpdateCoordinatesError() {
+    public synchronized boolean isUpdateCoordinatesError() {
         return updateCoordinatesError;
     }
 
@@ -453,7 +422,7 @@ public class GameModel implements Observable {
      * @return a boolean indicating that the game must be updated after an error
      * occured when a player entered a command.
      */
-    public boolean isUpdateCommandsError() {
+    public synchronized boolean isUpdateCommandsError() {
         return updateCommandsError;
     }
 
@@ -461,7 +430,7 @@ public class GameModel implements Observable {
      * Throws an error if an error occured when the player entered a wrong
      * coordinates.
      */
-    public void throwCoordinatesError() {
+    public synchronized void throwCoordinatesError() {
         updateInit = false;
         updateScore = false;
         updatePlay = false;
@@ -475,7 +444,6 @@ public class GameModel implements Observable {
         updateConfirm = false;
         updateGiveUp = false;
         updateProblemPass = false;
-        updateAskName = false;
         updatePass = false;
         updateChangePlayer = false;
         notifyObservers();
@@ -485,7 +453,7 @@ public class GameModel implements Observable {
      * Throws an error if an error occured when the player entered a wrong
      * command line.
      */
-    public void throwCommandsError() {
+    public synchronized void throwCommandsError() {
         updateInit = false;
         updateScore = false;
         updatePlay = false;
@@ -499,7 +467,6 @@ public class GameModel implements Observable {
         updateConfirm = false;
         updateGiveUp = false;
         updateProblemPass = false;
-        updateAskName = false;
         updatePass = false;
         updateChangePlayer = false;
         notifyObservers();
@@ -510,7 +477,7 @@ public class GameModel implements Observable {
      *
      * @return a boolean indicating if the game is over.
      */
-    public boolean isOver() {
+    public synchronized boolean isOver() {
         return game.isOver();
     }
 
@@ -520,7 +487,7 @@ public class GameModel implements Observable {
      *
      * @return the name of the current player
      */
-    public String getMoveName() {
+    public synchronized String getMoveName() {
         return moveName;
     }
 
@@ -530,7 +497,7 @@ public class GameModel implements Observable {
      *
      * @return the action the current player just did.
      */
-    public String getMoveAction() {
+    public synchronized String getMoveAction() {
         return moveAction;
     }
 
@@ -540,7 +507,7 @@ public class GameModel implements Observable {
      *
      * @return the position at which the current player played.
      */
-    public String getMovePos() {
+    public synchronized String getMovePos() {
         return movePos;
     }
 
@@ -550,7 +517,7 @@ public class GameModel implements Observable {
      *
      * @return the number of pawn the player has taken by playing.
      */
-    public String getMoveTaken() {
+    public synchronized String getMoveTaken() {
         return moveTaken;
     }
 
@@ -559,7 +526,7 @@ public class GameModel implements Observable {
      *
      * @param coord the coordinates of the case the mouse has entered in.
      */
-    public void mouseOverEnter(Coordinates coord) {
+    public synchronized void mouseOverEnter(Coordinates coord) {
         game.updatePossibleMove(game.getCurrentColor());
         isPossibleCase = game.getPossibleMove().contains(coord);
         coordX = coord.getX();
@@ -577,7 +544,6 @@ public class GameModel implements Observable {
         updateConfirm = false;
         updateGiveUp = false;
         updateProblemPass = false;
-        updateAskName = false;
         updatePass = false;
         updateChangePlayer = false;
         notifyObservers();
@@ -588,7 +554,7 @@ public class GameModel implements Observable {
      *
      * @return a boolean inidicating if it is possible to play a pawn in a case.
      */
-    public boolean isPossibleCase() {
+    public synchronized boolean isPossibleCase() {
         return isPossibleCase;
     }
 
@@ -597,7 +563,7 @@ public class GameModel implements Observable {
      *
      * @return the absissa of a coordinate.
      */
-    public int getCoordX() {
+    public synchronized int getCoordX() {
         return coordX;
     }
 
@@ -606,7 +572,7 @@ public class GameModel implements Observable {
      *
      * @return the ordinate of a coordinate.
      */
-    public int getCoordY() {
+    public synchronized int getCoordY() {
         return coordY;
     }
 
@@ -615,7 +581,7 @@ public class GameModel implements Observable {
      *
      * @return a boolean indicating if the mouse is over a case.
      */
-    public boolean isUpdateMouseOver() {
+    public synchronized boolean isUpdateMouseOver() {
         return updateMouseOver;
     }
 
@@ -627,7 +593,7 @@ public class GameModel implements Observable {
      * @throws esi.atlg3.g43320.othello.model.GameException if the game status
      * is not the right one.
      */
-    private void wall(Coordinates aCoordinate, String namePlayer) throws GameException {
+    private synchronized void wall(Coordinates aCoordinate, String namePlayer) throws GameException {
         isWallValid = game.putWall(aCoordinate);
         if (isWallValid) {
             game.changePlayer();
@@ -649,7 +615,6 @@ public class GameModel implements Observable {
         updateConfirm = false;
         updateGiveUp = false;
         updateProblemPass = false;
-        updateAskName = false;
         updatePass = false;
         updateChangePlayer = true;
         notifyObservers();
@@ -660,7 +625,7 @@ public class GameModel implements Observable {
      *
      * @return a boolean indicating if a wall has been put correctly.
      */
-    public boolean isWallValid() {
+    public synchronized boolean isWallValid() {
         return isWallValid;
     }
 
@@ -671,31 +636,15 @@ public class GameModel implements Observable {
      * @return a boolean indicating if the game has to be updated following the
      * setting of a wall.
      */
-    public boolean isUpdateWall() {
+    public synchronized boolean isUpdateWall() {
         return updateWall;
     }
 
     /**
      * Change the current player.
      */
-    public void changePlayer() {
+    public synchronized void changePlayer() {
         game.changePlayer();
-        updateInit = false;
-        updateScore = false;
-        updatePlay = false;
-        updateShow = false;
-        updateTurnPassed = false;
-        updateEndOfGame = false;
-        updateCommandsError = false;
-        updateCoordinatesError = false;
-        updateMouseOver = false;
-        updateWall = false;
-        updateConfirm = false;
-        updateGiveUp = false;
-        updateProblemPass = false;
-        updateAskName = false;
-        updatePass = false;
-        updateChangePlayer = true;
     }
 
     /**
@@ -703,14 +652,14 @@ public class GameModel implements Observable {
      *
      * @return the number of occupied case of the board.
      */
-    public int getNbPawnsOnBoard() {
+    public synchronized int getNbPawnsOnBoard() {
         return game.nbCaseOccupied();
     }
 
     /**
      * Confirms an action.
      */
-    public void confirm() {
+    public synchronized void confirm() {
         updateInit = false;
         updateScore = false;
         updatePlay = false;
@@ -724,7 +673,6 @@ public class GameModel implements Observable {
         updateConfirm = true;
         updateGiveUp = false;
         updateProblemPass = false;
-        updateAskName = false;
         updatePass = false;
         updateChangePlayer = false;
         notifyObservers();
@@ -737,14 +685,14 @@ public class GameModel implements Observable {
      * @return a boolean indicating if the game has to be updated following the
      * confirmation of an action.
      */
-    public boolean isUpdateConfirm() {
+    public synchronized boolean isUpdateConfirm() {
         return updateConfirm;
     }
 
     /**
      * States that the player has given up.
      */
-    public void giveUp() {
+    public synchronized void giveUp() {
         updateInit = false;
         updateScore = false;
         updatePlay = false;
@@ -758,7 +706,6 @@ public class GameModel implements Observable {
         updateConfirm = false;
         updateGiveUp = true;
         updateProblemPass = false;
-        updateAskName = false;
         updatePass = false;
         updateChangePlayer = false;
         notifyObservers();
@@ -771,14 +718,14 @@ public class GameModel implements Observable {
      * @return a boolean indicating if the game has to be updated following the
      * abandonment of a player.
      */
-    public boolean isUpdateGiveUp() {
+    public synchronized boolean isUpdateGiveUp() {
         return updateGiveUp;
     }
 
     /**
      * States that a player can't pass its turn even if he wants to.
      */
-    public void problemPass() {
+    public synchronized void problemPass() {
         updateInit = false;
         updateScore = false;
         updatePlay = false;
@@ -792,7 +739,6 @@ public class GameModel implements Observable {
         updateConfirm = false;
         updateGiveUp = false;
         updateProblemPass = true;
-        updateAskName = false;
         updatePass = false;
         updateChangePlayer = false;
         notifyObservers();
@@ -805,25 +751,18 @@ public class GameModel implements Observable {
      * @return a boolean indicating if the game has to be updated following the
      * will of a player to pass.
      */
-    public boolean isUpdateProblemPass() {
+    public synchronized boolean isUpdateProblemPass() {
         return updateProblemPass;
     }
 
-    /**
-     * Returns the board of the game.
-     *
-     * @return the board of the game.
-     */
-    public Board getBoard() {
-        return new Board(game.getBoard());
-    }
+    
 
     /**
      * Returns the list of all the possible moves.
      *
      * @return the list of all the possible moves.
      */
-    public List<Coordinates> getPossibleMove() {
+    public synchronized List<Coordinates> getPossibleMove() {
         return Collections.unmodifiableList(game.getPossibleMove());
     }
 
@@ -832,7 +771,7 @@ public class GameModel implements Observable {
      *
      * @return the color of the current player.
      */
-    public ColorPawn getCurrentColor() {
+    public synchronized ColorPawn getCurrentColor() {
         return game.getCurrentPlayer().getColor();
     }
 
@@ -853,7 +792,7 @@ public class GameModel implements Observable {
      * @throws esi.atlg3.g43320.othello.model.GameException if the game status
      * is not the right one.
      */
-    public void playATurn(boolean primaryKeyPressed, Coordinates coord,
+    public synchronized void playATurn(boolean primaryKeyPressed, Coordinates coord,
             String name1, String name2, boolean wallChosenOverPass, boolean iaChosen) throws GameException {
         if (iaChosen) {
             game.getPlayers().get(1).setStrategy(new IARandomStrategy(this));
@@ -863,25 +802,33 @@ public class GameModel implements Observable {
             if (!wallChosenOverPass) {
                 pass(getCurrentPlayer().getName());
                 checkGameOver();
-                game.getCurrentPlayer().runStrategy();
-                if (iaChosen){checkGameOver();}
+                runStrategy();
+                if (iaChosen) {
+                    checkGameOver();
+                }
             } else {
                 wall(coord, getCurrentPlayer().getName());
                 checkGameOver();
-                game.getCurrentPlayer().runStrategy();
-                if (iaChosen){checkGameOver();}
+                runStrategy();
+                if (iaChosen) {
+                    checkGameOver();
+                }
             }
         } else {
             if (primaryKeyPressed) {
-                play (coord, getCurrentPlayer().getName());
+                play(coord, getCurrentPlayer().getName());
                 checkGameOver();
-                game.getCurrentPlayer().runStrategy();
-                if (iaChosen){checkGameOver();}
+                runStrategy();
+                if (iaChosen) {
+                    checkGameOver();
+                }
             } else {
                 wall(coord, getCurrentPlayer().getName());
                 checkGameOver();
-                game.getCurrentPlayer().runStrategy();
-                if (iaChosen){checkGameOver();}
+                runStrategy();
+                if (iaChosen) {
+                    checkGameOver();
+                }
             }
         }
     }
@@ -894,7 +841,7 @@ public class GameModel implements Observable {
      * @throws esi.atlg3.g43320.othello.model.GameException if the game status
      * is not the right one.
      */
-    public void checkGameOver() throws GameException {
+    public synchronized void checkGameOver() throws GameException {
         if (isOver()) {
             endOfGame();
         }
@@ -905,7 +852,7 @@ public class GameModel implements Observable {
      * will always be "IA".
      *
      */
-    public void askName() {
+    public synchronized void askName() {
         updateInit = false;
         updateScore = false;
         updatePlay = false;
@@ -919,22 +866,10 @@ public class GameModel implements Observable {
         updateConfirm = false;
         updateGiveUp = false;
         updateProblemPass = false;
-        updateAskName = true;
         updatePass = false;
         updateChangePlayer = false;
         game.setStatus(GameStatus.INIT);
         notifyObservers();
-    }
-
-    /**
-     * Returns a boolean indicating the the game must be updated following the
-     * choosing of the names of the players.
-     *
-     * @return a boolean indicating the the game must be updated following the
-     * choosing of the names of the players.
-     */
-    public boolean isUpdateAskName() {
-        return updateAskName;
     }
 
     /**
@@ -943,7 +878,7 @@ public class GameModel implements Observable {
      *
      * @param name the name of the player that passes his turn.
      */
-    public void pass(String name) {
+    public synchronized void pass(String name) {
         updateInit = false;
         updateScore = false;
         updatePlay = false;
@@ -957,7 +892,6 @@ public class GameModel implements Observable {
         updateConfirm = false;
         updateGiveUp = false;
         updateProblemPass = false;
-        updateAskName = false;
         updatePass = true;
         moveName = name;
         moveAction = "Passe son tour";
@@ -975,7 +909,7 @@ public class GameModel implements Observable {
      * @return a boolean indicating that the game must be updated following the
      * passing of a player.
      */
-    public boolean isUpdatePass() {
+    public synchronized boolean isUpdatePass() {
         return updatePass;
     }
 
@@ -985,7 +919,7 @@ public class GameModel implements Observable {
      * @param c the coordinate of the case.
      * @return the pawn on that coordinate.
      */
-    public int getPawn(Coordinates c) {
+    public synchronized int getPawn(Coordinates c) {
         return game.getBoard().getPawn(c);
     }
 
@@ -994,7 +928,7 @@ public class GameModel implements Observable {
      *
      * @return the number of row of the boardgame.
      */
-    public int getROW() {
+    public synchronized int getROW() {
         return game.getBoard().getROW();
     }
 
@@ -1003,7 +937,7 @@ public class GameModel implements Observable {
      *
      * @return the number of columns of the boardgame.
      */
-    public int getCOL() {
+    public synchronized int getCOL() {
         return game.getBoard().getCOL();
     }
 
@@ -1012,7 +946,7 @@ public class GameModel implements Observable {
      *
      * @return the array of int representing the boardgame.
      */
-    public int[][] getCheckerboard() {
+    public synchronized int[][] getCheckerboard() {
         return game.getBoard().getCheckerboard();
     }
 
@@ -1021,7 +955,7 @@ public class GameModel implements Observable {
      *
      * @return a boolean indicating if an IA is playing.
      */
-    public boolean isIsIA() {
+    public synchronized boolean isIsIA() {
         return isIA;
     }
 
@@ -1031,7 +965,7 @@ public class GameModel implements Observable {
      *
      * @param color the color of the player.
      */
-    public void updatePossibleMove(ColorPawn color) {
+    public synchronized void updatePossibleMove(ColorPawn color) {
         game.updatePossibleMove(color);
     }
 
@@ -1042,7 +976,7 @@ public class GameModel implements Observable {
      * @return a boolean indicating that the game must be updated following the
      * change of player.
      */
-    public boolean isUpdateChangePlayer() {
+    public synchronized boolean isUpdateChangePlayer() {
         return updateChangePlayer;
     }
 
@@ -1052,7 +986,7 @@ public class GameModel implements Observable {
      * @param aCoordinate the coordinate of the case from which the pawn must be
      * removed.
      */
-    public void removePawn(Coordinates aCoordinate) {
+    public synchronized void removePawn(Coordinates aCoordinate) {
         game.removePawn(aCoordinate);
     }
 
@@ -1064,7 +998,7 @@ public class GameModel implements Observable {
      * @throws esi.atlg3.g43320.othello.model.GameException if the game status
      * is not the right one.
      */
-    public boolean putPawn(Coordinates c) throws GameException {
+    public synchronized boolean putPawn(Coordinates c) throws GameException {
         return game.putPawn(c, ColorPawn.WHITE);
     }
 
@@ -1075,7 +1009,7 @@ public class GameModel implements Observable {
      * @return the number of pawn that a player can take from the other one by
      * playing.
      */
-    public int getNbPawnsTaken() {
+    public synchronized int getNbPawnsTaken() {
         return game.getNbPawnsToBeTurned();
     }
 
@@ -1085,45 +1019,23 @@ public class GameModel implements Observable {
      * @return the list of all the pawn to be turned after one player has
      * played.
      */
-    public List<List<Coordinates>> getPawnsToBeTurned() {
+    public synchronized List<List<Coordinates>> getPawnsToBeTurned() {
         return Collections.unmodifiableList(game.getPawnsToBeTurned());
     }
 
-    /**
-     * Change the color of the pawn won by a player after its move.
-     */
-    public void changeColorPawn() {
-        game.changeColorPawn();
-        updateInit = false;
-        updateScore = false;
-        updatePlay = false;
-        updateShow = false;
-        updateTurnPassed = false;
-        updateEndOfGame = false;
-        updateCommandsError = false;
-        updateCoordinatesError = false;
-        updateMouseOver = false;
-        updateWall = false;
-        updateConfirm = false;
-        updateGiveUp = false;
-        updateProblemPass = false;
-        updateAskName = false;
-        updatePass = false;
-        updateChangePlayer = false;
-        notifyObservers();
-    }
 
     /**
      * Plays a full game if the two players are both IA.
      *
      * @throws GameException (see method checkGameOver(String name)).
      */
-    public void playOnlyComputers() throws GameException {
-        game.getPlayers().get(0).setStrategy(new IARandomStrategy(this));
-        game.getPlayers().get(1).setStrategy(new IARandomStrategy(this));
+    public synchronized void playOnlyComputers() throws GameException {
+        getPlayers().get(0).setStrategy(new IARandomStrategy(this));
+        getPlayers().get(1).setStrategy(new IARandomStrategy(this));
         while (!isOver()) {
-            game.getCurrentPlayer().runStrategy();
+            getCurrentPlayer().runStrategy();
         }
+
         checkGameOver();
 
     }
@@ -1133,22 +1045,48 @@ public class GameModel implements Observable {
      *
      * @return the current player of the game.
      */
-    public Player getCurrentPlayer() {
+    public synchronized Player getCurrentPlayer() {
         return game.getCurrentPlayer();
     }
-    
+
     /**
      * Set the status of the game to INIT.
      */
-    public void setINITStatus(){
+    public synchronized void setINITStatus() {
         game.setStatus(GameStatus.INIT);
     }
-    
+
     /**
      * Returns the list of players.
+     *
      * @return the list of players.
      */
-    public List<Player> getPlayers(){
+    public synchronized List<Player> getPlayers() {
         return Collections.unmodifiableList(game.getPlayers());
+    }
+
+    public synchronized void runStrategy() {
+        getCurrentPlayer().runStrategy();
+        
+    }
+    
+    void booleanSetter(boolean b1,boolean b2,boolean b3,boolean b4,boolean b5,
+            boolean b6,boolean b7,boolean b8,boolean b9,boolean b10,
+            boolean b11,boolean b12,boolean b13,boolean b14,boolean b15){
+        updateChangePlayer = b1;
+        updateCommandsError = b2;
+        updateConfirm = b3;
+        updateCoordinatesError = b4;
+        updateEndOfGame = b5;
+        updateGiveUp = b6;
+        updateInit = b7;
+        updateMouseOver = b8;
+        updatePass = b9;
+        updatePlay = b10;
+        updateProblemPass = b11;
+        updateScore = b12;
+        updateShow = b13;
+        updateTurnPassed = b14;
+        updateWall = b15;
     }
 }

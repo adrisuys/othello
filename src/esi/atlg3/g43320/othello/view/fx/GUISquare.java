@@ -5,10 +5,14 @@
  */
 package esi.atlg3.g43320.othello.view.fx;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 /**
  * This class represent a single case of the boardgame.
@@ -64,6 +68,19 @@ public class GUISquare extends StackPane {
         } else {
             square.setFill(Color.LIGHTCORAL);
         }
+    }
+    
+    public void animationPawnTurn(){
+        Timeline tl = new Timeline();
+        KeyFrame kfFront = new KeyFrame(Duration.millis(100), e->{
+            if (pawn.getFill()==Color.BLACK) {
+                pawn.setFill(Color.WHITE);
+            } else {
+                pawn.setFill(Color.BLACK);
+            }
+        }, new KeyValue(pawn.scaleXProperty(), 0));
+        KeyFrame kfBack = new KeyFrame(Duration.millis(100), new KeyValue(pawn.scaleXProperty(),1));
+        tl.getKeyFrames().addAll(kfFront,kfBack);
     }
     
     

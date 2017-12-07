@@ -102,7 +102,6 @@ public class TerminalOthelloView implements Observer {
                 System.out.println("It is now the turn of " + displayCurrentPlayer() + ".");
             }
         }
-
     }
 
     private void updateScore() {
@@ -110,14 +109,12 @@ public class TerminalOthelloView implements Observer {
             System.out.println("The score of the player BLACK is " + observable.getScorePlayer1());
             System.out.println("The score of the player WHITE is " + observable.getScorePlayer2());
         }
-
     }
 
     private void updateShow() {
         if (observable.isUpdateShow()) {
             displayBoardgame(observable.getCurrentColor());
         }
-
     }
 
     private void updateInit() {
@@ -141,7 +138,6 @@ public class TerminalOthelloView implements Observer {
             System.out.println("You have not entered proper command");
             displayUsage();
         }
-
     }
 
     private String displayCurrentPlayer() {
@@ -166,7 +162,6 @@ public class TerminalOthelloView implements Observer {
                 System.out.println("The player WHITE is the winner!");
             }
         }
-
     }
 
     private void updateTurnPassed() {
@@ -176,7 +171,6 @@ public class TerminalOthelloView implements Observer {
                 displayBoardgame(observable.getCurrentColor());
             }
         }
-
     }
 
     @Override
@@ -211,6 +205,7 @@ public class TerminalOthelloView implements Observer {
         updateTurnPassed();
         updateErrorInputCommand();
         updateErrorInputCoordinates();
+        
     }
 
 }

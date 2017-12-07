@@ -89,11 +89,13 @@ public class GUIIntroMsg {
         grid.setPadding(new Insets(20, 150, 10, 10));
 
         name1 = new TextField();
+        name1.setPromptText("Nom du joueur 1");
         addTextLimiter(name1, 5);
         grid.add(new Label("Nom du premier joueur (max 5 caractères):"), 0, 0);
         grid.add(name1, 1, 0);
 
         name2 = new TextField();
+        name2.setPromptText("Nom du joueur 2");
         addTextLimiter(name2, 5);
         grid.add(new Label("Nom du deuxième joueur (max 5 caractères):"), 0, 1);
         grid.add(name2, 1, 1);
@@ -184,7 +186,10 @@ public class GUIIntroMsg {
         return OKButtonType;
     }
     
-    
+    public void cleanTxtField(){
+        name1.clear();
+        name2.clear();
+    }
     
 
 }
