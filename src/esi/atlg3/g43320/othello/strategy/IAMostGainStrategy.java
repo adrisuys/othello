@@ -7,7 +7,7 @@ package esi.atlg3.g43320.othello.strategy;
 
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.GameException;
-import esi.atlg3.g43320.othello.model.OthelloModel;
+import esi.atlg3.g43320.othello.model.GameModel;
 import java.util.List;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
@@ -21,14 +21,14 @@ import javafx.util.Duration;
  */
 public class IAMostGainStrategy implements Strategy {
 
-    private final OthelloModel othello;
+    private final GameModel othello;
 
     /**
      * Creates an instance of MostGainStrategy.
      *
      * @param othello the game being played.
      */
-    public IAMostGainStrategy(OthelloModel othello) {
+    public IAMostGainStrategy(GameModel othello) {
         this.othello = othello;
     }
 
@@ -67,11 +67,6 @@ public class IAMostGainStrategy implements Strategy {
             othello.removePawn(c);
         }
         return bestMove;
-    }
-
-    @Override
-    public boolean isIA() {
-        return true;
     }
 
 }

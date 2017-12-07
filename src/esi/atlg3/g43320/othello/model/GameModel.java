@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author s_u_y_s_a
  */
-public class OthelloModel implements Observable {
+public class GameModel implements Observable {
 
     private final List<Observer> observers;
     private Game game;
@@ -56,7 +56,7 @@ public class OthelloModel implements Observable {
     /**
      * Creates an instance of a model of Othello.
      */
-    public OthelloModel() {
+    public GameModel() {
         observers = new ArrayList<>();
         game = new Game();
     }
@@ -203,12 +203,12 @@ public class OthelloModel implements Observable {
     /**
      * Initializes the game.
      *
-     * @param name1 the name of the first player (always the black one).
-     * @param isOnlyIAs the boolean indicating if the 2 players are computers.
+     * @param name2 the name of the first player.
+     * @param name3 the name of the second player.
      * @throws esi.atlg3.g43320.othello.model.GameException if the game status
      * is not the right one.
      */
-    public void init(String name1, boolean isOnlyIAs) throws GameException {
+    public void init(String name2, String name3) throws GameException {
         if (game.getStatus() != GameStatus.INIT) {
             throw new GameException("Status error : game has to be initialize now");
         }
@@ -220,10 +220,9 @@ public class OthelloModel implements Observable {
         game.setStatus(GameStatus.PLAY);
         scorePlayer1 = game.getScore(ColorPawn.BLACK);
         scorePlayer2 = game.getScore(ColorPawn.WHITE);
-        if (isOnlyIAs) {
-            playOnlyComputers(name1);
-        }
-        moveName = name1;
+        game.getPlayers().get(0).setName(name2);
+        game.getPlayers().get(1).setName(name3);
+        moveName = name2;
         moveAction = "Nouvelle partie";
         movePos = "/";
         moveTaken = "/";
@@ -862,43 +861,27 @@ public class OthelloModel implements Observable {
         turnPassedFX(iaChosen);
         if (isTurnPassed()) {
             if (!wallChosenOverPass) {
-                if (getCurrentColor() == ColorPawn.BLACK) {
-                    pass(name1);
-                } else {
-                    pass(name2);
-                }
-                checkGameOver(name1);
+                pass(getCurrentPlayer().getName());
+                checkGameOver();
                 game.getCurrentPlayer().runStrategy();
-                checkGameOver(name1);
+                if (iaChosen){checkGameOver();}
             } else {
-                if (getCurrentColor() == ColorPawn.BLACK) {
-                    wall(coord, name1);
-                } else {
-                    wall(coord, name2);
-                }
-                checkGameOver(name1);
+                wall(coord, getCurrentPlayer().getName());
+                checkGameOver();
                 game.getCurrentPlayer().runStrategy();
-                checkGameOver(name1);
+                if (iaChosen){checkGameOver();}
             }
         } else {
             if (primaryKeyPressed) {
-                if (getGame().getCurrentColor() == ColorPawn.BLACK) {
-                    play(coord, name1);
-                } else {
-                    play(coord, name2);
-                }
-                checkGameOver(name1);
+                play (coord, getCurrentPlayer().getName());
+                checkGameOver();
                 game.getCurrentPlayer().runStrategy();
-                checkGameOver(name1);
+                if (iaChosen){checkGameOver();}
             } else {
-                if (getGame().getCurrentColor() == ColorPawn.BLACK) {
-                    wall(coord, name1);
-                } else {
-                    wall(coord, name2);
-                }
-                checkGameOver(name1);
+                wall(coord, getCurrentPlayer().getName());
+                checkGameOver();
                 game.getCurrentPlayer().runStrategy();
-                checkGameOver(name1);
+                if (iaChosen){checkGameOver();}
             }
         }
     }
@@ -908,15 +891,12 @@ public class OthelloModel implements Observable {
      * new game by asking the type of game (against a player or an IA) and the
      * name of the players.
      *
-     * @param name1 the name of the first player.
      * @throws esi.atlg3.g43320.othello.model.GameException if the game status
      * is not the right one.
      */
-    public void checkGameOver(String name1) throws GameException {
+    public void checkGameOver() throws GameException {
         if (isOver()) {
             endOfGame();
-            //askName();
-            //init(name1, isOnlyIA);
         }
     }
 
@@ -984,7 +964,7 @@ public class OthelloModel implements Observable {
         movePos = "/";
         moveTaken = "/";
         updateChangePlayer = false;
-        changePlayer();
+        game.changePlayer();
         notifyObservers();
     }
 
@@ -1136,17 +1116,15 @@ public class OthelloModel implements Observable {
     /**
      * Plays a full game if the two players are both IA.
      *
-     * @param name the name of the first player.
      * @throws GameException (see method checkGameOver(String name)).
      */
-    private void playOnlyComputers(String name) throws GameException {
+    public void playOnlyComputers() throws GameException {
         game.getPlayers().get(0).setStrategy(new IARandomStrategy(this));
         game.getPlayers().get(1).setStrategy(new IARandomStrategy(this));
         while (!isOver()) {
             game.getCurrentPlayer().runStrategy();
-            System.out.println("ply");
         }
-        checkGameOver(name);
+        checkGameOver();
 
     }
 
@@ -1159,7 +1137,18 @@ public class OthelloModel implements Observable {
         return game.getCurrentPlayer();
     }
     
+    /**
+     * Set the status of the game to INIT.
+     */
     public void setINITStatus(){
         game.setStatus(GameStatus.INIT);
+    }
+    
+    /**
+     * Returns the list of players.
+     * @return the list of players.
+     */
+    public List<Player> getPlayers(){
+        return Collections.unmodifiableList(game.getPlayers());
     }
 }

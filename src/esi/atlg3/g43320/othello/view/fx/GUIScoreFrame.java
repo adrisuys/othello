@@ -6,7 +6,7 @@
 package esi.atlg3.g43320.othello.view.fx;
 
 import esi.atlg3.g43320.othello.model.ColorPawn;
-import esi.atlg3.g43320.othello.model.OthelloModel;
+import esi.atlg3.g43320.othello.model.GameModel;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -113,7 +113,7 @@ public class GUIScoreFrame extends HBox {
      *
      * @param othello the game that is being played.
      */
-    public GUIScoreFrame(OthelloModel othello) {
+    public GUIScoreFrame(GameModel othello) {
         this();
         score1.setText(Integer.toString(othello.getScorePlayer1()));
         score2.setText(Integer.toString(othello.getScorePlayer2()));
@@ -211,7 +211,7 @@ public class GUIScoreFrame extends HBox {
      *
      * @param othello the game being played.
      */
-    public void updateScore(OthelloModel othello) {
+    public void updateScore(GameModel othello) {
         setScore1(Integer.toString(othello.getScorePlayer1()));
         setScore2(Integer.toString(othello.getScorePlayer2()));
     }
@@ -222,7 +222,7 @@ public class GUIScoreFrame extends HBox {
      *
      * @param othello the game being played.
      */
-    public void updateChangePlayer(OthelloModel othello) {
+    public void updateChangePlayer(GameModel othello) {
         if (othello.getCurrentColor() == ColorPawn.BLACK) {
             score1Frame.setStyle("-fx-background-color: #c7f097;-fx-border-width : 5; -fx-border-color: #FFD700;");
             score2Frame.setStyle("-fx-background-color: #f08c6b;-fx-border-width : 5; -fx-border-color: #a7682b;");

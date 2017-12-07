@@ -5,7 +5,7 @@
  */
 package esi.atlg3.g43320.othello.view.fx;
 
-import esi.atlg3.g43320.othello.model.OthelloModel;
+import esi.atlg3.g43320.othello.model.GameModel;
 import javafx.scene.control.ProgressIndicator;
 
 /**
@@ -42,7 +42,7 @@ public class GUIProgressCake {
      *
      * @param othello
      */
-    public void updateProgressCake(OthelloModel othello) {
+    public void updateProgressCake(GameModel othello) {
         double nbPawnsAlreadyPut = othello.getNbPawnsOnBoard();
         progressCake.setProgress(nbPawnsAlreadyPut / 64);
     }

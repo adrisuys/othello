@@ -20,6 +20,7 @@ public class GUIMenu {
 
     private final Menu game;
     private final Menu rules;
+    private final Menu quit;
     private final MenuBar menu;
 
     /**
@@ -28,12 +29,15 @@ public class GUIMenu {
     public GUIMenu() {
         Label labGame = new Label("Jouer");
         Label labRules = new Label("Règles");
+        Label labQuit = new Label("Quitter");
         game = new Menu();
         rules = new Menu();
+        quit = new Menu();
         game.setGraphic(labGame);
         rules.setGraphic(labRules);
+        quit.setGraphic(labQuit);
         menu = new MenuBar();
-        menu.getMenus().addAll(game, rules);
+        menu.getMenus().addAll(game, rules, quit);
         menu.setMinWidth(1000);
     }
 
@@ -59,6 +63,14 @@ public class GUIMenu {
      */
     public MenuBar getMenu() {
         return menu;
+    }
+    
+    /**
+     * Returns the menu QUITTER.
+     * @return the menu QUITTER.
+     */
+    public Menu getQuit() {
+        return quit;
     }
 
 }

@@ -5,7 +5,7 @@
  */
 package esi.atlg3.g43320.othello.view.fx;
 
-import esi.atlg3.g43320.othello.model.OthelloModel;
+import esi.atlg3.g43320.othello.model.GameModel;
 import javafx.scene.control.ProgressBar;
 
 /**
@@ -38,7 +38,7 @@ public class GUIColoredProgressBar {
      * Update the progress bar by changing its percentage of completion.
      * @param othello the model of the game being played.
      */
-    public void updateProgressBar(OthelloModel othello){
+    public void updateProgressBar(GameModel othello){
         double score1 = othello.getScorePlayer1();
         double score2 = othello.getScorePlayer2();
         double nbPawnsOnBoard = score1 + score2;

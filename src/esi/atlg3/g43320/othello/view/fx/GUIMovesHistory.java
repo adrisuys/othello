@@ -5,7 +5,7 @@
  */
 package esi.atlg3.g43320.othello.view.fx;
 
-import esi.atlg3.g43320.othello.model.OthelloModel;
+import esi.atlg3.g43320.othello.model.GameModel;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -77,7 +77,7 @@ public class GUIMovesHistory {
      *
      * @param othello
      */
-    public void updateMovesHistory(OthelloModel othello) {
+    public void updateMovesHistory(GameModel othello) {
         String name = othello.getMoveName();
         String action = othello.getMoveAction();
         String pos = othello.getMovePos();

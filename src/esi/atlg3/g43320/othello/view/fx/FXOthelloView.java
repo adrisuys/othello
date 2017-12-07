@@ -7,7 +7,7 @@ package esi.atlg3.g43320.othello.view.fx;
 
 import esi.atlg3.g43320.othello.dpObs.Observable;
 import esi.atlg3.g43320.othello.dpObs.Observer;
-import esi.atlg3.g43320.othello.model.OthelloModel;
+import esi.atlg3.g43320.othello.model.GameModel;
 import java.util.Optional;
 import javafx.animation.PauseTransition;
 import javafx.beans.value.ObservableValue;
@@ -33,7 +33,7 @@ import javafx.util.Pair;
  */
 public class FXOthelloView implements Observer {
 
-    private OthelloModel othello;
+    private GameModel othello;
     private GUIBoardgame boardgame;
     private GUIColoredProgressBar bar;
     private GUIMovesHistory historyOfMoves;
@@ -60,7 +60,7 @@ public class FXOthelloView implements Observer {
         if (observable == null) {
             throw new IllegalArgumentException("Nothing to observe");
         }
-        othello = (OthelloModel) observable;
+        othello = (GameModel) observable;
         othello.registerObserver(this);
 
         leftSubFrame = new VBox();
@@ -131,7 +131,6 @@ public class FXOthelloView implements Observer {
         updateConfirm();
         updateGiveUp();
         updateProblemPass();
-        //updateAskName();
         updatePass();
         updateChangePlayer();
     }
@@ -145,6 +144,10 @@ public class FXOthelloView implements Observer {
             progressCake.updateProgressCake(othello);
             resultFrame.updateScore(othello);
             bar.updateProgressBar(othello);
+            resultFrame.setName1(othello.getPlayers().get(0).getName());
+            resultFrame.setName2(othello.getPlayers().get(1).getName());
+            giveUp.setDisable(false);
+            pass.setDisable(false);
         }
     }
 
@@ -222,6 +225,9 @@ public class FXOthelloView implements Observer {
                 alert.setContentText(resultFrame.getName2() + " a gagné! (" + score1 + "-" + score2 + ")");
             }
             alert.showAndWait();
+            boardgame.setDisableOnTrue();
+            giveUp.setDisable(true);
+            pass.setDisable(true);
         }
     }
 
@@ -393,7 +399,6 @@ public class FXOthelloView implements Observer {
 //            //});
 //        }
 //    }
-
     private void updatePass() {
         if (othello.isUpdatePass()) {
             historyOfMoves.updateMovesHistory(othello);
@@ -447,9 +452,5 @@ public class FXOthelloView implements Observer {
     public void setOnlyIAPlaying(boolean onlyIAPlaying) {
         this.onlyIAPlaying = onlyIAPlaying;
     }
-    
-    
-    
-    
 
 }

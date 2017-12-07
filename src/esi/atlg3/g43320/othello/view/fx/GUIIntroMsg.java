@@ -5,9 +5,10 @@
  */
 package esi.atlg3.g43320.othello.view.fx;
 
-import esi.atlg3.g43320.othello.model.OthelloModel;
+import esi.atlg3.g43320.othello.model.GameModel;
 import static esi.atlg3.g43320.othello.view.fx.FXOthelloView.addTextLimiter;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -16,9 +17,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Pair;
 
 /**
@@ -46,21 +51,38 @@ public class GUIIntroMsg {
      *
      * @param title the name of the windows that is opened.
      */
-    public GUIIntroMsg(String title) {
+    public GUIIntroMsg() {
         dialog = new VBox();
-        Label titleLab = new Label(title);
-        //titleLab.setStyle();
+        String imgOthello = getClass().getResource("img/othello.jpg").toExternalForm();
+        ImageView imgViewOthello = new ImageView(imgOthello);
+        dialog.setStyle("-fx-background-image: url('" + imgOthello + "'); " +
+           "-fx-background-position: center center; " +
+           "-fx-background-repeat: stretch;");
+        dialog.setPadding(new Insets(250,10,0,10));
+        
+        VBox text = new VBox();
+        text.setStyle("-fx-background-color: #99e699;");
+        //text.setOpacity(0.5);
+        text.setMaxWidth(980);
+        
         Label explainLab = new Label("Entrez les noms des joueurs.");
-        dialog.getChildren().add(titleLab);
-        dialog.getChildren().add(explainLab);
-        // Set the button types.
+        VBox.setMargin(explainLab, new Insets(5, 0, 0, 10));
+        text.getChildren().addAll(explainLab);
+        
         quitButtonType = new Button("Quitter");
-        quitButtonType.setMinWidth(100);
+        quitButtonType.setMinHeight(100);
+        quitButtonType.setMinWidth(200);
+        quitButtonType.setStyle("-fx-border-color: green; -fx-border-width: 3;");
+        
         OKButtonType = new Button("OK");
-        OKButtonType.setMinWidth(100);
+        OKButtonType.setMinWidth(200);
+        OKButtonType.setMinHeight(100);
+        OKButtonType.setStyle("-fx-border-color: green; -fx-border-width: 3;");
         HBox btnFrame = new HBox();
         btnFrame.getChildren().addAll(OKButtonType,quitButtonType);
-        // Create the username and password labels and fields.
+        VBox.setMargin(btnFrame, new Insets(100, 0, 0, 270));
+        HBox.setMargin(OKButtonType, new Insets(0,50,0,0));
+        
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -89,8 +111,8 @@ public class GUIIntroMsg {
         grid.add(humVScomp, 2, 2);
         grid.add(compVScomp, 3, 2);
 
-        dialog.getChildren().addAll(grid);
-        dialog.getChildren().addAll(btnFrame);
+        text.getChildren().addAll(grid);
+        dialog.getChildren().addAll(text,btnFrame);
         
         //dialog.setPrefHeight(750);
         //dialog.setPrefWidth(1000);

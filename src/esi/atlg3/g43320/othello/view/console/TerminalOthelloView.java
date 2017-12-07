@@ -9,7 +9,7 @@ import esi.atlg3.g43320.othello.dpObs.Observable;
 import esi.atlg3.g43320.othello.dpObs.Observer;
 import esi.atlg3.g43320.othello.model.ColorPawn;
 import esi.atlg3.g43320.othello.model.Coordinates;
-import esi.atlg3.g43320.othello.model.OthelloModel;
+import esi.atlg3.g43320.othello.model.GameModel;
 import java.util.Objects;
 
 /**
@@ -19,7 +19,7 @@ import java.util.Objects;
  */
 public class TerminalOthelloView implements Observer {
 
-    private OthelloModel observable;
+    private GameModel observable;
 
     /**
      * Creates an instance of this class and register this object as an observer
@@ -32,7 +32,7 @@ public class TerminalOthelloView implements Observer {
         if (observable == null) {
             throw new IllegalArgumentException("Nothing to observe");
         }
-        this.observable = (OthelloModel) observable;
+        this.observable = (GameModel) observable;
         this.observable.registerObserver(this);
 
     }

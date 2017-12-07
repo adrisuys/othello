@@ -19,6 +19,7 @@ public class Player {
 
     private ColorPawn color;
     private Strategy strategy;
+    private String name;
 
     /**
      * Creates an instance of a player by giving it a specified color.
@@ -31,6 +32,7 @@ public class Player {
         }
         this.color = color;
         this.strategy = new HumanStrategy();
+        this.name = "";
     }
 
     /**
@@ -83,14 +85,6 @@ public class Player {
     }
     
     /**
-     * Indicates if the player is an IA.
-     * @return true if the player is an IA.
-     */
-    public boolean isAutomatic(){
-        return strategy.isIA();
-    }
-    
-    /**
      * Makes the player plays according to its own strategy.
      */
     public void runStrategy(){
@@ -112,11 +106,13 @@ public class Player {
     public void setStrategy(Strategy strategy) {
         this.strategy = strategy;
     }
-    
-    
-    
-    
-    
-    
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 
 }

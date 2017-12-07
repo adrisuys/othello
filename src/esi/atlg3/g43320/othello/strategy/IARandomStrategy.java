@@ -8,7 +8,7 @@ package esi.atlg3.g43320.othello.strategy;
 import esi.atlg3.g43320.othello.model.ColorPawn;
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.GameException;
-import esi.atlg3.g43320.othello.model.OthelloModel;
+import esi.atlg3.g43320.othello.model.GameModel;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 
@@ -20,7 +20,7 @@ import javafx.util.Duration;
  */
 public class IARandomStrategy implements Strategy {
 
-    private final OthelloModel othello;
+    private final GameModel othello;
 
     /**
      * It creates an instance of RandomStrategy.
@@ -36,34 +36,25 @@ public class IARandomStrategy implements Strategy {
      *
      * @param othello the game being played.
      */
-    public IARandomStrategy(OthelloModel othello) {
+    public IARandomStrategy(GameModel othello) {
         this.othello = othello;
     }
 
     @Override
     public void execute() {
-        //PauseTransition pause = new PauseTransition(Duration.millis(1000));
-        //pause.setOnFinished(e -> {
-            othello.turnPassedFX(true);
-            if (othello.isTurnPassed()) {
-                othello.pass("IA");
-            } else {
-                othello.updatePossibleMove(othello.getCurrentColor());
-                int nbPossibleMove = othello.getPossibleMove().size();
-                int random = (int) (Math.random() * nbPossibleMove);
-                Coordinates playedCoord = othello.getPossibleMove().get(random);
-                try {
-                    othello.play(playedCoord, "IA");
-                } catch (GameException ex) {
-                }
+        othello.turnPassedFX(true);
+        if (othello.isTurnPassed()) {
+            othello.pass(othello.getCurrentPlayer().getName());
+        } else {
+            othello.updatePossibleMove(othello.getCurrentColor());
+            int nbPossibleMove = othello.getPossibleMove().size();
+            int random = (int) (Math.random() * nbPossibleMove);
+            Coordinates playedCoord = othello.getPossibleMove().get(random);
+            try {
+                othello.play(playedCoord, othello.getCurrentPlayer().getName());
+            } catch (GameException ex) {
             }
-        //});
-        //pause.play();
-    }
-
-    @Override
-    public boolean isIA() {
-        return true;
+        }
     }
 
 }

@@ -20,9 +20,4 @@ public class HumanStrategy implements Strategy {
 
     }
 
-    @Override
-    public boolean isIA() {
-        return false;
-    }
-
 }

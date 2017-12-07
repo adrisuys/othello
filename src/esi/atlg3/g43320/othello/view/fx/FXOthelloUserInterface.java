@@ -7,9 +7,7 @@ package esi.atlg3.g43320.othello.view.fx;
 
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.GameException;
-import esi.atlg3.g43320.othello.model.OthelloModel;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import esi.atlg3.g43320.othello.model.GameModel;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -31,7 +29,7 @@ import javafx.stage.Stage;
  */
 public class FXOthelloUserInterface extends Application {
 
-    private OthelloModel othello;
+    private GameModel othello;
     private FXOthelloView view;
 
     /**
@@ -41,7 +39,9 @@ public class FXOthelloUserInterface extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-        othello = new OthelloModel();
+        primaryStage.setMaxHeight(750);
+        primaryStage.setMaxWidth(1000);
+        othello = new GameModel();
         view = new FXOthelloView(othello);
 
         BorderPane mainFrame = new BorderPane();
@@ -64,33 +64,33 @@ public class FXOthelloUserInterface extends Application {
         mainFrame.setTop(menu.getMenu());
         mainFrame.setCenter(contentGame);
         Scene scene = new Scene(mainFrame, 1000, 750);
-        GUIIntroMsg start = new GUIIntroMsg("Othello");
+        GUIIntroMsg start = new GUIIntroMsg();
         Scene sceneStart = new Scene(start.getDialog(), 1000, 750);
+        
+        //WHEN PLAY BUTTON PRESSED ON START SCREEN
         start.getOKButtonType().setOnMouseClicked((MouseEvent e) -> {
             if (start.getTypeGame().getSelectedToggle() == start.getHumVShum()) {
-                view.getResultFrame().setName1(start.getName1());
-                view.getResultFrame().setName2(start.getName2());
                 view.setIsIAPlaying(false);
                 view.setOnlyIAPlaying(false);
             } else if (start.getTypeGame().getSelectedToggle() == start.getHumVScomp()) {
-                view.getResultFrame().setName1(start.getName1());
-                view.getResultFrame().setName2("IA");
                 view.setIsIAPlaying(true);
                 view.setOnlyIAPlaying(false);
             } else if (start.getTypeGame().getSelectedToggle() == start.getCompVScomp()) {
-                view.getResultFrame().setName1("IA 1");
-                view.getResultFrame().setName2("IA 2");
                 view.setIsIAPlaying(false);
                 view.setOnlyIAPlaying(true);
             }
             primaryStage.setScene(scene);
             
             try {
-                othello.init(view.getResultFrame().getName1(), view.isOnlyIAPlaying());
+                othello.init(start.getName1(), start.getName2());
+                if (view.isOnlyIAPlaying()){
+                    othello.playOnlyComputers();
+                }
             } catch (GameException ex) {
-                System.out.println("yyy");
             }
         });
+        
+        //WHEN QUIT BUTTON PRESSED ON START SCREEN
         start.getQuitButtonType().setOnMouseClicked((MouseEvent ev) -> {
             Platform.exit();
         });
@@ -98,12 +98,7 @@ public class FXOthelloUserInterface extends Application {
         primaryStage.setScene(sceneStart);
         primaryStage.show();
 
-        //INITIALIZING THE GAME AND PLAY IF ONLY COMPUTERS
-        //othello.askName();
-//        try {
-//            othello.init(view.getResultFrame().getName1(), view.isOnlyIAPlaying());
-//        } catch (GameException ex) {
-//        }
+        
 
         //WHEN MOUSE HOVER CASE
         view.getBoardgame().getBoard().getChildren().stream().map((node) -> {
@@ -144,13 +139,8 @@ public class FXOthelloUserInterface extends Application {
             othello.confirm();
             if (view.hasConfirm()) {
                 othello.giveUp();
-                //othello.askName();
                 othello.setINITStatus();
                 primaryStage.setScene(sceneStart);
-//                try {
-//                    othello.init(view.getResultFrame().getName1(), view.isOnlyIAPlaying());
-//                } catch (GameException ex) {
-//                }
             }
         });
 
@@ -158,14 +148,8 @@ public class FXOthelloUserInterface extends Application {
         view.getRestart().addEventHandler(ActionEvent.ACTION, (ActionEvent event) -> {
             othello.confirm();
             if (view.hasConfirm()) {
-                //othello.askName();
                 othello.setINITStatus();
                 primaryStage.setScene(sceneStart);
-//                try {
-//                    othello.init(view.getResultFrame().getName1(), view.isOnlyIAPlaying());
-//                } catch (GameException ex) {
-//                }
-
             }
         });
 
@@ -187,6 +171,11 @@ public class FXOthelloUserInterface extends Application {
         //WHEN MENU REGLES IS PRESSED
         menu.getRules().getGraphic().setOnMouseClicked((MouseEvent event) -> {
             mainFrame.setCenter(contentRules.getFrame());
+        });
+        
+        //WHEN MENU QUITTER IS PRESSED
+        menu.getQuit().getGraphic().setOnMouseClicked((MouseEvent event) -> {
+            Platform.exit();
         });
     }
 

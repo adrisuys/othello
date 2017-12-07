@@ -7,7 +7,7 @@ package esi.atlg3.g43320.othello.view.console;
 
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.GameException;
-import esi.atlg3.g43320.othello.model.OthelloModel;
+import esi.atlg3.g43320.othello.model.GameModel;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -25,11 +25,11 @@ public class TerminalOthelloUserInterface {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        OthelloModel othello = new OthelloModel();
+        GameModel othello = new GameModel();
         TerminalOthelloView view = new TerminalOthelloView(othello);
 
         try {
-            othello.init("", false);
+            othello.init("","");
         } catch (GameException ex) {
             Logger.getLogger(TerminalOthelloUserInterface.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -43,7 +43,7 @@ public class TerminalOthelloUserInterface {
         othello.endOfGame();
     }
 
-    private static boolean verifyArgsCoordinates(String[] tabStr, OthelloModel othello) {
+    private static boolean verifyArgsCoordinates(String[] tabStr, GameModel othello) {
         boolean ok = true;
         try {
             int row = Integer.parseInt(tabStr[1]);
@@ -61,7 +61,7 @@ public class TerminalOthelloUserInterface {
         return ok;
     }
 
-    private static void playATurn(OthelloModel othello) {
+    private static void playATurn(GameModel othello) {
         boolean unvalid = true;
         Scanner keyboard = new Scanner(System.in, "UTF-8");
         String input = keyboard.nextLine();
