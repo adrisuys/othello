@@ -8,6 +8,9 @@ package esi.atlg3.g43320.othello.view.fx;
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.GameException;
 import esi.atlg3.g43320.othello.model.GameModel;
+import esi.atlg3.g43320.othello.strategy.IARandomStrategy;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -82,10 +85,7 @@ public class FXOthelloUserInterface extends Application {
             primaryStage.setScene(scene);
             
             try {
-                othello.init(start.getName1(), start.getName2());
-                if (view.isOnlyIAPlaying()){
-                    othello.playOnlyComputers();
-                }
+                othello.init(start.getName1(), start.getName2(), view.isIsIAPlaying(), view.isOnlyIAPlaying());
             } catch (GameException ex) {
             }
         });
@@ -161,7 +161,10 @@ public class FXOthelloUserInterface extends Application {
         view.getPass().addEventHandler(ActionEvent.ACTION, (ActionEvent event) -> {
             othello.turnPassedFX(view.isIsIAPlaying());
             if (othello.isTurnPassed()) {
-                othello.changePlayer();
+                try {
+                    othello.changePlayer();
+                } catch (GameException ex) {
+                }
             } else {
                 othello.problemPass();
             }
