@@ -11,9 +11,6 @@ import esi.atlg3.g43320.othello.strategy.IARandomStrategy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -203,15 +200,6 @@ public class GameModel implements Observable {
         }
         runStrategy();
         notifyObservers();
-    }
-
-    /**
-     * Returns the game.
-     *
-     * @return the game.
-     */
-    public Game getGame() {
-        return new Game(game);
     }
 
     /**

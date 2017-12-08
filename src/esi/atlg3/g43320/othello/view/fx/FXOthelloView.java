@@ -257,7 +257,7 @@ public class FXOthelloView implements Observer {
      *
      * @return the graphical interface of the boardgame.
      */
-    public GUIBoardgame getBoardgame() {
+    GUIBoardgame getBoardgame() {
         return new GUIBoardgame(boardgame);
     }
 
@@ -266,8 +266,8 @@ public class FXOthelloView implements Observer {
      *
      * @return the graphical interface of the progress bar of the score.
      */
-    public GUIColoredProgressBar getBar() {
-        return bar;
+    GUIColoredProgressBar getBar() {
+        return new GUIColoredProgressBar(bar);
     }
 
     /**
@@ -275,8 +275,8 @@ public class FXOthelloView implements Observer {
      *
      * @return the graphical interface of the history of moves.
      */
-    public GUIMovesHistory getHistoryOfMoves() {
-        return historyOfMoves;
+    GUIMovesHistory getHistoryOfMoves() {
+        return new GUIMovesHistory(historyOfMoves);
     }
 
     /**
@@ -284,8 +284,8 @@ public class FXOthelloView implements Observer {
      *
      * @return the graphical interface of the progress cake of the game.
      */
-    public GUIProgressCake getProgressCake() {
-        return progressCake;
+    GUIProgressCake getProgressCake() {
+        return new GUIProgressCake(progressCake);
     }
 
     /**
@@ -293,8 +293,8 @@ public class FXOthelloView implements Observer {
      *
      * @return the graphical interface of the score.
      */
-    public GUIScoreFrame getResultFrame() {
-        return resultFrame;
+    GUIScoreFrame getResultFrame() {
+        return new GUIScoreFrame(resultFrame);
     }
 
     /**
@@ -302,7 +302,7 @@ public class FXOthelloView implements Observer {
      *
      * @return the left part of the window with all its components.
      */
-    public VBox getLeftSubFrame() {
+    VBox getLeftSubFrame() {
         return leftSubFrame;
     }
 
@@ -311,7 +311,7 @@ public class FXOthelloView implements Observer {
      *
      * @return the right part of the window with all its components.
      */
-    public VBox getRightSubFrame() {
+    VBox getRightSubFrame() {
         return rightSubFrame;
     }
 
@@ -322,7 +322,7 @@ public class FXOthelloView implements Observer {
      * @return a boolean indicating if a player has chosen to put a wall instead
      * of passing its turn.
      */
-    public boolean isWallChosenOverPass() {
+    boolean isWallChosenOverPass() {
         return wallChosenOverPass;
     }
 
@@ -331,7 +331,7 @@ public class FXOthelloView implements Observer {
      *
      * @return the button GIVE UP.
      */
-    public Button getGiveUp() {
+    Button getGiveUp() {
         return giveUp;
     }
 
@@ -340,7 +340,7 @@ public class FXOthelloView implements Observer {
      *
      * @return the button PASS.
      */
-    public Button getPass() {
+    Button getPass() {
         return pass;
     }
 
@@ -349,7 +349,7 @@ public class FXOthelloView implements Observer {
      *
      * @return the button RESTART.
      */
-    public Button getRestart() {
+    Button getRestart() {
         return restart;
     }
 
@@ -358,7 +358,7 @@ public class FXOthelloView implements Observer {
      *
      * @return a boolean indication if a player has confirmed an action.
      */
-    public boolean hasConfirm() {
+    boolean hasConfirm() {
         return confirm;
     }
 
@@ -373,7 +373,7 @@ public class FXOthelloView implements Observer {
      *
      * @return a boolean indicating if the IA is playing.
      */
-    public boolean isIsIAPlaying() {
+    boolean isIsIAPlaying() {
         return isIAPlaying;
     }
 
@@ -382,7 +382,7 @@ public class FXOthelloView implements Observer {
      *
      * @return a boolean indicating if 2 IAs are playing.
      */
-    public boolean isOnlyIAPlaying() {
+    boolean isOnlyIAPlaying() {
         return onlyIAPlaying;
     }
 
@@ -394,28 +394,12 @@ public class FXOthelloView implements Observer {
     }
 
     /**
-     * Limits the number of character a player can enter in a TextField.
-     *
-     * @param tf the TextField.
-     * @param maxLength the maximum number of character a player can enter in
-     * the TextField.
-     */
-    public static void addTextLimiter(final TextField tf, final int maxLength) {
-        tf.textProperty().addListener((final ObservableValue<? extends String> ov, final String oldValue, final String newValue) -> {
-            if (tf.getText().length() > maxLength) {
-                String s = tf.getText().substring(0, maxLength);
-                tf.setText(s);
-            }
-        });
-    }
-
-    /**
      * Set the boolean isIAPlaying with the new value (true or false). It
      * indicates that the game is in the mode Human vs Computer.
      *
      * @param isIAPlaying a boolean indicating if one IA is playing.
      */
-    public void setIsIAPlaying(boolean isIAPlaying) {
+    void setIsIAPlaying(boolean isIAPlaying) {
         this.isIAPlaying = isIAPlaying;
     }
 
@@ -425,12 +409,11 @@ public class FXOthelloView implements Observer {
      *
      * @param onlyIAPlaying a boolean indicating if two IAs are playing.
      */
-    public void setOnlyIAPlaying(boolean onlyIAPlaying) {
+    void setOnlyIAPlaying(boolean onlyIAPlaying) {
         this.onlyIAPlaying = onlyIAPlaying;
     }
     
-    public void enableHumanPlay(){
-        System.out.println(othello.getCurrentPlayer().isIsIA());
+    private void enableHumanPlay(){
         if (othello.getCurrentPlayer().isIsIA()){
             boardgame.setDisableOnTrue();
         } else {

@@ -5,7 +5,7 @@
  */
 package esi.atlg3.g43320.othello.view.fx;
 
-import static esi.atlg3.g43320.othello.view.fx.FXOthelloView.addTextLimiter;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -104,9 +104,6 @@ public class GUIIntroMsg {
 
         text.getChildren().addAll(grid);
         dialog.getChildren().addAll(text, btnFrame);
-
-        //dialog.setPrefHeight(750);
-        //dialog.setPrefWidth(1000);
     }
 
     /**
@@ -202,6 +199,22 @@ public class GUIIntroMsg {
     public void cleanTxtField() {
         name1.clear();
         name2.clear();
+    }
+    
+    /**
+     * Limits the number of character a player can enter in a TextField.
+     *
+     * @param tf the TextField.
+     * @param maxLength the maximum number of character a player can enter in
+     * the TextField.
+     */
+    private void addTextLimiter(final TextField tf, final int maxLength) {
+        tf.textProperty().addListener((final ObservableValue<? extends String> ov, final String oldValue, final String newValue) -> {
+            if (tf.getText().length() > maxLength) {
+                String s = tf.getText().substring(0, maxLength);
+                tf.setText(s);
+            }
+        });
     }
 
 }

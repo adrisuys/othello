@@ -9,7 +9,7 @@ package esi.atlg3.g43320.othello.model;
  * This class represents all the different status the game can have.
  * @author s_u_y_s_a
  */
-public enum GameStatus {
+enum GameStatus {
 
     /**
      * The game status INITIALIZATION.
