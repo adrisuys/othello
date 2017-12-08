@@ -8,9 +8,6 @@ package esi.atlg3.g43320.othello.view.fx;
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.GameException;
 import esi.atlg3.g43320.othello.model.GameModel;
-import esi.atlg3.g43320.othello.strategy.IARandomStrategy;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -159,7 +156,7 @@ public class FXOthelloUserInterface extends Application {
 
         //WHEN BUTTON PASSER CLICKED
         view.getPass().addEventHandler(ActionEvent.ACTION, (ActionEvent event) -> {
-            othello.turnPassedFX(view.isIsIAPlaying());
+            othello.turnPassed(view.isIsIAPlaying());
             if (othello.isTurnPassed()) {
                 try {
                     othello.changePlayer();

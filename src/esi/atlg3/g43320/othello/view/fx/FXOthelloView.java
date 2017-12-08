@@ -183,16 +183,6 @@ public class FXOthelloView implements Observer {
                     Optional<ButtonType> result = alert.showAndWait();
                     wallChosenOverPass = (result.get() == btnWall);
                 }
-            } else {
-                if (othello.isTurnPassed()) {
-//                    Alert alert = new Alert(AlertType.INFORMATION);
-//                    alert.setTitle("");
-//                    alert.setHeaderText("L'ordinateur a passé son tour !");
-//                    PauseTransition delay = new PauseTransition(Duration.seconds(3));
-//                    delay.setOnFinished(e -> alert.hide());
-//                    alert.showAndWait();
-//                    delay.play();
-                }
             }
         }
     }
@@ -399,6 +389,7 @@ public class FXOthelloView implements Observer {
     private void updateChangePlayer() {
         if (othello.isUpdateChangePlayer()) {
             resultFrame.updateChangePlayer(othello);
+            enableHumanPlay();
         }
     }
 
@@ -418,12 +409,33 @@ public class FXOthelloView implements Observer {
         });
     }
 
+    /**
+     * Set the boolean isIAPlaying with the new value (true or false). It
+     * indicates that the game is in the mode Human vs Computer.
+     *
+     * @param isIAPlaying a boolean indicating if one IA is playing.
+     */
     public void setIsIAPlaying(boolean isIAPlaying) {
         this.isIAPlaying = isIAPlaying;
     }
 
+    /**
+     * Set the boolean isIAPlaying with the new value (true or false). It
+     * indicates that the game is in the mode Computer vs Computer
+     *
+     * @param onlyIAPlaying a boolean indicating if two IAs are playing.
+     */
     public void setOnlyIAPlaying(boolean onlyIAPlaying) {
         this.onlyIAPlaying = onlyIAPlaying;
+    }
+    
+    public void enableHumanPlay(){
+        System.out.println(othello.getCurrentPlayer().isIsIA());
+        if (othello.getCurrentPlayer().isIsIA()){
+            boardgame.setDisableOnTrue();
+        } else {
+            boardgame.setDisableOnFalse();
+        }
     }
 
 }

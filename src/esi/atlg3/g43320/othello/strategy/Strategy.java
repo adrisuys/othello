@@ -16,7 +16,7 @@ public interface Strategy {
     /**
      * Plays following a certain strategy.
      *
-     * @param name
      */
     public void execute();
+    
 }

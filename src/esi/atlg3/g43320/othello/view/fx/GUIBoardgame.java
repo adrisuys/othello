@@ -7,18 +7,11 @@ package esi.atlg3.g43320.othello.view.fx;
 
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.GameModel;
-import java.util.List;
-import javafx.animation.Interpolator;
-import javafx.animation.ScaleTransition;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.util.Duration;
 
 /**
  * This class represents the graphical interface of the boardgame.
@@ -124,7 +117,7 @@ public class GUIBoardgame {
     }
     
     /**
-     * Allows all the cases of the board to be responsive to the different
+     * Unable all the cases of the board to be responsive to the different
      * events.
      */
     public void setDisableOnTrue() {

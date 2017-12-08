@@ -8,6 +8,7 @@ package esi.atlg3.g43320.othello.strategy;
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.GameException;
 import esi.atlg3.g43320.othello.model.GameModel;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -40,24 +41,46 @@ public class IARandomStrategy implements Strategy {
 
     @Override
     public void execute() {
-            othello.turnPassedFX(true);
-            if (othello.isTurnPassed()) {
-                try {
-                    othello.pass(othello.getCurrentPlayer().getName());
-                } catch (GameException ex) {
-                    System.out.println("error GameException");
-                }
-            } else {
-                othello.updatePossibleMove(othello.getCurrentColor());
-                int nbPossibleMove = othello.getPossibleMove().size();
-                Random r = new Random();
-                int random = r.nextInt(nbPossibleMove);
-                Coordinates playedCoord = othello.getPossibleMove().get(random);
-                try {
-                    othello.play(playedCoord, othello.getCurrentPlayer().getName());
-                } catch (GameException ex) {
-                }
+        othello.turnPassed(true);
+        if (othello.isTurnPassed()) {
+            try {
+                othello.pass(othello.getCurrentPlayer().getName());
+            } catch (GameException ex) {
+                System.out.println("error GameException");
             }
+        } else {
+            othello.updatePossibleMove(othello.getCurrentColor());
+            int nbPossibleMove = othello.getPossibleMove().size();
+            Random r = new Random();
+            int random = r.nextInt(nbPossibleMove);
+            Coordinates playedCoord = othello.getPossibleMove().get(random);
+            try {
+                othello.play(playedCoord, othello.getCurrentPlayer().getName());
+            } catch (GameException ex) {
+            }
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 83 * hash + Objects.hashCode(this.othello);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final IARandomStrategy other = (IARandomStrategy) obj;
+        return Objects.equals(this.othello, other.othello);
     }
 
 }

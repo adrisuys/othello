@@ -138,14 +138,6 @@ public class Game {
     }
     
     /**
-     * Remove a pawn of a case of the board.
-     * @param aCoordinate the coordinates of the case of the board.
-     */
-    void removePawn(Coordinates aCoordinate){
-        board.getCheckerboard()[aCoordinate.getX()][aCoordinate.getY()] = 0;
-    }
-
-    /**
      * update the list of all the possible move for the player of the specified
      * color at a given time.
      *

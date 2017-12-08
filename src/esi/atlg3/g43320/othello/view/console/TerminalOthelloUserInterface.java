@@ -34,7 +34,7 @@ public class TerminalOthelloUserInterface {
             Logger.getLogger(TerminalOthelloUserInterface.class.getName()).log(Level.SEVERE, null, ex);
         }
         while (!othello.isOver()) {
-            othello.turnPassedFX(false);
+            othello.turnPassed(false);
             if (!othello.isTurnPassed()) {
                 playATurn(othello);
             }

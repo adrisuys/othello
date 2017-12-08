@@ -7,7 +7,6 @@ package esi.atlg3.g43320.othello.model;
 
 import esi.atlg3.g43320.othello.strategy.HumanStrategy;
 import esi.atlg3.g43320.othello.strategy.Strategy;
-import java.util.Objects;
 
 /**
  * The class represents a player and a player is defined by the color of its
@@ -20,6 +19,7 @@ public class Player {
     private ColorPawn color;
     private Strategy strategy;
     private String name;
+    private boolean isIA;
 
     /**
      * Creates an instance of a player by giving it a specified color.
@@ -33,6 +33,7 @@ public class Player {
         this.color = color;
         this.strategy = new HumanStrategy();
         this.name = "";
+        this.isIA = false;
     }
 
     /**
@@ -51,37 +52,6 @@ public class Player {
      */
     public void setColor(ColorPawn color) {
         this.color = color;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + Objects.hashCode(this.color);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Player other = (Player) obj;
-        return this.color == other.color;
-    }
-
-    @Override
-    public String toString() {
-        if (getColor() == ColorPawn.BLACK) {
-            return "Player Black";
-        } else {
-            return "Player White";
-        }
     }
     
     /**
@@ -107,12 +77,40 @@ public class Player {
         this.strategy = strategy;
     }
 
+    /**
+     * Change the name of the player.
+     * @param name the new name of the player.
+     */
     public void setName(String name) {
         this.name = name;
     }
-
+    
+    /**
+     * Returns the name of the player.
+     * @return the name of the player.
+     */
     public String getName() {
         return name;
     }
+    
+    /**
+     * Returns the boolean indicating if the player is an IA or not.
+     * @return true if the player is an IA, false otherwise.
+     */
+    public boolean isIsIA() {
+        return isIA;
+    }
+
+    /**
+     * Changes the value of the boolean isIA.
+     * @param isIA the new value (true or false).
+     */
+    public void setIsIA(boolean isIA) {
+        this.isIA = isIA;
+    }
+    
+    
+    
+    
 
 }

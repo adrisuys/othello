@@ -10,9 +10,12 @@ package esi.atlg3.g43320.othello.strategy;
  * @author s_u_y_s_a
  */
 public class HumanStrategy implements Strategy {
-    
-    public HumanStrategy(){
-        
+
+    /**
+     * Creates an instance of HumanStrategy.
+     */
+    public HumanStrategy() {
+
     }
 
     @Override

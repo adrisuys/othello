@@ -5,8 +5,6 @@
  */
 package esi.atlg3.g43320.othello.model;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
