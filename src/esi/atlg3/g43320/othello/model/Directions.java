@@ -6,7 +6,7 @@
 package esi.atlg3.g43320.othello.model;
 
 /**
- * This class present all the direction in which we can check the board.
+ * This class presents all the direction in which we can check the board.
  * 
  * @author s_u_y_s_a
  */

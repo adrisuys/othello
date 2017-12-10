@@ -803,7 +803,7 @@ public class GameModel implements Observable {
      * if the player are human or not.
      */
     public void runStrategy() {
-        PauseTransition p = new PauseTransition(Duration.millis(300));
+        PauseTransition p = new PauseTransition(Duration.millis(1000));
         p.setOnFinished((ActionEvent e) -> {
             Platform.runLater(() -> {
                 getCurrentPlayer().runStrategy();

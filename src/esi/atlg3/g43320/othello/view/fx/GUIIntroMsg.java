@@ -12,7 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -51,22 +50,15 @@ public class GUIIntroMsg {
 
         VBox text = new VBox();
         text.setStyle("-fx-background-color: #99e699;");
-        //text.setOpacity(0.5);
         text.setMaxWidth(980);
 
         Label explainLab = new Label("Entrez les noms des joueurs.");
         VBox.setMargin(explainLab, new Insets(5, 0, 0, 10));
         text.getChildren().addAll(explainLab);
 
-        quitButtonType = new Button("Quitter");
-        quitButtonType.setMinHeight(100);
-        quitButtonType.setMinWidth(200);
-        quitButtonType.setStyle("-fx-border-color: green; -fx-border-width: 3;");
-
-        OKButtonType = new Button("OK");
-        OKButtonType.setMinWidth(200);
-        OKButtonType.setMinHeight(100);
-        OKButtonType.setStyle("-fx-border-color: green; -fx-border-width: 3;");
+        quitButtonType = createsButton("Quitter");
+        OKButtonType = createsButton("OK");
+        
         HBox btnFrame = new HBox();
         btnFrame.getChildren().addAll(OKButtonType, quitButtonType);
         VBox.setMargin(btnFrame, new Insets(100, 0, 0, 270));
@@ -77,15 +69,11 @@ public class GUIIntroMsg {
         grid.setVgap(10);
         grid.setPadding(new Insets(20, 150, 10, 10));
 
-        name1 = new TextField();
-        name1.setPromptText("Nom du joueur 1");
-        addTextLimiter(name1, 5);
+        name1 = createsTF(5,"Nom du joueur 1");
         grid.add(new Label("Nom du premier joueur (max 5 caractères):"), 0, 0);
         grid.add(name1, 1, 0);
 
-        name2 = new TextField();
-        name2.setPromptText("Nom du joueur 2");
-        addTextLimiter(name2, 5);
+        name2 = createsTF(5,"Nom du joueur 2");
         grid.add(new Label("Nom du deuxième joueur (max 5 caractères):"), 0, 1);
         grid.add(name2, 1, 1);
 
@@ -215,6 +203,21 @@ public class GUIIntroMsg {
                 tf.setText(s);
             }
         });
+    }
+    
+    private Button createsButton(String str){
+        Button btn = new Button(str);
+        btn.setMinHeight(100);
+        btn.setMinWidth(200);
+        btn.setStyle("-fx-border-color: green; -fx-border-width: 3;");
+        return btn;
+    }
+    
+    private TextField createsTF(int maxNbChar, String promptTxt){
+        TextField tf = new TextField();
+        tf.setPromptText(promptTxt);
+        addTextLimiter(tf,maxNbChar);
+        return tf;
     }
 
 }

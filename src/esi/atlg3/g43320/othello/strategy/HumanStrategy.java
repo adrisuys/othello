@@ -6,6 +6,8 @@
 package esi.atlg3.g43320.othello.strategy;
 
 /**
+ * This class represents the strategy of a human playing the game Othello. It
+ * does nothing since the player IRL can play as he wants.
  *
  * @author s_u_y_s_a
  */

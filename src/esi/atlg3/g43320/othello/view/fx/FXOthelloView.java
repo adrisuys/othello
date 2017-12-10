@@ -9,7 +9,6 @@ import esi.atlg3.g43320.othello.dpObs.Observable;
 import esi.atlg3.g43320.othello.dpObs.Observer;
 import esi.atlg3.g43320.othello.model.GameModel;
 import java.util.Optional;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -18,7 +17,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -141,8 +139,8 @@ public class FXOthelloView implements Observer {
             progressCake.updateProgressCake(othello);
             resultFrame.updateScore(othello);
             bar.updateProgressBar(othello);
-            resultFrame.setName1(othello.getPlayers().get(0).getName());
-            resultFrame.setName2(othello.getPlayers().get(1).getName());
+            resultFrame.setNameP1(othello.getPlayers().get(0).getName());
+            resultFrame.setNameP2(othello.getPlayers().get(1).getName());
             giveUp.setDisable(false);
             pass.setDisable(false);
         }
@@ -205,11 +203,11 @@ public class FXOthelloView implements Observer {
             int score1 = othello.getScorePlayer1();
             int score2 = othello.getScorePlayer2();
             if (score1 > score2) {
-                alert.setContentText(resultFrame.getName1() + " a gagné! (" + score1 + "-" + score2 + ")");
+                alert.setContentText(othello.getPlayers().get(0).getName() + " a gagné! (" + score1 + "-" + score2 + ")");
             } else if (score1 == score2) {
                 alert.setContentText("Match nul! (" + score1 + "-" + score2 + ")");
             } else {
-                alert.setContentText(resultFrame.getName2() + " a gagné! (" + score1 + "-" + score2 + ")");
+                alert.setContentText(othello.getPlayers().get(1).getName() + " a gagné! (" + score1 + "-" + score2 + ")");
             }
             alert.showAndWait();
             boardgame.setDisableOnTrue();

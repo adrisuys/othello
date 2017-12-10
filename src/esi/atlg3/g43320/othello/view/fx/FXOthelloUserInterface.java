@@ -8,6 +8,8 @@ package esi.atlg3.g43320.othello.view.fx;
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.GameException;
 import esi.atlg3.g43320.othello.model.GameModel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -50,17 +52,17 @@ public class FXOthelloUserInterface extends Application {
         imgView.fitWidthProperty().bind(primaryStage.widthProperty());
         mainFrame.getChildren().add(imgView);
 
-        //CREATION OF FRAMES OF THE DISPLAY (THE GAME SCENE)
+        //CREATION OF THE GAME WINDOW
         HBox contentGame = new HBox();
         contentGame.getChildren().addAll(view.getLeftSubFrame(), view.getRightSubFrame());
 
-        //CREATIONS OF FRAMES OF THE DISPLAY (THE RULES SCENE)
+        //CREATION OF THE RULES WINDOW
         GUIRules contentRules = new GUIRules();
 
-        //CREATIONS OF FRAMES OF THE DISPLAY (THE MENU)
+        //CREATION OF THE MENU
         GUIMenu menu = new GUIMenu();
 
-        //.................
+        //SET UP OF THE START WINDOW
         mainFrame.setTop(menu.getMenu());
         mainFrame.setCenter(contentGame);
         Scene scene = new Scene(mainFrame, 1000, 750);
@@ -92,10 +94,9 @@ public class FXOthelloUserInterface extends Application {
             Platform.exit();
         });
 
+        //SHOWING THE START WINDOW
         primaryStage.setScene(sceneStart);
         primaryStage.show();
-
-        
 
         //WHEN MOUSE HOVER CASE
         view.getBoardgame().getBoard().getChildren().stream().map((node) -> {
@@ -125,8 +126,8 @@ public class FXOthelloUserInterface extends Application {
                     primaryButtonMouseClicked = false;
                 }
                 try {
-                    othello.playATurn(primaryButtonMouseClicked, new Coordinates(i, j), view.getResultFrame().getName1(), view.getResultFrame().getName2(), view.isWallChosenOverPass(), view.isIsIAPlaying());
-                } catch (GameException e) {
+                    othello.playATurn(primaryButtonMouseClicked, new Coordinates(i, j), othello.getPlayers().get(0).getName(), othello.getPlayers().get(1).getName(), view.isWallChosenOverPass(), view.isIsIAPlaying());
+                } catch (GameException ex) {
                 }
             });
         });

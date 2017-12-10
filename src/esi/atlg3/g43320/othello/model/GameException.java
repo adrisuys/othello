@@ -6,7 +6,7 @@
 package esi.atlg3.g43320.othello.model;
 
 /**
- *
+ * This class represents an Exception for the game Othello.
  * @author s_u_y_s_a
  */
 public class GameException extends Exception {

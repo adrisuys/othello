@@ -13,7 +13,7 @@ import java.util.Random;
 
 /**
  * This class represents the following strategy : the IA will chose a random
- * move amongs all its possible move.
+ * move amongst all its possible moves.
  *
  * @author s_u_y_s_a
  */
