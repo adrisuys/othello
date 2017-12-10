@@ -8,8 +8,6 @@ package esi.atlg3.g43320.othello.view.fx;
 import esi.atlg3.g43320.othello.model.Coordinates;
 import esi.atlg3.g43320.othello.model.GameException;
 import esi.atlg3.g43320.othello.model.GameModel;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
