@@ -39,7 +39,7 @@ public class GameModel implements Observable {
     private boolean isWallValid;
     private boolean isIA;
 
-    //booleans to be used to check updates
+    //booleans used to check updates
     private boolean updatePlay;
     private boolean updateScore;
     private boolean updateShow;
@@ -122,14 +122,11 @@ public class GameModel implements Observable {
             validPlay = true;
             game.putPawn(aCoordinate, getCurrentColor());
             game.changeColorPawn();
-            moveTaken = Integer.toString(game.getNbPawnsToBeTurned());
+            createsHistoryLine(namePlayer, "Place une pièce", aCoordinate.toString(),Integer.toString(game.getNbPawnsToBeTurned()));
             changePlayer();
         }
         scorePlayer1 = game.getScore(ColorPawn.BLACK);
         scorePlayer2 = game.getScore(ColorPawn.WHITE);
-        moveName = namePlayer;
-        moveAction = "Place une pièce";
-        movePos = aCoordinate.toString();
         booleanSetter(true, false, false, false, false, false, false, false, false, true, false, false, false, false, false);
         game.updatePossibleMove(game.getCurrentColor());
         notifyObservers();
@@ -182,10 +179,7 @@ public class GameModel implements Observable {
         scorePlayer2 = game.getScore(ColorPawn.WHITE);
         game.getPlayers().get(0).setName(name2);
         game.getPlayers().get(1).setName(name3);
-        moveName = name2;
-        moveAction = "Nouvelle partie";
-        movePos = "/";
-        moveTaken = "/";
+        createsHistoryLine(name2, "Nouvelle partie", "/", "/");
         booleanSetter(true, false, false, false, false, false, true, false, false, false, false, false, false, false, false);
         game.updatePossibleMove(game.getCurrentColor());
         if (ia1) {
@@ -475,10 +469,7 @@ public class GameModel implements Observable {
         if (isWallValid) {
             changePlayer();
         }
-        moveName = namePlayer;
-        moveAction = "Place un mur";
-        movePos = aCoordinate.toString();
-        moveTaken = "/";
+        createsHistoryLine(namePlayer,"Place un mur", aCoordinate.toString(), "/");
         booleanSetter(true, false, false, false, false, false, false, false, false, false, false, false, false, false, true);
         notifyObservers();
     }
@@ -619,9 +610,6 @@ public class GameModel implements Observable {
      */
     public void playATurn(boolean primaryKeyPressed, Coordinates coord,
             String name1, String name2, boolean wallChosenOverPass, boolean iaChosen) throws GameException {
-        if (iaChosen) {
-            game.getPlayers().get(1).setStrategy(new IARandomStrategy(this));
-        }
         turnPassed(iaChosen);
         if (isTurnPassed()) {
             if (!wallChosenOverPass) {
@@ -665,11 +653,7 @@ public class GameModel implements Observable {
      */
     public void pass(String name) throws GameException {
         booleanSetter(true, false, false, false, false, false, false, false, true, false, false, false, false, false, false);
-        moveName = name;
-        moveAction = "Passe son tour";
-        movePos = "/";
-        moveTaken = "/";
-        updateChangePlayer = true;
+        createsHistoryLine(name,"Passe son tour", "/", "/");
         changePlayer();
         notifyObservers();
     }
@@ -835,5 +819,12 @@ public class GameModel implements Observable {
         updateShow = b13;
         updateTurnPassed = b14;
         updateWall = b15;
+    }
+    
+    private void createsHistoryLine(String name, String action, String coord, String nbTaken){
+        moveName = name;
+        movePos = coord;
+        moveAction = action;
+        moveTaken = nbTaken;
     }
 }
