@@ -502,8 +502,8 @@ public class GameModel implements Observable {
     public void changePlayer() throws GameException {
         if (!isOver()) {
             game.changePlayer();
-            checkGameOver();
-            runStrategy();
+            //checkGameOver();
+            //runStrategy();
         }
     }
 
@@ -787,18 +787,18 @@ public class GameModel implements Observable {
      * if the player are human or not.
      */
     public void runStrategy() {
-        PauseTransition p = new PauseTransition(Duration.millis(1000));
-        p.setOnFinished((ActionEvent e) -> {
-            Platform.runLater(() -> {
+        //PauseTransition p = new PauseTransition(Duration.millis(1000));
+        //p.setOnFinished((ActionEvent e) -> {
+            //Platform.runLater(() -> {
                 getCurrentPlayer().runStrategy();
                 try {
                     checkGameOver();
                 } catch (GameException ex) {
 
                 }
-            });
-        });
-        p.play();
+            //});
+        //});
+        //p.play();
     }
 
     void booleanSetter(boolean b1, boolean b2, boolean b3, boolean b4, boolean b5,

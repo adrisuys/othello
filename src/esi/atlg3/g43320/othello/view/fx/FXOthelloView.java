@@ -7,8 +7,12 @@ package esi.atlg3.g43320.othello.view.fx;
 
 import esi.atlg3.g43320.othello.dpObs.Observable;
 import esi.atlg3.g43320.othello.dpObs.Observer;
+import esi.atlg3.g43320.othello.model.GameException;
 import esi.atlg3.g43320.othello.model.GameModel;
 import java.util.Optional;
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -19,6 +23,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 /**
  * This class creates the view of the application. It observes the model of the
@@ -388,31 +393,53 @@ public class FXOthelloView implements Observer {
         if (othello.isUpdateChangePlayer()) {
             resultFrame.updateChangePlayer(othello);
             enableHumanPlay();
+            if (!othello.isOver()) {
+                PauseTransition p = new PauseTransition(Duration.millis(1000));
+                p.setOnFinished((ActionEvent e) -> {
+                    Platform.runLater(() -> {
+                        othello.getCurrentPlayer().runStrategy();
+                        try {
+                            othello.checkGameOver();
+                        } catch (GameException ex) {
+
+                        }
+                    });
+                });
+                p.play();
+            }
         }
     }
 
-    /**
-     * Set the boolean isIAPlaying with the new value (true or false). It
-     * indicates that the game is in the mode Human vs Computer.
-     *
-     * @param isIAPlaying a boolean indicating if one IA is playing.
-     */
-    void setIsIAPlaying(boolean isIAPlaying) {
+        /**
+         * Set the boolean isIAPlaying with the new value (true or false). It
+         * indicates that the game is in the mode Human vs Computer.
+         *
+         * @param isIAPlaying a boolean indicating if one IA is playing.
+         */
+        void setIsIAPlaying
+        (boolean isIAPlaying
+        
+            ) {
         this.isIAPlaying = isIAPlaying;
-    }
+        }
 
-    /**
-     * Set the boolean isIAPlaying with the new value (true or false). It
-     * indicates that the game is in the mode Computer vs Computer
-     *
-     * @param onlyIAPlaying a boolean indicating if two IAs are playing.
-     */
-    void setOnlyIAPlaying(boolean onlyIAPlaying) {
+        /**
+         * Set the boolean isIAPlaying with the new value (true or false). It
+         * indicates that the game is in the mode Computer vs Computer
+         *
+         * @param onlyIAPlaying a boolean indicating if two IAs are playing.
+         */
+        void setOnlyIAPlaying
+        (boolean onlyIAPlaying
+        
+            ) {
         this.onlyIAPlaying = onlyIAPlaying;
-    }
+        }
     
-    private void enableHumanPlay(){
-        if (othello.getCurrentPlayer().isIsIA()){
+    
+
+    private void enableHumanPlay() {
+        if (othello.getCurrentPlayer().isIsIA()) {
             boardgame.setDisableOnTrue();
         } else {
             boardgame.setDisableOnFalse();
