@@ -11,10 +11,6 @@ import esi.atlg3.g43320.othello.strategy.IARandomStrategy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javafx.animation.PauseTransition;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.util.Duration;
 
 /**
  * This class is the model of the Game, it implements Observable.
